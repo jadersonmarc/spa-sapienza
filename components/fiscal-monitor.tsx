@@ -15,16 +15,16 @@ export function FiscalMonitor() {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
               <div className="lg:max-w-xl">
                 <Badge 
-                  className="mb-4 px-3 py-1 text-xs font-semibold bg-primary/20 text-primary border-primary/30 hover:bg-primary/20"
+                  className="mb-4 px-3 py-1 text-[10px] uppercase tracking-widest font-semibold bg-primary/20 text-primary border-primary/30 hover:bg-primary/20"
                 >
                   Em Desenvolvimento
                 </Badge>
 
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-balance">
+                <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4 text-balance font-display">
                   O Próximo Grande Passo
                 </h2>
 
-                <h3 className="text-xl md:text-2xl font-semibold text-primary mb-4 glow-text">
+                <h3 className="text-xl md:text-2xl font-medium text-primary mb-4 glow-text font-display">
                   Monitor Fiscal Pós-Reforma
                 </h3>
 

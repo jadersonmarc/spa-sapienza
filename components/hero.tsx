@@ -14,12 +14,12 @@ export function Hero() {
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <Badge 
           variant="outline" 
-          className="mb-6 px-4 py-1.5 text-sm border-primary/30 text-primary bg-primary/5"
+          className="mb-6 px-4 py-1.5 text-xs uppercase tracking-widest border-primary/30 text-primary bg-primary/5"
         >
           Product Studio
         </Badge>
         
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 text-balance">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-foreground mb-6 text-balance font-display">
           Transformamos complexidade técnica em{" "}
           <span className="text-primary glow-text">ativos digitais de alto valor.</span>
         </h1>

@@ -24,7 +24,7 @@ export function Services() {
     <section className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 text-balance">
+          <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4 text-balance font-display">
             Nossos Serviços
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -42,7 +42,7 @@ export function Services() {
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                   <service.icon className="h-6 w-6 text-primary" />
                 </div>
-                <CardTitle className="text-xl font-semibold text-card-foreground">
+                <CardTitle className="text-xl font-semibold text-card-foreground font-display">
                   {service.title}
                 </CardTitle>
               </CardHeader>

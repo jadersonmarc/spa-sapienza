@@ -28,12 +28,12 @@ export function Differentials() {
         <div className="glass rounded-2xl p-8 md:p-12 text-center border-border/50">
           <Badge 
             variant="outline" 
-            className="mb-6 px-4 py-1.5 text-sm border-accent/30 text-accent bg-accent/5"
+            className="mb-6 px-4 py-1.5 text-xs uppercase tracking-widest border-accent/30 text-accent bg-accent/5"
           >
             Por que Sapienza Labs?
           </Badge>
 
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-6 text-balance leading-tight">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold text-foreground mb-6 text-balance leading-tight font-display">
             Porque não entregamos apenas código; entregamos{" "}
             <span className="text-primary">inteligência</span>.
           </h2>

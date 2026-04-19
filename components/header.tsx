@@ -20,13 +20,13 @@ export function Header() {
         </a>
 
         <nav className="hidden items-center gap-2 rounded-full border border-white/8 bg-white/4 p-1 md:flex">
-          <a href="#servicos" className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
+          <a href="#servicos" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
             Serviços
           </a>
-          <a href="#sobre" className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
+          <a href="#sobre" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
             Sobre
           </a>
-          <a href="#contato" className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
+          <a href="#contato" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
             Contato
           </a>
         </nav>
