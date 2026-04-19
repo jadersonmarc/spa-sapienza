@@ -9,7 +9,6 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: 'Sapienza Labs | Product Studio de Inteligência Tecnológica',
   description: 'Especialistas em desenvolvimento de software, automações inteligentes e soluções RegTech sob medida. Transformamos complexidade técnica em ativos digitais de alto valor.',
-  generator: 'v0.app',
   icons: {
     icon: [
       {
