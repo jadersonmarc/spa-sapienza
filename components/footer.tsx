@@ -20,24 +20,24 @@ export function Footer() {
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <Mail className="h-4 w-4" />
-              contato@sapienzalabs.com.br
+              jadersonmarc@sapienzalabs.com.br
             </a>
             <div className="flex items-center gap-2 text-muted-foreground">
               <MapPin className="h-4 w-4" />
-              São Paulo, Brasil
+              Rio de Janeiro, Brasil
             </div>
           </div>
 
           <div className="flex items-center gap-4">
             <a 
-              href="#" 
+              href="https://www.linkedin.com/in/marc-jaderson-037183114/" 
               className="w-10 h-10 rounded-full bg-secondary/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all"
               aria-label="LinkedIn"
             >
               <Linkedin className="h-5 w-5" />
             </a>
             <a 
-              href="#" 
+              href="https://www.instagram.com/jadersonmarc/" 
               className="w-10 h-10 rounded-full bg-secondary/50 border border-border/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 transition-all"
               aria-label="Instagram"
             >

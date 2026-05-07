@@ -34,7 +34,7 @@ export function Hero() {
           asChild
         >
           <a 
-            href="https://wa.me/5511999999999?text=Olá! Gostaria de solicitar um orçamento." 
+            href="https://wa.me/5521986537054?text=Olá! Gostaria de solicitar um orçamento." 
             target="_blank" 
             rel="noopener noreferrer"
           >
