@@ -17,7 +17,7 @@ export default function HomePage() {
       <section id="sobre">
         <Differentials />
       </section>
-      <FiscalMonitor />
+      {/* <FiscalMonitor /> */}
       <section id="contato">
         <Footer />
       </section>
