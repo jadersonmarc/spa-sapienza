@@ -23,6 +23,9 @@ export function Header() {
           <a href="/#servicos" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
             Servicos
           </a>
+          <a href="/sobre" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
+            Sobre
+          </a>
           <a href="/blog" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
             Blog
           </a>
