@@ -20,15 +20,12 @@ export function Header() {
         </a>
 
         <nav className="hidden items-center gap-2 rounded-full border border-white/8 bg-white/4 p-1 md:flex">
-          <a href="#servicos" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
-            Serviços
+          <a href="/#servicos" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
+            Servicos
           </a>
-          {/* <a href="#sobre" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
-            Sobre
+          <a href="/blog" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
+            Blog
           </a>
-          <a href="#contato" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-wider text-muted-foreground transition-colors hover:bg-white/6 hover:text-foreground">
-            Contato
-          </a> */}
         </nav>
 
         <div className="flex items-center gap-2">
