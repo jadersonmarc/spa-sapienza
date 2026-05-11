@@ -139,7 +139,7 @@ export default function SobrePage() {
             <div className="glass flex flex-col items-center gap-8 rounded-2xl p-8 md:flex-row md:items-start">
               <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/20">
                 <Image
-                  src="/images/founder.jpg"
+                  src="/marc.png"
                   alt="Marc, fundador da Sapienza Labs"
                   fill
                   className="object-cover"
