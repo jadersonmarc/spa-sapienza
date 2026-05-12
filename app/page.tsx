@@ -1,4 +1,3 @@
-import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { Services } from "@/components/services"
 import { Differentials } from "@/components/differentials"
@@ -9,7 +8,6 @@ import { WhatsAppButton } from "@/components/whatsapp-button"
 export default function HomePage() {
   return (
     <main className="min-h-screen">
-      <Header />
       <Hero />
       <section id="servicos">
         <Services />

@@ -1,6 +1,7 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { Header } from '@/components/header'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -21,6 +22,14 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: '#0a0a0a',
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,6 +38,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="bg-background">
       <body className="font-sans antialiased">
+        <Header />
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
