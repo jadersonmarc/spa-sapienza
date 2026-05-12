@@ -4,33 +4,33 @@ import { MessageCircle } from "lucide-react"
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6 py-24 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center px-4 py-24 overflow-hidden sm:px-6 lg:px-8">
       {/* Background gradient effects */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/15 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl sm:w-96 sm:h-96" />
+        <div className="absolute bottom-1/4 right-1/4 w-56 h-56 bg-accent/15 rounded-full blur-3xl sm:w-80 sm:h-80" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <Badge 
           variant="outline" 
-          className="mb-6 px-4 py-1.5 text-xs uppercase tracking-widest border-primary/30 text-primary bg-primary/5"
+          className="mb-4 px-3 py-1 text-[10px] uppercase tracking-widest border-primary/30 text-primary bg-primary/5 sm:mb-6 sm:px-4 sm:py-1.5 sm:text-xs"
         >
           Product Studio
         </Badge>
         
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-foreground mb-6 text-balance font-display">
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground mb-4 text-balance font-display sm:text-4xl sm:mb-6 md:text-5xl lg:text-6xl">
           Transformamos complexidade técnica em{" "}
           <span className="text-primary glow-text">ativos digitais de alto valor.</span>
         </h1>
         
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty leading-relaxed">
+        <p className="text-base text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty leading-relaxed sm:text-lg sm:mb-10 md:text-xl">
           Especialistas em desenvolvimento de software, automações inteligentes e soluções RegTech sob medida.
         </p>
 
         <Button 
           size="lg" 
-          className="glow-primary bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-medium"
+          className="glow-primary bg-primary hover:bg-primary/90 text-primary-foreground w-full px-6 py-5 text-base font-medium sm:w-auto sm:px-8 sm:py-6 sm:text-lg"
           asChild
         >
           <a 
@@ -39,7 +39,8 @@ export function Hero() {
             rel="noopener noreferrer"
           >
             <MessageCircle className="mr-2 h-5 w-5" />
-            Solicitar Orçamento via WhatsApp
+            <span className="sm:hidden">Solicitar Orçamento</span>
+            <span className="hidden sm:inline">Solicitar Orçamento via WhatsApp</span>
           </a>
         </Button>
       </div>

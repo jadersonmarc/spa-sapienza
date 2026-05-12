@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Calendar, Clock, ArrowLeft, MessageCircle } from "lucide-react"
-import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { BlogBreadcrumb } from "@/components/blog-breadcrumb"
@@ -128,14 +127,12 @@ export default async function ArticlePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="min-h-screen">
-        <Header />
-        
-        <article className="pt-32 pb-16 px-6">
+        <article className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
             <BlogBreadcrumb currentPage={post.title} />
             
-            <header className="mt-8 mb-10">
-              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+            <header className="mt-6 mb-8 sm:mt-8 sm:mb-10">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-muted-foreground mb-3 sm:mb-4">
                 <span className="flex items-center gap-1.5">
                   <Calendar className="h-4 w-4" />
                   {new Date(post.date).toLocaleDateString("pt-BR", {
@@ -150,7 +147,7 @@ export default async function ArticlePage({ params }: PageProps) {
                 </span>
               </div>
               
-              <h1 className="text-3xl md:text-4xl font-semibold text-foreground leading-tight text-balance">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-foreground leading-tight text-balance">
                 {post.title}
               </h1>
             </header>
@@ -174,14 +171,14 @@ export default async function ArticlePage({ params }: PageProps) {
             </div>
 
             {/* CTA */}
-            <div className="mt-12 p-6 rounded-xl bg-card/50 border border-border/50">
-              <h3 className="text-xl font-semibold text-foreground mb-2">
+            <div className="mt-10 p-4 sm:mt-12 sm:p-6 rounded-xl bg-card/50 border border-border/50">
+              <h3 className="text-lg sm:text-xl font-semibold text-foreground mb-2">
                 Precisa de ajuda com seu projeto?
               </h3>
-              <p className="text-muted-foreground mb-4">
+              <p className="text-sm sm:text-base text-muted-foreground mb-4">
                 A Sapienza Labs desenvolve soluções de software sob medida para empresas que buscam eficiencia e inovacao.
               </p>
-              <Button asChild>
+              <Button asChild className="w-full sm:w-auto">
                 <a 
                   href="https://wa.me/5521986537054?text=Olá! Vim pelo blog e gostaria de saber mais sobre os serviços."
                   target="_blank"

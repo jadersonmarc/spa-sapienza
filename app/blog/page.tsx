@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { BlogBreadcrumb } from "@/components/blog-breadcrumb"
@@ -26,22 +25,20 @@ export default function BlogPage() {
 
   return (
     <main className="min-h-screen">
-      <Header />
-      
-      <section className="pt-32 pb-16 px-6">
+      <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <BlogBreadcrumb />
           
-          <div className="mt-8 mb-12">
-            <h1 className="text-3xl md:text-4xl font-semibold text-foreground mb-4">
+          <div className="mt-6 mb-8 sm:mt-8 sm:mb-12">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-foreground mb-3 sm:mb-4">
               Blog
             </h1>
-            <p className="text-muted-foreground text-lg max-w-2xl">
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl">
               Insights sobre desenvolvimento de software, automação e tecnologia para empresas que buscam crescer de forma inteligente.
             </p>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
               <ArticleCard key={post.slug} post={post} />
             ))}

@@ -11,8 +11,8 @@ export function ArticleCard({ post }: ArticleCardProps) {
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
       <Card className="h-full bg-card/50 border-border/50 transition-all duration-300 hover:border-primary/30 hover:bg-card/80">
-        <CardHeader>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground mb-2">
+        <CardHeader className="p-4 sm:p-6">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-2 sm:gap-4">
             <span className="flex items-center gap-1">
               <Calendar className="h-3.5 w-3.5" />
               {new Date(post.date).toLocaleDateString("pt-BR", {
@@ -26,12 +26,12 @@ export function ArticleCard({ post }: ArticleCardProps) {
               {post.readingTime} de leitura
             </span>
           </div>
-          <CardTitle className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+          <CardTitle className="text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2 sm:text-lg">
             {post.title}
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <CardDescription className="text-muted-foreground line-clamp-3 leading-relaxed">
+        <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
+          <CardDescription className="text-sm text-muted-foreground line-clamp-3 leading-relaxed sm:text-base">
             {post.excerpt}
           </CardDescription>
         </CardContent>
