@@ -222,7 +222,131 @@ A Sapienza Labs é especializada em desenvolvimento de software e integração d
 
 Leia também sobre [quando vale a pena investir em software personalizado](/blog/software-personalizado-vs-sistema-pronto) para sua empresa.
     `.trim()
-  }
+  },
+  {
+    title: "Sapienza University: o que a universidade mais famosa da Itália tem a ver com tecnologia e inovação",
+    slug: "sapienza-university-famosa-inovacao-tecnologia",
+    excerpt: "Entenda por que a Sapienza University of Rome é referência mundial e como os mesmos princípios que a tornaram famosa guiam a construção de produtos digitais na Sapienza Labs.",
+    date: "2025-05-20",
+    readingTime: "6 min",
+    author: {
+      name: "Sapienza Labs",
+      role: "Product Studio"
+    },
+    keywords: [
+      "Sapienza University",
+      "o que é a Sapienza",
+      "universidade mais antiga de Roma",
+      "inovação e tecnologia",
+      "Sapienza Labs"
+    ],
+    content: `
+## O que torna a Sapienza University famosa
+
+Fundada em 1303 pelo Papa Bonifácio VIII, a Sapienza University of Rome é uma das universidades mais antigas e reconhecidas do mundo. Com mais de 700 anos de história, ela formou papas, presidentes, prêmios Nobel e alguns dos maiores intelectuais da civilização ocidental.
+
+Mas o que exatamente a torna tão famosa?
+
+Não é apenas a idade. É o princípio que carrega no próprio nome: *sapienza*, em italiano, significa **sabedoria**. E sabedoria, ao contrário de informação, não é acumulada — é construída. Ela nasce da combinação entre conhecimento profundo, método rigoroso e a coragem de aplicar o que se sabe para resolver problemas reais.
+
+## Sete séculos de excelência acadêmica
+
+A Sapienza University é hoje a maior universidade da Europa, com mais de 100.000 estudantes. Seus departamentos de medicina, direito, engenharia e humanidades são referência internacional. Pesquisadores da instituição contribuíram para avanços em física, arquitetura, linguística e ciências da computação.
+
+O que sustenta essa reputação ao longo dos séculos não são as paredes de pedra em Roma — é o compromisso com o rigor. Cada geração de professores e alunos entra sabendo que o padrão foi estabelecido por quem veio antes, e que cabe a eles mantê-lo ou superá-lo.
+
+## O que isso tem a ver com tecnologia no Brasil
+
+Quando escolhemos o nome Sapienza Labs para o nosso estúdio de tecnologia no Rio de Janeiro, a referência foi intencional.
+
+A universidade italiana ensina. Nós construímos. Mas o princípio é o mesmo: **sabedoria como ponto de partida para criar coisas que durem**.
+
+Numa época em que qualquer pessoa com um computador pode montar um app em horas usando ferramentas de baixo código, o diferencial não está mais na capacidade de entregar rápido. Está na capacidade de entregar certo — de entender o problema antes de escrever a primeira linha de código, de escolher a arquitetura que vai sustentar o crescimento, de construir com método e não no improviso.
+
+## O que une os dois Sapienzas
+
+A universidade romana ficou famosa por recusar atalhos. Medicina se aprende estudando o corpo humano, não memorizando respostas de prova. Direito se aprende entendendo a lógica da lei, não decorando artigos.
+
+Na Sapienza Labs, a abordagem é a mesma. Quando uma empresa nos procura para desenvolver um sistema, o primeiro passo não é abrir o editor de código — é entender o negócio. Quais são os gargalos reais? Onde estão os custos escondidos? O que um sistema precisa resolver para fazer diferença de verdade?
+
+Só depois disso vem a tecnologia.
+
+## Sabedoria aplicada a produtos digitais
+
+O legado da Sapienza University é uma prova de que instituições construídas sobre princípios sólidos resistem a séculos de mudança. Tecnologias mudam, linguagens de programação mudam, frameworks surgem e somem — mas boas práticas de engenharia, clareza de propósito e comprometimento com a qualidade permanecem relevantes.
+
+É com essa mentalidade que desenvolvemos software para empresas no Rio de Janeiro: sem modismos, sem soluções genéricas, sem pressa que comprometa a entrega.
+
+Se sua empresa precisa de um sistema que funcione de verdade — não apenas no dia da entrega, mas nos próximos anos — [fale com a Sapienza Labs](/contato).
+
+Leia também: [software personalizado ou sistema pronto](/blog/software-personalizado-vs-sistema-pronto) — como escolher o caminho certo para o seu negócio.
+    `.trim()
+  },
+  {
+    title: "Os cursos mais reconhecidos da Sapienza University — e o que cada área ensina sobre construir produtos de qualidade",
+    slug: "cursos-sapienza-university-qualidade-produtos-digitais",
+    excerpt: "Da medicina ao direito, da engenharia às humanidades: veja como as áreas de destaque da Sapienza University of Rome se conectam com a forma como a Sapienza Labs desenvolve tecnologia.",
+    date: "2025-05-15",
+    readingTime: "7 min",
+    author: {
+      name: "Sapienza Labs",
+      role: "Product Studio"
+    },
+    keywords: [
+      "cursos Sapienza University",
+      "programas Sapienza Roma",
+      "universidade de Roma cursos",
+      "Sapienza Labs desenvolvimento",
+      "software sob medida Rio de Janeiro"
+    ],
+    content: `
+## Uma universidade, sete séculos, muitas áreas de excelência
+
+A Sapienza University of Rome não ficou famosa por uma única área do conhecimento. Ao longo de mais de 700 anos, ela construiu reputação em campos tão distintos quanto medicina, direito, engenharia, arquitetura, linguística e ciências exatas.
+
+O que todas essas áreas têm em comum? Método. Rigor. A convicção de que para dominar qualquer disciplina, é preciso entender seus fundamentos antes de tentar inovar.
+
+Esse princípio nunca envelheceu — e é o mesmo que orienta o trabalho da Sapienza Labs.
+
+## As áreas mais reconhecidas da Sapienza University
+
+### Medicina e ciências da saúde
+
+O curso de medicina da Sapienza é um dos mais disputados da Europa. Sua reputação vem de décadas de pesquisa aplicada, com hospitais universitários que funcionam como laboratórios vivos de inovação clínica.
+
+O que o desenvolvimento de software pode aprender com medicina? **Diagnóstico antes de prescrição.** Um médico que receita remédio sem examinar o paciente comete erro grave. Um desenvolvedor que escreve código sem entender o problema do cliente comete o mesmo erro — só que o paciente é o negócio.
+
+Na Sapienza Labs, todo projeto começa com uma fase de diagnóstico: entrevistas, mapeamento de processos e análise das dores reais antes de qualquer proposta técnica.
+
+### Direito
+
+A faculdade de direito da Sapienza formou advogados, juízes e legisladores que moldaram a história italiana e europeia. O curso é rigoroso porque o direito exige precisão: uma vírgula mal colocada pode mudar o significado de uma lei.
+
+Sistemas de software têm a mesma exigência. **Ambiguidade em código gera bugs.** Requisitos mal definidos geram sistemas que não resolvem o problema para o qual foram criados. O rigor na especificação — saber exatamente o que o sistema deve e não deve fazer — é uma das competências mais valiosas no desenvolvimento profissional.
+
+### Engenharia e arquitetura
+
+Os cursos de engenharia da Sapienza têm tradição em estruturas, infraestrutura e design técnico. Engenheiros formados lá constroem para durar — pontes, edifícios, sistemas que precisam resistir a décadas de uso.
+
+Software também precisa ser projetado para durar. **Arquitetura importa.** Um sistema construído sem planejamento arquitetural pode funcionar bem no começo e se tornar impossível de manter em dois anos. Na Sapienza Labs, escolhemos tecnologias e estruturas pensando no longo prazo do cliente, não apenas na entrega imediata.
+
+### Humanidades e ciências sociais
+
+Área menos óbvia quando se fala em tecnologia, mas fundamental. A Sapienza tem tradição forte em filosofia, história e ciências sociais — disciplinas que ensinam a fazer as perguntas certas antes de buscar respostas.
+
+Tecnologia sem contexto humano é ferramenta sem propósito. Os melhores produtos digitais não são os mais tecnicamente sofisticados — são os que resolvem problemas reais de pessoas reais. **Entender o usuário é tão importante quanto entender o código.**
+
+## O padrão Sapienza aplicado a produtos digitais
+
+A Sapienza University ficou famosa não porque escolheu uma área e se especializou nela, mas porque aplicou o mesmo nível de exigência em tudo que tocou.
+
+A Sapienza Labs opera com a mesma lógica. Desenvolvemos sistemas web, automações, integrações e aplicativos — áreas diferentes, mas o padrão é sempre o mesmo: entender primeiro, construir depois, entregar algo que funcione de verdade.
+
+Empresas do Rio de Janeiro que precisam de tecnologia feita com esse cuidado podem [entrar em contato](/contato) para uma conversa inicial sem compromisso.
+
+Leia também: [como a automação de processos pode reduzir custos operacionais](/blog/automacao-de-processos-pequenas-empresas) na sua empresa.
+    `.trim()
+  },
 ]
 
 export function getPostBySlug(slug: string): Post | undefined {
