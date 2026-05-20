@@ -18,7 +18,7 @@ export const metadata: Metadata = {
         media: '(prefers-color-scheme: dark)'
       },
     ],
-    apple: '/apple-icon.png',
+    apple: '/logo-sapienza.png',
   },
 }
 
