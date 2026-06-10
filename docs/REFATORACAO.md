@@ -24,9 +24,9 @@ Marcar cada spec ao concluir (ordem de execução sugerida ao final do documento
 - [x] SPEC-03 — Serviços reais
 - [x] SPEC-04 — Differentials com substância
 - [x] SPEC-07 — Seção Portfólio na Home
-- [ ] SPEC-08 — Campos `pilar`/`coverImage` na interface Post
-- [ ] SPEC-09 — Badge de pilar no ArticleCard
-- [ ] SPEC-10 — Autor real nos posts
+- [x] SPEC-08 — Campos `pilar`/`coverImage` na interface Post
+- [x] SPEC-09 — Badge de pilar no ArticleCard
+- [x] SPEC-10 — Autor real nos posts
 - [ ] SPEC-12 — Filtro por pilar no blog
 - [ ] SPEC-11 — Criar `docs/BLOG_MIGRATION.md` (planejamento MDX)
 
