@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import { notFound } from "next/navigation"
 import { Calendar, Clock, ArrowLeft, MessageCircle } from "lucide-react"
 import { Footer } from "@/components/footer"
@@ -103,8 +104,9 @@ export default async function ArticlePage({ params }: PageProps) {
     description: post.excerpt,
     datePublished: post.date,
     author: {
-      "@type": "Organization",
-      name: post.author.name
+      "@type": "Person",
+      name: post.author.name,
+      jobTitle: post.author.role
     },
     publisher: {
       "@type": "Organization",
@@ -160,9 +162,19 @@ export default async function ArticlePage({ params }: PageProps) {
             {/* Author block */}
             <div className="mt-12 pt-8 border-t border-border/50">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/25 bg-primary/12 text-sm font-semibold text-primary">
-                  SL
-                </div>
+                {post.author.avatarUrl ? (
+                  <Image
+                    src={post.author.avatarUrl}
+                    alt={post.author.name}
+                    width={48}
+                    height={48}
+                    className="h-12 w-12 rounded-full border border-primary/25 object-cover"
+                  />
+                ) : (
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/25 bg-primary/12 text-sm font-semibold text-primary">
+                    SL
+                  </div>
+                )}
                 <div>
                   <p className="font-semibold text-foreground">{post.author.name}</p>
                   <p className="text-sm text-muted-foreground">{post.author.role}</p>

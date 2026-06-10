@@ -1,3 +1,8 @@
+export type Pilar =
+  | "engenharia-ia"   // Pilar 1 — Engenharia + IA
+  | "negocio-pme"     // Pilar 2 — Negócio/PME
+  | "bastidores"      // Pilar 3 — Bastidores
+
 export interface Post {
   title: string
   slug: string
@@ -5,9 +10,12 @@ export interface Post {
   content: string
   date: string
   readingTime: string
+  pilar: Pilar
+  coverImage?: string
   author: {
     name: string
     role: string
+    avatarUrl?: string
   }
   keywords: string[]
 }
@@ -19,9 +27,11 @@ export const posts: Post[] = [
     excerpt: "Entenda quando um sistema pronto atende suas necessidades e quando vale a pena investir em desenvolvimento de software sob medida para sua empresa.",
     date: "2025-05-10",
     readingTime: "5 min",
+    pilar: "negocio-pme",
     author: {
-      name: "Sapienza Labs",
-      role: "Product Studio"
+      name: "Marc Jaderson",
+      role: "Fundador, Sapienza Labs",
+      avatarUrl: "/marc.png"
     },
     keywords: ["software personalizado", "sistema sob medida", "desenvolvimento de software para empresas"],
     content: `
@@ -82,9 +92,11 @@ Confira também nosso artigo sobre [como a automação de processos pode reduzir
     excerpt: "Descubra exemplos práticos de processos manuais que podem ser automatizados e quanto sua empresa pode economizar com software inteligente.",
     date: "2025-05-05",
     readingTime: "6 min",
+    pilar: "negocio-pme",
     author: {
-      name: "Sapienza Labs",
-      role: "Product Studio"
+      name: "Marc Jaderson",
+      role: "Fundador, Sapienza Labs",
+      avatarUrl: "/marc.png"
     },
     keywords: ["automação de processos", "redução de custos", "software para pequenas empresas RJ"],
     content: `
@@ -151,9 +163,11 @@ Saiba também [o que é uma API e como ela pode conectar todos os sistemas do se
     excerpt: "Uma explicação simples sobre APIs para empresários que querem entender como integrar diferentes sistemas e eliminar retrabalho.",
     date: "2025-04-28",
     readingTime: "5 min",
+    pilar: "negocio-pme",
     author: {
-      name: "Sapienza Labs",
-      role: "Product Studio"
+      name: "Marc Jaderson",
+      role: "Fundador, Sapienza Labs",
+      avatarUrl: "/marc.png"
     },
     keywords: ["integração de sistemas", "API para empresas", "conectar sistemas", "desenvolvimento de software RJ"],
     content: `
@@ -229,9 +243,11 @@ Leia também sobre [quando vale a pena investir em software personalizado](/blog
     excerpt: "Entenda por que a Sapienza University of Rome é referência mundial e como os mesmos princípios que a tornaram famosa guiam a construção de produtos digitais na Sapienza Labs.",
     date: "2025-05-20",
     readingTime: "6 min",
+    pilar: "negocio-pme",
     author: {
-      name: "Sapienza Labs",
-      role: "Product Studio"
+      name: "Marc Jaderson",
+      role: "Fundador, Sapienza Labs",
+      avatarUrl: "/marc.png"
     },
     keywords: [
       "Sapienza University",
@@ -288,9 +304,11 @@ Leia também: [software personalizado ou sistema pronto](/blog/software-personal
     excerpt: "Da medicina ao direito, da engenharia às humanidades: veja como as áreas de destaque da Sapienza University of Rome se conectam com a forma como a Sapienza Labs desenvolve tecnologia.",
     date: "2025-05-15",
     readingTime: "7 min",
+    pilar: "negocio-pme",
     author: {
-      name: "Sapienza Labs",
-      role: "Product Studio"
+      name: "Marc Jaderson",
+      role: "Fundador, Sapienza Labs",
+      avatarUrl: "/marc.png"
     },
     keywords: [
       "cursos Sapienza University",
