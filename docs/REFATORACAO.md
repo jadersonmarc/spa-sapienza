@@ -27,8 +27,8 @@ Marcar cada spec ao concluir (ordem de execução sugerida ao final do documento
 - [x] SPEC-08 — Campos `pilar`/`coverImage` na interface Post
 - [x] SPEC-09 — Badge de pilar no ArticleCard
 - [x] SPEC-10 — Autor real nos posts
-- [ ] SPEC-12 — Filtro por pilar no blog
-- [ ] SPEC-11 — Criar `docs/BLOG_MIGRATION.md` (planejamento MDX)
+- [x] SPEC-12 — Filtro por pilar no blog
+- [x] SPEC-11 — Criar `docs/BLOG_MIGRATION.md` (planejamento MDX)
 
 ---
 
