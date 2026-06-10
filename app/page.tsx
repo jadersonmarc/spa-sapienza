@@ -1,6 +1,7 @@
 import { Hero } from "@/components/hero"
 import { Services } from "@/components/services"
 import { Differentials } from "@/components/differentials"
+import { Portfolio } from "@/components/portfolio"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 
@@ -10,6 +11,9 @@ export default function HomePage() {
       <Hero />
       <section id="servicos">
         <Services />
+      </section>
+      <section id="portfolio">
+        <Portfolio />
       </section>
       <section id="sobre">
         <Differentials />
