@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowUpRight, MessageCircle, Menu, X } from "lucide-react"
 
@@ -59,8 +60,14 @@ export function Header() {
       <div className="glass mx-auto flex h-16 max-w-6xl items-center justify-between rounded-full border border-white/8 px-4 shadow-[0_16px_48px_rgba(2,6,23,0.38)] md:h-[4.5rem] md:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 text-foreground sm:gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-primary/25 bg-primary/12 text-sm font-semibold text-primary sm:h-10 sm:w-10">
-            SL
+          <span className="flex h-9 w-9 items-center justify-center sm:h-10 sm:w-10">
+            <Image
+              src="/icon.svg"
+              alt="Sapienza Labs"
+              width={36}
+              height={36}
+              priority
+            />
           </span>
           <span className="flex flex-col leading-none">
             <span className="font-display text-lg text-foreground sm:text-xl">Sapienza Labs</span>
