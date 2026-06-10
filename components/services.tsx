@@ -1,21 +1,21 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Zap, ShoppingCart, Bot } from "lucide-react"
+import { Scale, Bot, Layers } from "lucide-react"
 
 const services = [
   {
-    icon: Zap,
-    title: "Landing Pages de Alta Performance",
-    description: "Foco em velocidade e conversão para empresas que buscam resultados reais. Sites otimizados que transformam visitantes em clientes."
-  },
-  {
-    icon: ShoppingCart,
-    title: "E-commerce Estratégico",
-    description: "Lojas virtuais robustas com WooCommerce para escalar sua operação. Arquitetura pensada para crescimento sustentável."
+    icon: Scale,
+    title: "Automação para Escritórios Jurídicos",
+    description: "Monitoramento automático de processos (PJe, e-SAJ, Projudi), onboarding de cliente via WhatsApp e alertas de prazo. Devolve horas faturáveis toda semana."
   },
   {
     icon: Bot,
-    title: "Automação Inteligente",
-    description: "Chatbots e fluxos de atendimento que filtram leads e economizam seu tempo. Inteligência artificial aplicada ao seu negócio."
+    title: "Integração e Automação de Fluxos",
+    description: "Conectamos seus sistemas atuais e eliminamos a digitação duplicada. WhatsApp, ERP, planilha e sistema fiscal conversando de forma automática."
+  },
+  {
+    icon: Layers,
+    title: "Sistema de Gestão Sob Medida",
+    description: "Para quando SaaS genérico não cabe na sua operação. Desenvolvemos o sistema exato que sua empresa precisa — com escopo fechado, prazo definido e suporte incluso."
   }
 ]
 
