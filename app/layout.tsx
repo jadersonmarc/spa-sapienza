@@ -11,13 +11,20 @@ export const metadata: Metadata = {
   description: 'Especialistas em desenvolvimento de software, automações inteligentes e soluções RegTech sob medida. Transformamos complexidade técnica em ativos digitais de alto valor.',
   icons: {
     icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
       {
-        url: '/logo-sapienza.png',
+        url: '/icon-dark-32x32.png',
         type: 'image/png',
+        sizes: '32x32',
         media: '(prefers-color-scheme: dark)'
       },
+      {
+        url: '/icon-light-32x32.png',
+        type: 'image/png',
+        sizes: '32x32',
+        media: '(prefers-color-scheme: light)'
+      },
     ],
-    apple: '/logo-sapienza.png',
   },
 }
 
