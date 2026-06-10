@@ -19,6 +19,14 @@ diagnóstico, 12 specs priorizadas (SPEC-01 a SPEC-12), ordem de execução e
 checklist de verificação. Consulte esse documento antes de alterar conteúdo,
 copy ou estrutura do site.
 
+## Skills e análises
+
+- **`/ux-review`** e **`/branding-review`** (em `.claude/skills/`) — skills
+  de auditoria profissional que geram relatórios priorizados em
+  `docs/analises/` (UX-AAAA-MM-DD.md / BRANDING-AAAA-MM-DD.md). Os
+  relatórios propõem specs numeradas continuando a sequência do roadmap
+  (SPEC-13+). Rodar novamente após cada rodada de mudanças.
+
 ## Stack
 
 - Next.js 16 (App Router) + React 19 + TypeScript
