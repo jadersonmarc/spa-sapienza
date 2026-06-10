@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { BlogBreadcrumb } from "@/components/blog-breadcrumb"
-import { ArticleCard } from "@/components/article-card"
+import { BlogFilter } from "@/components/blog-filter"
 import { getAllPosts } from "@/lib/posts"
 
 export const metadata: Metadata = {
@@ -38,11 +38,7 @@ export default function BlogPage() {
             </p>
           </div>
 
-          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
-              <ArticleCard key={post.slug} post={post} />
-            ))}
-          </div>
+          <BlogFilter posts={posts} />
         </div>
       </section>
 

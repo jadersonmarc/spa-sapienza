@@ -3,7 +3,7 @@ import { Calendar, Clock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import type { Pilar, Post } from "@/lib/posts"
 
-const pilarConfig: Record<Pilar, { label: string; color: string }> = {
+export const pilarConfig: Record<Pilar, { label: string; color: string }> = {
   "engenharia-ia": { label: "Engenharia + IA", color: "bg-blue-500/15 text-blue-400 border-blue-500/20" },
   "negocio-pme": { label: "Negócio / PME", color: "bg-green-500/15 text-green-400 border-green-500/20" },
   "bastidores": { label: "Bastidores", color: "bg-orange-500/15 text-orange-400 border-orange-500/20" }
