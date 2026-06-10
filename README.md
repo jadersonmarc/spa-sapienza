@@ -32,3 +32,4 @@ A aplicação ficará disponível em `http://localhost:3000`.
 - `components/`: blocos visuais e componentes reutilizáveis
 - `lib/`: utilitários
 - `public/`: assets estáticos
+- `docs/REFATORACAO.md`: roadmap ativo da refatoração (diagnóstico + specs)
