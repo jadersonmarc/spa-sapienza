@@ -14,10 +14,13 @@ comunicação direta com clientes.
 
 ## Roadmap ativo
 
-A refatoração em andamento está especificada em **`docs/REFATORACAO.md`** —
-diagnóstico, 12 specs priorizadas (SPEC-01 a SPEC-12), ordem de execução e
-checklist de verificação. Consulte esse documento antes de alterar conteúdo,
-copy ou estrutura do site.
+- **`docs/PLANO-DE-ACAO.md`** — plano vigente: SPEC-13 a SPEC-30 (backlog
+  das auditorias de UX, branding e design) organizadas em 5 fases, com
+  status por checkbox. Consultar antes de alterar conteúdo, copy ou
+  estrutura do site.
+- `docs/REFATORACAO.md` — primeira rodada (SPEC-01 a SPEC-12), concluída;
+  mantém o diagnóstico original e as restrições.
+- `docs/analises/` — relatórios das auditorias que originaram as specs.
 
 ## Skills e análises
 
