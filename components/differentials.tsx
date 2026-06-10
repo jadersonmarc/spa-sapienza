@@ -1,18 +1,21 @@
 import { Badge } from "@/components/ui/badge"
-import { Database, Scale, Layers } from "lucide-react"
+import { ClipboardCheck, Wrench, ShieldCheck } from "lucide-react"
 
 const features = [
   {
-    icon: Database,
-    label: "Inteligência de Dados"
+    icon: ClipboardCheck,
+    label: "Requisitos antes de código",
+    description: "Todo projeto começa com diagnóstico da operação real — não com formulário."
   },
   {
-    icon: Scale,
-    label: "Compliance Fiscal"
+    icon: Wrench,
+    label: "Stack escolhida pelo problema",
+    description: "Go, Rust, PostgreSQL — tecnologia pela necessidade, não pela moda."
   },
   {
-    icon: Layers,
-    label: "Arquitetura Escalável"
+    icon: ShieldCheck,
+    label: "Entrega de produção desde o MVP",
+    description: "Sem retrabalho disfarçado de v2. O que entregamos funciona na vida real."
   }
 ]
 
@@ -42,14 +45,17 @@ export function Differentials() {
             Nossa abordagem vai além do desenvolvimento tradicional. Combinamos expertise técnica com visão estratégica de negócio.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-            {features.map((feature, index) => (
-              <div 
-                key={index}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-secondary/50 border border-border/50 sm:gap-3 sm:px-5 sm:py-3"
+          <div className="grid gap-4 text-left sm:grid-cols-3">
+            {features.map((feature) => (
+              <div
+                key={feature.label}
+                className="rounded-xl bg-secondary/30 border border-border/40 p-5"
               >
                 <feature.icon className="h-5 w-5 text-primary" />
-                <span className="text-foreground font-medium">{feature.label}</span>
+                <p className="mt-3 font-medium text-foreground">{feature.label}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>

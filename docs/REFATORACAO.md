@@ -20,9 +20,9 @@ Marcar cada spec ao concluir (ordem de execução sugerida ao final do documento
 - [x] SPEC-06 — Limpeza de assets e imports mortos
 - [x] SPEC-01 — Logo real no Header
 - [x] SPEC-05 — Acentuação em `/sobre`
-- [ ] SPEC-02 — Hero com posicionamento real
-- [ ] SPEC-03 — Serviços reais
-- [ ] SPEC-04 — Differentials com substância
+- [x] SPEC-02 — Hero com posicionamento real
+- [x] SPEC-03 — Serviços reais
+- [x] SPEC-04 — Differentials com substância
 - [ ] SPEC-07 — Seção Portfólio na Home
 - [ ] SPEC-08 — Campos `pilar`/`coverImage` na interface Post
 - [ ] SPEC-09 — Badge de pilar no ArticleCard
