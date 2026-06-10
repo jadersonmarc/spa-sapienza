@@ -21,11 +21,12 @@ copy ou estrutura do site.
 
 ## Skills e análises
 
-- **`/ux-review`** e **`/branding-review`** (em `.claude/skills/`) — skills
-  de auditoria profissional que geram relatórios priorizados em
-  `docs/analises/` (UX-AAAA-MM-DD.md / BRANDING-AAAA-MM-DD.md). Os
-  relatórios propõem specs numeradas continuando a sequência do roadmap
-  (SPEC-13+). Rodar novamente após cada rodada de mudanças.
+- **`/ux-review`**, **`/branding-review`** e **`/design-review`** (em
+  `.claude/skills/`) — skills de auditoria profissional que geram
+  relatórios priorizados em `docs/analises/` (UX- / BRANDING- /
+  DESIGN-AAAA-MM-DD.md). Os relatórios propõem specs numeradas continuando
+  a sequência do roadmap (SPEC-13+). Rodar novamente após cada rodada de
+  mudanças.
 
 ## Stack
 
