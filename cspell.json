@@ -1,0 +1,30 @@
+{
+  "version": "0.2",
+  "language": "en,pt,pt-BR",
+  "words": [
+    "Sapienza",
+    "Coolify",
+    "Hostinger",
+    "Fluminense",
+    "Caxias",
+    "LexWatch",
+    "OracleTalk",
+    "OncoCare",
+    "Projudi",
+    "pgvector",
+    "chromedp",
+    "XGBoost",
+    "RegTech",
+    "lucide",
+    "shadcn",
+    "Geist",
+    "contentlayer",
+    "jadersonmarc",
+    "sapienzalabs",
+    "servicos",
+    "contato",
+    "sobre",
+    "negocio"
+  ],
+  "ignorePaths": ["node_modules", ".next", "pnpm-lock.yaml", "public"]
+}
