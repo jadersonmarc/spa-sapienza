@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next"
-import { getAllPosts } from "@/lib/posts"
+import { getAllPosts } from "@/lib/blog"
 
 const BASE_URL = "https://sapienzalabs.com.br"
 

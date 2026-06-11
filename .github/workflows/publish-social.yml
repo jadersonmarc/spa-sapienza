@@ -1,0 +1,57 @@
+name: Publish to Social Media
+
+# Dispara quando um novo post MDX entra na main (commit via GitHub API pelo n8n).
+# Extrai o frontmatter e aciona o webhook do n8n, que publica no Instagram e LinkedIn.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/blog/posts/**.mdx'
+
+jobs:
+  post-social:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect new post
+        id: detect
+        run: |
+          NEW_FILE=$(git diff --name-only --diff-filter=A HEAD~1 HEAD -- 'app/blog/posts/*.mdx' | head -n 1)
+          echo "file=$NEW_FILE" >> "$GITHUB_OUTPUT"
+          if [ -n "$NEW_FILE" ]; then
+            echo "Novo post detectado: $NEW_FILE"
+          else
+            echo "Nenhum post novo neste push."
+          fi
+
+      - name: Setup Node
+        if: steps.detect.outputs.file != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install gray-matter
+        if: steps.detect.outputs.file != ''
+        run: npm install gray-matter
+
+      - name: Extract frontmatter
+        if: steps.detect.outputs.file != ''
+        run: |
+          node scripts/extract-post-meta.mjs "${{ steps.detect.outputs.file }}" > meta.json
+          echo "Payload:"
+          cat meta.json
+
+      - name: Notify n8n webhook
+        if: steps.detect.outputs.file != ''
+        env:
+          WEBHOOK_URL: ${{ secrets.N8N_SOCIAL_WEBHOOK_URL }}
+          WEBHOOK_SECRET: ${{ secrets.N8N_WEBHOOK_SECRET }}
+        run: |
+          # -d @meta.json evita quebra de shell quando o título tem aspas.
+          curl -sf -X POST "$WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -H "X-Webhook-Secret: $WEBHOOK_SECRET" \
+            -d @meta.json
