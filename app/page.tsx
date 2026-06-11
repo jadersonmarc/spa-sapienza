@@ -26,9 +26,7 @@ export default function HomePage() {
       <section id="diferenciais">
         <Differentials />
       </section>
-      <section id="contato">
-        <Footer />
-      </section>
+      <Footer />
       <WhatsAppButton />
     </main>
   )

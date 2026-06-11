@@ -32,7 +32,7 @@
 | SPEC-14 | UX | Unificar os 5 CTAs na oferta "Diagnóstico gratuito — 30 minutos", mensagem de WhatsApp parametrizada por origem (depende da SPEC-13 existir para o link do blog) |
 
 **Status:**
-- [ ] SPEC-13 — Rota /contato
+- [x] SPEC-13 — Rota /contato (executada fora de ordem a pedido do fundador; resolve os 5 links `/contato` dos posts e a nav "Contato")
 - [ ] SPEC-19 — Metadata global
 - [ ] SPEC-21 — Higiene de contato no footer
 - [ ] SPEC-20 — Tagline pt-BR
