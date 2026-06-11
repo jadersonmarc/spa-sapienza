@@ -11,20 +11,10 @@ export const metadata: Metadata = {
   description: 'Especialistas em desenvolvimento de software, automações inteligentes e soluções RegTech sob medida. Transformamos complexidade técnica em ativos digitais de alto valor.',
   icons: {
     icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-      {
-        url: '/icon-dark-32x32.png',
-        type: 'image/png',
-        sizes: '32x32',
-        media: '(prefers-color-scheme: dark)'
-      },
-      {
-        url: '/icon-light-32x32.png',
-        type: 'image/png',
-        sizes: '32x32',
-        media: '(prefers-color-scheme: light)'
-      },
+      { url: '/icon-32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
     ],
+    apple: { url: '/apple-icon.png', sizes: '180x180' },
   },
 }
 
