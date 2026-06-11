@@ -2,11 +2,11 @@ import Link from "next/link"
 import { Calendar, Clock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tag, type TagTone } from "@/components/tag"
-import type { Pilar, Post } from "@/lib/posts"
+import type { Pilar, Post } from "@/lib/blog"
 
 export const pilarConfig: Record<Pilar, { label: string; tone: TagTone }> = {
-  "engenharia-ia": { label: "Engenharia + IA", tone: "blue" },
-  "negocio-pme": { label: "Negócio / PME", tone: "green" },
+  "engenharia": { label: "Engenharia + IA", tone: "blue" },
+  "pme": { label: "Negócio / PME", tone: "green" },
   "bastidores": { label: "Bastidores", tone: "orange" }
 }
 

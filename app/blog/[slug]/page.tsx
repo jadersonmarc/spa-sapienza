@@ -7,7 +7,7 @@ import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { BlogBreadcrumb } from "@/components/blog-breadcrumb"
 import { Button } from "@/components/ui/button"
-import { getPostBySlug, getAllPosts } from "@/lib/posts"
+import { getPostBySlug, getAllPosts } from "@/lib/blog"
 
 interface PageProps {
   params: Promise<{ slug: string }>

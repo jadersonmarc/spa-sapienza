@@ -54,8 +54,15 @@ pnpm lint    # análise estática
 - `components/` — seções da home (`hero.tsx`, `services.tsx`,
   `differentials.tsx`, `header.tsx`, `footer.tsx`, `whatsapp-button.tsx`) e
   `components/ui/` (shadcn).
-- `lib/posts.ts` — posts do blog hardcoded como array (interface `Post`).
-  Parsing de markdown via regex em `app/blog/[slug]/page.tsx`.
+- `app/blog/posts/` — posts em `.mdx` (`YYYY-MM-DD-slug.mdx`), frontmatter
+  YAML + corpo Markdown. Pilares: `pme` | `engenharia` | `bastidores`.
+- `lib/blog.ts` — lê os `.mdx` no build via `gray-matter` e expõe
+  `getAllPosts` / `getPostBySlug` (interface `Post`); mapeia o frontmatter para
+  a interface e calcula `readingTime`. Parsing do corpo via regex em
+  `app/blog/[slug]/page.tsx`.
+- `scripts/extract-post-meta.mjs` + `.github/workflows/publish-social.yml` +
+  `docs/n8n-workflows/editorial-automation.json` — pipeline editorial
+  automático (ver `docs/AUTOMACAO_EDITORIAL.md`).
 - `public/` — assets permitidos: `logo-sapienza.png` (logo principal),
   `icon.svg`, `icon-dark-32x32.png`, `icon-light-32x32.png`, `marc.png`.
 

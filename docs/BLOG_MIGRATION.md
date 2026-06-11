@@ -1,8 +1,13 @@
 # Migração do Blog para MDX — Planejamento
 
-> **Status**: planejamento. Não executar agora.
-> **Gatilho para iniciar**: após os primeiros 3 clientes pagantes — a
-> prioridade atual é produzir conteúdo, não infraestrutura de blog.
+> **Status**: ✅ CONCLUÍDA (antecipada). A migração foi executada como base da
+> automação editorial (ver `docs/AUTOMACAO_EDITORIAL.md`), antes do gatilho
+> original. Diferenças em relação a este planejamento: os posts vivem em
+> `app/blog/posts/*.mdx` (não em `/content/blog/<pilar>/`); o pilar é um campo
+> do frontmatter (`pme`/`engenharia`/`bastidores`), não derivado do diretório;
+> e o corpo é renderizado pelo parser regex existente (restrição: única dep
+> nova é `gray-matter`). A camada de acesso é `lib/blog.ts`.
+> O texto abaixo é mantido como registro do diagnóstico original.
 
 ## Problema atual
 
