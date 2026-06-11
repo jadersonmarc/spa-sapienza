@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import { ArticleCard, pilarConfig } from "@/components/article-card"
+import { tagVariants } from "@/components/tag"
+import { cn } from "@/lib/utils"
 import type { Pilar, Post } from "@/lib/posts"
 
 const filters: { value: Pilar | "todos"; label: string }[] = [
@@ -31,13 +33,17 @@ export function BlogFilter({ posts }: BlogFilterProps) {
             type="button"
             onClick={() => setActiveFilter(filter.value)}
             aria-pressed={activeFilter === filter.value}
-            className={`rounded-full border px-4 py-1.5 text-[11px] uppercase tracking-wider transition-colors ${
-              activeFilter === filter.value
-                ? filter.value === "todos"
-                  ? "border-primary/30 bg-primary/15 text-primary"
-                  : pilarConfig[filter.value].color
-                : "border-border/50 text-muted-foreground hover:bg-white/4 hover:text-foreground"
-            }`}
+            className={cn(
+              tagVariants({
+                tone: activeFilter === filter.value
+                  ? filter.value === "todos"
+                    ? "primary"
+                    : pilarConfig[filter.value].tone
+                  : "neutral",
+                size: "md",
+                interactive: activeFilter !== filter.value,
+              })
+            )}
           >
             {filter.label}
           </button>

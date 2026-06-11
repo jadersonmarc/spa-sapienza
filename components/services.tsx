@@ -36,7 +36,7 @@ export function Services() {
           {services.map((service, index) => (
             <Card 
               key={index} 
-              className="glass border-border/50 hover:border-primary/30 transition-all duration-300 group"
+              className="glass border-border/50 hover:border-primary/30 transition-colors duration-300 group"
             >
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">

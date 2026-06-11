@@ -18,7 +18,10 @@
 
 ---
 
-## Fase 1 — Estancar (críticos de funil e marca) ✅ pronta para execução
+## Fase 1 — Estancar (críticos de funil e marca) ⏸️ EM ESPERA
+
+> Decisão do fundador (2026-06-10): não executar por enquanto. A execução
+> do plano começa pela Fase 2.
 
 | Spec | Origem | Entrega |
 |---|---|---|
@@ -42,13 +45,11 @@
 | SPEC-18 | UX/Design | `marc.png` 592 KB → ≤ 40 KB (256 px); og-image dedicada 1200×630 leve com o logo oficial; corrigir `<Link>` externo em /sobre e itens BAIXO do relatório UX |
 | SPEC-26 | Design | Token `--font-display` no `@theme` (versão mínima: Geist com peso/tracking próprios) — destrava a classe usada em todos os títulos |
 | SPEC-27 | Design | `.glass`/`.glow-*` derivados dos tokens oklch via `color-mix` (fim do rgba hardcoded) |
-| SPEC-22 | Branding | Padronizar promessa geográfica nos posts e páginas (Baixada Fluminense como identidade) |
 
 **Status:**
-- [ ] SPEC-18 — Imagens otimizadas + ajustes baixos
-- [ ] SPEC-26 — Token de tipografia display
-- [ ] SPEC-27 — Efeitos derivados dos tokens
-- [ ] SPEC-22 — Promessa geográfica
+- [x] SPEC-18 — Imagens otimizadas + ajustes baixos
+- [x] SPEC-26 — Token de tipografia display
+- [x] SPEC-27 — Efeitos derivados dos tokens
 
 ## Fase 3 — Confiança e conversão (coração comercial)
 
@@ -60,10 +61,10 @@
 | SPEC-17 | UX | Nav do header com âncoras Serviços/Portfólio, Contato reativado, `#sobre` da home → `#diferenciais` |
 
 **Status:**
-- [ ] SPEC-15 — Seção de confiança
-- [ ] SPEC-24 — Fundador na home + logo no footer
-- [ ] SPEC-16 — Seção "Como funciona"
-- [ ] SPEC-17 — Navegação com âncoras
+- [x] SPEC-15 — Seção de confiança
+- [x] SPEC-24 — Fundador na home + logo no footer
+- [x] SPEC-16 — Seção "Como funciona"
+- [x] SPEC-17 — Navegação com âncoras
 
 ## Fase 4 — Identidade e consistência
 
@@ -74,9 +75,9 @@
 | SPEC-25 | Branding | `docs/MARCA.md` — mini brand book: paleta (com decisão pendente registrada), tipografia, tom de voz, mensagens-chave, glossário (termos a evitar) |
 
 **Status:**
-- [ ] SPEC-23 — /sobre reordenada
-- [ ] SPEC-28 — Tag/Pill unificado
-- [ ] SPEC-25 — Brand book
+- [x] SPEC-23 — /sobre reordenada
+- [x] SPEC-28 — Tag/Pill unificado
+- [x] SPEC-25 — Brand book
 
 ## Fase 5 — Higiene técnica
 
@@ -86,8 +87,8 @@
 | SPEC-30 | Design | `transition-all` → transições específicas nos componentes de seção; testar remoção do `overflow-x: hidden` global |
 
 **Status:**
-- [ ] SPEC-29 — Limpeza de bundle
-- [ ] SPEC-30 — Micro-polish
+- [x] SPEC-29 — Limpeza de bundle (CSS de produção 127,4 KB → 50,5 KB; 54 componentes `ui/` removidos, mantidos `button`/`card`/`breadcrumb`; `theme-provider.tsx` e `hooks/` órfãos removidos; 40 dependências órfãs removidas)
+- [x] SPEC-30 — Micro-polish (`transition-all` → transições específicas nas seções; `overflow-x: hidden` global removido sem regressão)
 
 ---
 
@@ -102,6 +103,9 @@
 
 ## Fora deste plano (pendências conhecidas)
 
+- **SPEC-22 — promessa geográfica**: removida do plano por decisão do
+  fundador (2026-06-10) — a âncora geográfica é parte da estratégia e será
+  trabalhada de outra forma, em outro momento. Não explorar por enquanto.
 - **Analytics** (decisão adiada pelo fundador — Umami/Plausible vs GA4).
 - **Migração MDX do blog** (`docs/BLOG_MIGRATION.md` — gatilho: 3 clientes
   pagantes).

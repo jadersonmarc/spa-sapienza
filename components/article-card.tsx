@@ -1,12 +1,13 @@
 import Link from "next/link"
 import { Calendar, Clock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Tag, type TagTone } from "@/components/tag"
 import type { Pilar, Post } from "@/lib/posts"
 
-export const pilarConfig: Record<Pilar, { label: string; color: string }> = {
-  "engenharia-ia": { label: "Engenharia + IA", color: "bg-blue-500/15 text-blue-400 border-blue-500/20" },
-  "negocio-pme": { label: "Negócio / PME", color: "bg-green-500/15 text-green-400 border-green-500/20" },
-  "bastidores": { label: "Bastidores", color: "bg-orange-500/15 text-orange-400 border-orange-500/20" }
+export const pilarConfig: Record<Pilar, { label: string; tone: TagTone }> = {
+  "engenharia-ia": { label: "Engenharia + IA", tone: "blue" },
+  "negocio-pme": { label: "Negócio / PME", tone: "green" },
+  "bastidores": { label: "Bastidores", tone: "orange" }
 }
 
 interface ArticleCardProps {
@@ -16,7 +17,7 @@ interface ArticleCardProps {
 export function ArticleCard({ post }: ArticleCardProps) {
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
-      <Card className="h-full bg-card/50 border-border/50 transition-all duration-300 hover:border-primary/30 hover:bg-card/80">
+      <Card className="h-full bg-card/50 border-border/50 transition-colors duration-300 hover:border-primary/30 hover:bg-card/80">
         <CardHeader className="p-4 sm:p-6">
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-2 sm:gap-4">
             <span className="flex items-center gap-1">
@@ -32,11 +33,9 @@ export function ArticleCard({ post }: ArticleCardProps) {
               {post.readingTime} de leitura
             </span>
           </div>
-          <span
-            className={`mb-2 w-fit rounded-full border px-2.5 py-0.5 text-[10px] uppercase tracking-wider ${pilarConfig[post.pilar].color}`}
-          >
+          <Tag tone={pilarConfig[post.pilar].tone} className="mb-2">
             {pilarConfig[post.pilar].label}
-          </span>
+          </Tag>
           <CardTitle className="text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2 sm:text-lg">
             {post.title}
           </CardTitle>

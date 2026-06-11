@@ -8,7 +8,7 @@ export function WhatsAppButton() {
       href="https://wa.me/5521986537054?text=Olá! Gostaria de mais informações."
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20BD5A] flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-110 group"
+      className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20BD5A] flex items-center justify-center shadow-lg hover:shadow-xl transition-[background-color,box-shadow,transform] duration-300 hover:scale-110 group"
       aria-label="Contato via WhatsApp"
     >
       <MessageCircle className="h-7 w-7 text-white" />

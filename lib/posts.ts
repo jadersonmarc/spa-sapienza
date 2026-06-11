@@ -31,7 +31,7 @@ export const posts: Post[] = [
     author: {
       name: "Marc Jaderson",
       role: "Fundador, Sapienza Labs",
-      avatarUrl: "/marc.png"
+      avatarUrl: "/marc.webp"
     },
     keywords: ["software personalizado", "sistema sob medida", "desenvolvimento de software para empresas"],
     content: `
@@ -96,7 +96,7 @@ Confira também nosso artigo sobre [como a automação de processos pode reduzir
     author: {
       name: "Marc Jaderson",
       role: "Fundador, Sapienza Labs",
-      avatarUrl: "/marc.png"
+      avatarUrl: "/marc.webp"
     },
     keywords: ["automação de processos", "redução de custos", "software para pequenas empresas RJ"],
     content: `
@@ -167,7 +167,7 @@ Saiba também [o que é uma API e como ela pode conectar todos os sistemas do se
     author: {
       name: "Marc Jaderson",
       role: "Fundador, Sapienza Labs",
-      avatarUrl: "/marc.png"
+      avatarUrl: "/marc.webp"
     },
     keywords: ["integração de sistemas", "API para empresas", "conectar sistemas", "desenvolvimento de software RJ"],
     content: `
@@ -247,7 +247,7 @@ Leia também sobre [quando vale a pena investir em software personalizado](/blog
     author: {
       name: "Marc Jaderson",
       role: "Fundador, Sapienza Labs",
-      avatarUrl: "/marc.png"
+      avatarUrl: "/marc.webp"
     },
     keywords: [
       "Sapienza University",
@@ -308,7 +308,7 @@ Leia também: [software personalizado ou sistema pronto](/blog/software-personal
     author: {
       name: "Marc Jaderson",
       role: "Fundador, Sapienza Labs",
-      avatarUrl: "/marc.png"
+      avatarUrl: "/marc.webp"
     },
     keywords: [
       "cursos Sapienza University",

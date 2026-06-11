@@ -1,18 +1,19 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tag, type TagTone } from "@/components/tag"
 
 type TagColor = "blue" | "yellow" | "purple"
 
-const tagStyles: Record<TagColor, { badge: string; border: string }> = {
+const tagStyles: Record<TagColor, { tone: TagTone; border: string }> = {
   blue: {
-    badge: "bg-blue-500/15 text-blue-400 border-blue-500/20",
+    tone: "blue",
     border: "border-l-blue-500/50"
   },
   yellow: {
-    badge: "bg-yellow-500/15 text-yellow-400 border-yellow-500/20",
+    tone: "yellow",
     border: "border-l-yellow-500/50"
   },
   purple: {
-    badge: "bg-purple-500/15 text-purple-400 border-purple-500/20",
+    tone: "purple",
     border: "border-l-purple-500/50"
   }
 }
@@ -71,20 +72,18 @@ export function Portfolio() {
           {projects.map((project) => (
             <Card
               key={project.name}
-              className={`glass border-border/50 border-l-2 ${tagStyles[project.tagColor].border} hover:border-primary/30 transition-all duration-300`}
+              className={`glass border-border/50 border-l-2 ${tagStyles[project.tagColor].border} hover:border-primary/30 transition-colors duration-300`}
             >
               <CardHeader>
-                <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                <Tag tone="neutral">
                   {project.sector}
-                </p>
+                </Tag>
                 <CardTitle className="text-xl font-semibold text-card-foreground font-display">
                   {project.name}
                 </CardTitle>
-                <span
-                  className={`mt-1 w-fit rounded-full border px-2.5 py-0.5 text-[10px] uppercase tracking-wider ${tagStyles[project.tagColor].badge}`}
-                >
+                <Tag tone={tagStyles[project.tagColor].tone} className="mt-1">
                   {project.tag}
-                </span>
+                </Tag>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-muted-foreground text-base leading-relaxed">
@@ -92,12 +91,15 @@ export function Portfolio() {
                 </CardDescription>
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {project.stack.map((tech) => (
-                    <span
+                    <Tag
                       key={tech}
-                      className="rounded-md border border-border/50 bg-secondary/40 px-2 py-0.5 font-mono text-xs text-muted-foreground"
+                      tone="muted"
+                      shape="rounded"
+                      textCase="normal"
+                      mono
                     >
                       {tech}
-                    </span>
+                    </Tag>
                   ))}
                 </div>
               </CardContent>

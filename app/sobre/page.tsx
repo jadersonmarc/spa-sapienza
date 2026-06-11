@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Leaf, HeartPulse, Building2 } from "lucide-react"
-import Link from "next/link"
 import Image from "next/image"
 
 export const metadata: Metadata = {
@@ -74,7 +73,7 @@ export default function SobrePage() {
         {/* Hero Section */}
         <section className="px-4 sm:px-6">
           <div className="mx-auto max-w-3xl">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl text-balance">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground font-display sm:text-4xl md:text-5xl text-balance">
               Quem somos
             </h1>
             <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -83,20 +82,43 @@ export default function SobrePage() {
           </div>
         </section>
 
-        {/* Mission Section */}
+        {/* Commercial Context Section */}
         <section className="mt-16 px-4 sm:mt-20 sm:px-6">
           <div className="mx-auto max-w-3xl">
-            <h2 className="text-xl font-semibold text-foreground sm:text-2xl">Nossa missão</h2>
+            <h2 className="text-xl font-semibold text-foreground font-display sm:text-2xl">Para quem trabalhamos</h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Existimos na interseção entre engenharia e impacto social. Desenvolvemos software robusto, mas também perseguimos algo maior: usar tecnologia como ferramenta para o progresso científico e para resolver problemas públicos reais — no agronegócio, na saúde pública e na infraestrutura cívica.
+              Trabalhamos com empresas que chegaram ao limite da planilha, do sistema pronto ou do processo manual. Nosso papel é transformar operação real em software sob medida, com escopo claro e engenharia responsável desde o primeiro diagnóstico.
             </p>
           </div>
         </section>
 
-        {/* How We Build Knowledge Section */}
+        {/* Founder Section */}
         <section className="mt-16 px-4 sm:mt-20 sm:px-6">
           <div className="mx-auto max-w-3xl">
-            <h2 className="text-xl font-semibold text-foreground sm:text-2xl">Como construímos conhecimento</h2>
+            <div className="glass flex flex-col items-center gap-6 rounded-2xl p-6 text-center sm:gap-8 sm:p-8 md:flex-row md:items-start md:text-left">
+              <div className="relative h-28 w-28 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/20 sm:h-32 sm:w-32">
+                <Image
+                  src="/marc.webp"
+                  alt="Marc, fundador da Sapienza Labs"
+                  fill
+                  sizes="128px"
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold text-foreground font-display sm:text-2xl">O fundador</h2>
+                <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
+                  Sou Marc, o engenheiro por trás da Sapienza Labs. Vim do Ruby e do Smalltalk, me apaixonei por Go e Rust, e decidi que a melhor forma de crescer era construir coisas que importam. Moro em Duque de Caxias e acredito que a Baixada Fluminense merece uma referência tecnológica própria.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How We Work Section */}
+        <section className="mt-16 px-4 sm:mt-20 sm:px-6">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="text-xl font-semibold text-foreground font-display sm:text-2xl">Como trabalhamos</h2>
             <div className="mt-4 space-y-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
               <p>
                 Não trabalhamos isolados. A Sapienza Labs participa ativamente de programas de empreendedorismo e inovação, como o Dev Empreendedor do SEBRAE, e busca parcerias com ICTs (Instituições de Ciência e Tecnologia) e centros de pesquisa.
@@ -111,7 +133,10 @@ export default function SobrePage() {
         {/* Impact Areas Section */}
         <section className="mt-16 px-4 sm:mt-20 sm:px-6">
           <div className="mx-auto max-w-3xl">
-            <h2 className="text-xl font-semibold text-foreground sm:text-2xl">Áreas de impacto social</h2>
+            <h2 className="text-xl font-semibold text-foreground font-display sm:text-2xl">Impacto social como visão</h2>
+            <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Existimos na interseção entre engenharia e impacto social. Desenvolvemos software robusto, mas também perseguimos algo maior: usar tecnologia como ferramenta para o progresso científico e para resolver problemas públicos reais — no agronegócio, na saúde pública e na infraestrutura cívica.
+            </p>
             <div className="mt-6 grid gap-4 sm:mt-8 sm:gap-6 md:grid-cols-3">
               {impactAreas.map((area) => (
                 <div
@@ -131,28 +156,6 @@ export default function SobrePage() {
           </div>
         </section>
 
-        {/* Founder Section */}
-        <section className="mt-16 px-4 sm:mt-20 sm:px-6">
-          <div className="mx-auto max-w-3xl">
-            <div className="glass flex flex-col items-center gap-6 rounded-2xl p-6 text-center sm:gap-8 sm:p-8 md:flex-row md:items-start md:text-left">
-              <div className="relative h-28 w-28 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/20 sm:h-32 sm:w-32">
-                <Image
-                  src="/marc.png"
-                  alt="Marc, fundador da Sapienza Labs"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-foreground sm:text-2xl">O fundador</h2>
-                <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  Sou Marc, o engenheiro por trás da Sapienza Labs. Vim do Ruby e do Smalltalk, me apaixonei por Go e Rust, e decidi que a melhor forma de crescer era construir coisas que importam. Moro em Duque de Caxias e acredito que a Baixada Fluminense merece uma referência tecnológica própria.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* CTA Section */}
         <section className="mt-16 px-4 sm:mt-20 sm:px-6">
           <div className="mx-auto max-w-3xl text-center">
@@ -161,10 +164,14 @@ export default function SobrePage() {
             </h2>
             <p className="mt-2 text-muted-foreground">Fale com a gente.</p>
             <Button asChild className="mt-6 w-full group sm:w-auto">
-              <Link href="https://wa.me/5521986537054?text=Olá! Vim do site e gostaria de conversar.">
+              <a
+                href="https://wa.me/5521986537054?text=Olá! Vim do site e gostaria de conversar."
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Entrar em contato
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
+              </a>
             </Button>
           </div>
         </section>

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { Tag } from "@/components/tag"
 import { MessageCircle } from "lucide-react"
 
 export function Hero() {
@@ -11,12 +11,9 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        <Badge 
-          variant="outline" 
-          className="mb-4 px-3 py-1 text-[10px] uppercase tracking-widest border-primary/30 text-primary bg-primary/5 sm:mb-6 sm:px-4 sm:py-1.5 sm:text-xs"
-        >
+        <Tag tone="primary" size="sm" className="mb-4 sm:mb-6">
           Software sob medida · Baixada Fluminense
-        </Badge>
+        </Tag>
 
         <h1 className="text-3xl font-semibold tracking-tight text-foreground mb-4 text-balance font-display sm:text-4xl sm:mb-6 md:text-5xl lg:text-6xl">
           Seu negócio merece sistema feito para ele —{" "}

@@ -43,6 +43,7 @@
 @theme inline {
   --font-sans: 'Geist', 'Geist Fallback';
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-display: 'Geist', 'Geist Fallback';
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -85,28 +86,26 @@
   * {
     @apply border-border outline-ring/50;
   }
-  html {
-    overflow-x: hidden;
-  }
   body {
     @apply bg-background text-foreground;
-    overflow-x: hidden;
   }
 }
 
 /* Glassmorphism utility */
 .glass {
-  background: rgba(20, 20, 30, 0.6);
+  background: color-mix(in oklch, var(--card) 72%, transparent);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid color-mix(in oklch, var(--border) 45%, transparent);
 }
 
 /* Glow effect for accent elements */
 .glow-primary {
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 40px rgba(139, 92, 246, 0.1);
+  box-shadow:
+    0 0 20px color-mix(in oklch, var(--primary) 32%, transparent),
+    0 0 40px color-mix(in oklch, var(--primary) 12%, transparent);
 }
 
 .glow-text {
-  text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+  text-shadow: 0 0 20px color-mix(in oklch, var(--primary) 52%, transparent);
 }

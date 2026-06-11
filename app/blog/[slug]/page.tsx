@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       siteName: "Sapienza Labs",
       images: [
         {
-          url: "https://sapienzalabs.com.br/logo-sapienza.png",
+          url: "https://sapienzalabs.com.br/og-image.png",
           width: 1200,
           height: 630,
           alt: post.title

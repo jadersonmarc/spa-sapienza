@@ -9,9 +9,11 @@ import { ArrowUpRight, MessageCircle, Menu, X } from "lucide-react"
 
 const navLinks = [
   { href: "/", label: "Início" },
+  { href: "/#servicos", label: "Serviços" },
+  { href: "/#portfolio", label: "Portfólio" },
   { href: "/sobre", label: "Sobre" },
   { href: "/blog", label: "Blog" },
-  // { href: "/#contato", label: "Contato" },
+  { href: "/#contato", label: "Contato" },
 ]
 
 export function Header() {
@@ -51,39 +53,32 @@ export function Header() {
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/"
-    if (href.startsWith("/#")) return pathname === "/"
+    if (href.startsWith("/#")) return false
     return pathname.startsWith(href)
   }
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6">
-      <div className="glass mx-auto flex h-16 max-w-6xl items-center justify-between rounded-full border border-white/8 px-4 shadow-[0_16px_48px_rgba(2,6,23,0.38)] md:h-[4.5rem] md:px-6">
+      <div className="glass mx-auto flex h-16 max-w-6xl items-center justify-between rounded-full border border-white/8 px-4 shadow-[0_16px_48px_color-mix(in_oklch,var(--background)_72%,transparent)] md:h-[4.5rem] md:px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 text-foreground sm:gap-3">
-          <span className="flex h-9 w-9 items-center justify-center sm:h-10 sm:w-10">
-            <Image
-              src="/icon.svg"
-              alt="Sapienza Labs"
-              width={36}
-              height={36}
-              priority
-            />
-          </span>
-          <span className="flex flex-col leading-none">
-            <span className="font-display text-lg text-foreground sm:text-xl">Sapienza Labs</span>
-            <span className="hidden text-[10px] uppercase tracking-[0.32em] text-muted-foreground sm:block sm:text-[11px]">
-              Product Studio
-            </span>
-          </span>
+        <Link href="/" className="flex items-center text-foreground" aria-label="Sapienza Labs — início">
+          <Image
+            src="/logo-sapienza-footer.webp"
+            alt="Sapienza Labs"
+            width={168}
+            height={92}
+            priority
+            className="h-9 w-auto sm:h-10"
+          />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 rounded-full border border-white/8 bg-white/4 p-1 md:flex" aria-label="Menu principal">
+        <nav className="hidden items-center gap-1 rounded-full border border-white/8 bg-white/4 p-1 lg:flex" aria-label="Menu principal">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`rounded-full px-4 py-2 text-[11px] uppercase tracking-wider transition-colors hover:bg-white/6 hover:text-foreground ${
+            className={`rounded-full px-3 py-2 text-[11px] uppercase tracking-wider transition-colors hover:bg-white/6 hover:text-foreground xl:px-4 ${
                 isActive(link.href)
                   ? "bg-white/8 text-foreground"
                   : "text-muted-foreground"
@@ -102,7 +97,7 @@ export function Header() {
           </div>
           
           {/* Desktop CTA Button */}
-          <Button size="sm" className="group hidden sm:inline-flex" asChild>
+          <Button size="sm" className="group hidden rounded-full sm:inline-flex" asChild>
             <a
               href="https://wa.me/5521986537054?text=Olá! Gostaria de solicitar um orçamento."
               target="_blank"
@@ -118,7 +113,7 @@ export function Header() {
           <button
             type="button"
             onClick={toggleMenu}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/8 bg-white/4 text-foreground transition-colors hover:bg-white/8 md:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/8 bg-white/4 text-foreground transition-colors hover:bg-white/8 lg:hidden"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
@@ -131,7 +126,7 @@ export function Header() {
       {/* Mobile Menu Overlay */}
       <div
         id="mobile-menu"
-        className={`fixed inset-x-0 top-0 z-40 h-screen bg-background/98 backdrop-blur-lg transition-all duration-300 ease-in-out md:hidden ${
+        className={`fixed inset-x-0 top-0 z-40 h-screen bg-background/98 backdrop-blur-lg transition-[opacity,visibility] duration-300 ease-in-out lg:hidden ${
           isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
         role="dialog"

@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge"
+import { Tag } from "@/components/tag"
 import { ClipboardCheck, Wrench, ShieldCheck } from "lucide-react"
 
 const features = [
@@ -29,12 +29,9 @@ export function Differentials() {
 
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="glass rounded-2xl p-6 text-center border-border/50 sm:p-8 md:p-12">
-          <Badge 
-            variant="outline" 
-            className="mb-4 px-3 py-1 text-[10px] uppercase tracking-widest border-accent/30 text-accent bg-accent/5 sm:mb-6 sm:px-4 sm:py-1.5 sm:text-xs"
-          >
+          <Tag tone="accent" size="sm" className="mb-4 sm:mb-6">
             Por que Sapienza Labs?
-          </Badge>
+          </Tag>
 
           <h2 className="text-xl font-semibold text-foreground mb-4 text-balance leading-tight font-display sm:text-2xl sm:mb-6 md:text-3xl lg:text-4xl">
             Porque não entregamos apenas código; entregamos{" "}
