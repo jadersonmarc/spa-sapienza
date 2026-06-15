@@ -4,12 +4,12 @@ import { useState } from "react"
 import { ArticleCard, pilarConfig } from "@/components/article-card"
 import { tagVariants } from "@/components/tag"
 import { cn } from "@/lib/utils"
-import type { Pilar, Post } from "@/lib/posts"
+import type { Pilar, Post } from "@/lib/blog"
 
 const filters: { value: Pilar | "todos"; label: string }[] = [
   { value: "todos", label: "Todos" },
-  { value: "negocio-pme", label: pilarConfig["negocio-pme"].label },
-  { value: "engenharia-ia", label: pilarConfig["engenharia-ia"].label },
+  { value: "pme", label: pilarConfig["pme"].label },
+  { value: "engenharia", label: pilarConfig["engenharia"].label },
   { value: "bastidores", label: pilarConfig["bastidores"].label }
 ]
 

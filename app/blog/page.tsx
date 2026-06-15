@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { BlogBreadcrumb } from "@/components/blog-breadcrumb"
 import { BlogFilter } from "@/components/blog-filter"
-import { getAllPosts } from "@/lib/posts"
+import { getAllPosts } from "@/lib/blog"
 
 export const metadata: Metadata = {
   title: "Blog | Sapienza Labs - Artigos sobre Desenvolvimento de Software",
