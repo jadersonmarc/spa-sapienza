@@ -9,7 +9,12 @@ __v0_jsx-dev-runtime.ts
 next.user-config.*
 
 # Environment variables
+.env
 .env*.local
+scripts/.env
+
+# Local MCP config (contém URL/credenciais da instância n8n)
+.mcp.json
 
 # Common ignores
 node_modules
