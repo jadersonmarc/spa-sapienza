@@ -189,6 +189,8 @@ de parse no nó *Build MDX*.
 | Instagram 400 `Cannot parse access token` (code 190) | Tipo de token errado. O endpoint `graph.facebook.com` exige token do Facebook (`EAA…`); tokens `IGAA…` (Instagram Login) só funcionam em `graph.instagram.com`. |
 | Instagram 400 `Object with ID … does not exist` (code 100) | `INSTAGRAM_ACCOUNT_ID` errado (provavelmente o id da Página). Use o `instagram_business_account.id` — ver passo 4 dos pré-requisitos. |
 | Instagram 400 `media_type`/`image_url` | `image_url` precisa ser HTTPS público. O default `/og-image.png` resolve; confirme que o domínio responde. |
+| Instagram 400 `Media ID is not available` (code 9007, subcode 2207027) | Condição de corrida: `media_publish` chamado antes do container terminar de processar. O template tem um nó **Aguardar processamento IG** (Wait 10s) entre `criar container` e `publicar`. Se persistir com imagem maior, aumente o Wait ou troque por polling de `GET /{creation_id}?fields=status_code` até `FINISHED`. |
+| Secret na Action chega vazio / nomes divergentes | Os nomes em `secrets.*` do YAML têm de bater **exatamente** com os Repository secrets (aba **Secrets**, não Variables/Environment). O passo `Notify n8n webhook` imprime `WEBHOOK_URL length`/`HTTP code` para diagnosticar. Atenção: gravar a **Test URL** (`/webhook-test/`, 86 chars) em vez da **Production** (`/webhook/`, 81 chars) causa 404 com hint de *test mode*. |
 | Instagram falha sem erro claro | Conta não é Business, ou token sem `instagram_content_publish`. Cheque `GET /me/permissions`. |
 | LinkedIn 401 | Token expirado — renove via `refresh_token`. |
 | LinkedIn 422 `author` | `LINKEDIN_AUTHOR_URN` ausente ou mal formado (`urn:li:person:...`). |

@@ -188,6 +188,19 @@
     },
     {
       "parameters": {
+        "amount": 10,
+        "unit": "seconds"
+      },
+      "id": "11111111-1111-4111-8111-111111111111",
+      "name": "Aguardar processamento IG",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [130, 700],
+      "webhookId": "wait-ig-container",
+      "notes": "Espera o container do IG ficar pronto antes do media_publish (evita erro 9007/2207027 'Media ID is not available')."
+    },
+    {
+      "parameters": {
         "method": "POST",
         "url": "=https://graph.facebook.com/v19.0/{{ $env.INSTAGRAM_ACCOUNT_ID }}/media_publish",
         "sendBody": true,
@@ -270,6 +283,9 @@
       "main": [[{ "node": "Instagram: criar container", "type": "main", "index": 0 }]]
     },
     "Instagram: criar container": {
+      "main": [[{ "node": "Aguardar processamento IG", "type": "main", "index": 0 }]]
+    },
+    "Aguardar processamento IG": {
       "main": [[{ "node": "Instagram: publicar", "type": "main", "index": 0 }]]
     },
     "Instagram: publicar": {
