@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     siteName: "Sapienza Labs",
     locale: "pt_BR",
     type: "website",
+    images: ["/og-image.png"],
   },
   alternates: {
     canonical: "https://sapienzalabs.com.br/sobre",

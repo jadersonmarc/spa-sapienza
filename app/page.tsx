@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { Hero } from "@/components/hero"
 import { Services } from "@/components/services"
 import { HowItWorks } from "@/components/how-it-works"
@@ -6,6 +7,10 @@ import { Portfolio } from "@/components/portfolio"
 import { Trust } from "@/components/trust"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
+
+export const metadata: Metadata = {
+  alternates: { canonical: "https://sapienzalabs.com.br" },
+}
 
 export default function HomePage() {
   return (

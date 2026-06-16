@@ -13,7 +13,8 @@ export const metadata: Metadata = {
     description: "Artigos e insights sobre desenvolvimento de software personalizado, automação de processos e integração de sistemas para empresas.",
     url: "https://sapienzalabs.com.br/blog",
     type: "website",
-    siteName: "Sapienza Labs"
+    siteName: "Sapienza Labs",
+    images: ["/og-image.png"]
   },
   alternates: {
     canonical: "https://sapienzalabs.com.br/blog"
