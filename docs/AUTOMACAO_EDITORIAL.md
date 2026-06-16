@@ -192,5 +192,7 @@ de parse no nó *Build MDX*.
 | Instagram falha sem erro claro | Conta não é Business, ou token sem `instagram_content_publish`. Cheque `GET /me/permissions`. |
 | LinkedIn 401 | Token expirado — renove via `refresh_token`. |
 | LinkedIn 422 `author` | `LINKEDIN_AUTHOR_URN` ausente ou mal formado (`urn:li:person:...`). |
+| Webhook 404 `"... is not registered"` (produção ou teste) | No **n8n 2.x** ativar o toggle não basta: é preciso **Publicar** o workflow. Draft não registra o webhook de produção e o boot loga `0 published workflows`. Clique em **Publish** no editor. |
+| Webhook 500 `{"code":0,"message":"No item to return was found"}` | `X-Webhook-Secret` não bate com `N8N_WEBHOOK_SECRET` → IF cai no ramo *false* (sem nós) e o `responseMode: lastNode` não tem item pra retornar. Confira se o secret enviado = env do n8n. Resposta 200 com `urn:li:share:...` = ciclo OK. |
 | Action não dispara | O push precisa **adicionar** arquivo em `app/blog/posts/*.mdx`; edição de arquivo existente também dispara, mas a detecção usa `--diff-filter=A` (apenas adições). |
 | GitHub API 409/422 | Arquivo já existe (slug repetido) ou `branch` inválida. |
