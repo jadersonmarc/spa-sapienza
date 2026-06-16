@@ -1,6 +1,8 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Calendar, Clock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { ArticleCover } from "@/components/article-cover"
 import { Tag, type TagTone } from "@/components/tag"
 import type { Pilar, Post } from "@/lib/blog"
 
@@ -17,7 +19,18 @@ interface ArticleCardProps {
 export function ArticleCard({ post }: ArticleCardProps) {
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
-      <Card className="h-full bg-card/50 border-border/50 transition-colors duration-300 hover:border-primary/30 hover:bg-card/80">
+      <Card className="h-full overflow-hidden bg-card/50 border-border/50 transition-colors duration-300 hover:border-primary/30 hover:bg-card/80 gap-0 py-0">
+        {post.coverImage ? (
+          <Image
+            src={post.coverImage}
+            alt={post.title}
+            width={640}
+            height={360}
+            className="aspect-[16/9] w-full object-cover"
+          />
+        ) : (
+          <ArticleCover pilar={post.pilar} variant="card" />
+        )}
         <CardHeader className="p-4 sm:p-6">
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-2 sm:gap-4">
             <span className="flex items-center gap-1">

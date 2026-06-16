@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { BlogBreadcrumb } from "@/components/blog-breadcrumb"
 import { Button } from "@/components/ui/button"
+import { ArticleCover } from "@/components/article-cover"
 import { getPostBySlug, getAllPosts } from "@/lib/blog"
 
 interface PageProps {
@@ -132,8 +133,24 @@ export default async function ArticlePage({ params }: PageProps) {
         <article className="pt-32 pb-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
             <BlogBreadcrumb currentPage={post.title} />
-            
-            <header className="mt-6 mb-8 sm:mt-8 sm:mb-10">
+
+            {post.coverImage ? (
+              <Image
+                src={post.coverImage}
+                alt={post.title}
+                width={1200}
+                height={480}
+                className="mt-6 aspect-[5/2] w-full rounded-xl border border-border/50 object-cover sm:mt-8"
+              />
+            ) : (
+              <ArticleCover
+                pilar={post.pilar}
+                variant="feature"
+                className="mt-6 rounded-xl border border-border/50 sm:mt-8"
+              />
+            )}
+
+            <header className="mt-6 mb-8 sm:mb-10">
               <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-muted-foreground mb-3 sm:mb-4">
                 <span className="flex items-center gap-1.5">
                   <Calendar className="h-4 w-4" />
