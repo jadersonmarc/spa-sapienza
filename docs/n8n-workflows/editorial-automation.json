@@ -92,7 +92,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Faz parse do JSON do artigo e monta o arquivo MDX + payload do GitHub.\nconst resp = $input.first().json;\nconst ctx = $('Build Claude Request').first().json;\nlet text = Array.isArray(resp.content)\n  ? resp.content.filter((b) => b.type === 'text').map((b) => b.text).join('')\n  : '';\ntext = text.trim().replace(/^```(json)?/i, '').replace(/```$/, '').trim();\nconst article = JSON.parse(text);\nconst date = ctx.today;\nconst mdx = [\n  '---',\n  `title: ${JSON.stringify(article.title)}`,\n  `slug: ${JSON.stringify(article.slug)}`,\n  `excerpt: ${JSON.stringify(article.excerpt)}`,\n  `pillar: ${JSON.stringify(ctx.pilar)}`,\n  `publishedAt: ${JSON.stringify(date)}`,\n  'author: \"Marc Jaderson\"',\n  `tags: ${JSON.stringify(article.tags || [])}`,\n  'coverImage: \"/og-image.png\"',\n  '---',\n  '',\n  article.content,\n  ''\n].join('\\n');\nconst filename = `${date}-${article.slug}.mdx`;\nconst path = `app/blog/posts/${filename}`;\nconst contentB64 = Buffer.from(mdx, 'utf-8').toString('base64');\nconst githubBody = {\n  message: `feat(blog): add post '${article.title}' [${ctx.pilar}]`,\n  content: contentB64,\n  branch: 'main'\n};\nreturn [{ json: { path, filename, title: article.title, pilar: ctx.pilar, githubBody } }];"
+        "jsCode": "// Faz parse do JSON do artigo e monta o arquivo MDX + payload do GitHub.\nconst resp = $input.first().json;\nconst ctx = $('Build Claude Request').first().json;\nlet text = Array.isArray(resp.content)\n  ? resp.content.filter((b) => b.type === 'text').map((b) => b.text).join('')\n  : '';\ntext = text.trim().replace(/^```(json)?/i, '').replace(/```$/, '').trim();\nconst article = JSON.parse(text);\nconst date = ctx.today;\nconst mdx = [\n  '---',\n  `title: ${JSON.stringify(article.title)}`,\n  `slug: ${JSON.stringify(article.slug)}`,\n  `excerpt: ${JSON.stringify(article.excerpt)}`,\n  `pillar: ${JSON.stringify(ctx.pilar)}`,\n  `publishedAt: ${JSON.stringify(date)}`,\n  'author: \"Marc Jaderson\"',\n  `tags: ${JSON.stringify(article.tags || [])}`,\n  '---',\n  '',\n  article.content,\n  ''\n].join('\\n');\nconst filename = `${date}-${article.slug}.mdx`;\nconst path = `app/blog/posts/${filename}`;\nconst contentB64 = Buffer.from(mdx, 'utf-8').toString('base64');\nconst githubBody = {\n  message: `feat(blog): add post '${article.title}' [${ctx.pilar}]`,\n  content: contentB64,\n  branch: 'main'\n};\nreturn [{ json: { path, filename, title: article.title, pilar: ctx.pilar, githubBody } }];"
       },
       "id": "77777777-7777-4777-8777-777777777777",
       "name": "Build MDX + GitHub Payload",
@@ -162,7 +162,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Monta a legenda do Instagram e o post do LinkedIn a partir do payload do webhook.\nconst p = $('Webhook Social (da GitHub Action)').first().json.body || {};\nconst tags = (p.tags || []).slice(0, 2).map((t) => '#' + String(t).replace(/[^a-zA-Z0-9]/g, '')).join(' ');\nconst igCaption = `${p.title}\\n\\n${p.excerpt}\\n\\nArtigo completo 👇\\n${p.url}\\n\\n${tags} #PME #sapienzalabs #softwaresobmedida`;\nconst liText = `${p.title}\\n\\n${p.excerpt}\\n\\n→ ${p.url}\\n\\nPublico sobre ${p.pillar} toda semana. Segue o perfil para acompanhar.`;\nreturn [{ json: { ...p, igCaption, liText, image_url: 'https://sapienzalabs.com.br/og-image.png' } }];"
+        "jsCode": "// Monta a legenda do Instagram e o post do LinkedIn a partir do payload do webhook.\nconst p = $('Webhook Social (da GitHub Action)').first().json.body || {};\nconst tags = (p.tags || []).slice(0, 2).map((t) => '#' + String(t).replace(/[^a-zA-Z0-9]/g, '')).join(' ');\nconst igCaption = `${p.title}\\n\\n${p.excerpt}\\n\\nArtigo completo 👇\\n${p.url}\\n\\n${tags} #PME #sapienzalabs #softwaresobmedida`;\nconst liText = `${p.title}\\n\\n${p.excerpt}\\n\\n→ ${p.url}\\n\\nPublico sobre ${p.pillar} toda semana. Segue o perfil para acompanhar.`;\nreturn [{ json: { ...p, igCaption, liText, image_url: `${p.url}/opengraph-image` } }];"
       },
       "id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
       "name": "Build Captions",
@@ -184,7 +184,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [20, 540],
-      "notes": "Requer conta Instagram Business. image_url usa o OG default do site (sem stock)."
+      "notes": "Requer conta Instagram Business. image_url usa o og:image branded por post (/blog/{slug}/opengraph-image)."
     },
     {
       "parameters": {
