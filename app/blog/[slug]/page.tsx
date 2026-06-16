@@ -45,15 +45,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: "article",
       publishedTime: post.date,
       authors: [post.author.name],
-      siteName: "Sapienza Labs",
-      images: [
-        {
-          url: "https://sapienzalabs.com.br/og-image.png",
-          width: 1200,
-          height: 630,
-          alt: post.title
-        }
-      ]
+      siteName: "Sapienza Labs"
+      // og:image gerado por app/blog/[slug]/opengraph-image.tsx (branded por pilar).
     },
     twitter: {
       card: "summary_large_image",
