@@ -29,10 +29,11 @@ export const platform = pgEnum("platform", ["instagram", "linkedin"])
 export const socialStatus = pgEnum("social_status", ["draft", "approved", "sent"])
 export const userRole = pgEnum("user_role", ["admin", "editor"])
 
-// ── users (espelho do Supabase auth.users; id = auth.uid) ────────────────────
+// ── users (fonte da verdade do admin; Auth.js Credentials) ───────────────────
 export const users = pgTable("users", {
-  id: uuid("id").primaryKey(), // = Supabase auth.uid
+  id: uuid("id").primaryKey().defaultRandom(),
   email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
   role: userRole("role").notNull().default("editor"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),

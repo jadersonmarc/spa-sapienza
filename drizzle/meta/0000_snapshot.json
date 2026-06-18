@@ -1,5 +1,5 @@
 {
-  "id": "808cb9c8-2820-42aa-b13f-b5fb7d58ded3",
+  "id": "2e11fe4a-eb4e-45f2-893b-a674263a6089",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -585,10 +585,17 @@
           "name": "id",
           "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "email": {
           "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
           "type": "text",
           "primaryKey": false,
           "notNull": true
