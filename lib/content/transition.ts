@@ -40,7 +40,11 @@ export async function contentTransition(
 ) {
   const result = await db.transaction(async (tx) => {
     const [item] = await tx
-      .select({ status: contentItems.status, publishedAt: contentItems.publishedAt })
+      .select({
+        status: contentItems.status,
+        publishedAt: contentItems.publishedAt,
+        slug: contentItems.slug,
+      })
       .from(contentItems)
       .where(eq(contentItems.id, itemId))
       .limit(1)
@@ -78,14 +82,20 @@ export async function contentTransition(
       note: opts.note ?? null,
     })
 
-    return { from, to }
+    return { from, to, slug: item.slug }
   })
 
-  // Efeitos colaterais só em → published (SPEC, princípio inviolável #2).
-  if (result.to === "published") {
+  // Revalida o site quando a visibilidade pública muda (entra/sai de published).
+  // O blog lê do Postgres, então publicar/despublicar reflete sem deploy.
+  const visibilityChanged = result.to === "published" || result.from === "published"
+  if (visibilityChanged) {
     revalidatePath("/blog")
-    // TODO(site DB-backed): quando o blog ler do Postgres com cacheTag('content'),
-    // trocar/adicionar revalidateTag('content', <profile>) (API de cache do Next 16).
+    revalidatePath(`/blog/${result.slug}`)
+    revalidatePath("/sitemap.xml")
+  }
+
+  // Webhook social só em → published (SPEC, princípio inviolável #2).
+  if (result.to === "published") {
     // TODO(ponte social): POST ao n8n (slug/title/excerpt/url/pilar/image_url)
     // será adicionado na fatia "/api/generate-draft + ponte social".
   }

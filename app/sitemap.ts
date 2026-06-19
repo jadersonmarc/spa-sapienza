@@ -3,8 +3,9 @@ import { getAllPosts } from "@/lib/blog"
 
 const BASE_URL = "https://sapienzalabs.com.br"
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const postEntries: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getAllPosts()
+  const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: new Date(post.date),
     changeFrequency: "monthly",

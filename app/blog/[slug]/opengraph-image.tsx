@@ -8,8 +8,9 @@ export const contentType = "image/png"
 export const alt = "Sapienza Labs"
 
 // Geração estática no build (sem runtime no Coolify).
-export function generateStaticParams() {
-  return getAllPosts().map((post) => ({ slug: post.slug }))
+export async function generateStaticParams() {
+  const posts = await getAllPosts()
+  return posts.map((post) => ({ slug: post.slug }))
 }
 
 // Fonte versionada no repo — satori não aceita .woff2; precisa de TTF/OTF.
@@ -27,7 +28,7 @@ interface ImageProps {
 
 export default async function Image({ params }: ImageProps) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPostBySlug(slug)
 
   const title = post?.title ?? "Sapienza Labs"
   const theme = pilarTheme[post?.pilar ?? "pme"]
