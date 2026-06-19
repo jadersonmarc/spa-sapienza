@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getContentItem, type Seo } from "@/lib/content/queries"
+import { allowedTransitions } from "@/lib/content/transition"
 import { ContentForm, type ContentFormValues } from "../content-form"
+import { StatusControls } from "../status-controls"
 import { saveContentAction } from "../actions"
 
 export const metadata: Metadata = {
@@ -39,6 +41,15 @@ export default async function EditContentPage({
       <p className="mb-6 text-sm text-muted-foreground">
         Salvar cria uma nova revisão (snapshot).
       </p>
+
+      <div className="mb-6">
+        <StatusControls
+          itemId={item.id}
+          status={item.status}
+          allowed={allowedTransitions(item.status)}
+        />
+      </div>
+
       <ContentForm
         action={saveContentAction.bind(null, id)}
         initial={initial}

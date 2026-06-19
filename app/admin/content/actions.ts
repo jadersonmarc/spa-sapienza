@@ -8,12 +8,14 @@ import {
   deleteContentItem,
   saveContentItem,
   slugExists,
+  type ContentStatus,
   type ContentType,
   type ItemInput,
   type Pilar,
   type RevisionInput,
   type Seo,
 } from "@/lib/content/queries"
+import { contentTransition, TransitionError } from "@/lib/content/transition"
 
 export type FormState = { error?: string }
 
@@ -95,6 +97,28 @@ export async function saveContentAction(
   revalidatePath("/admin/content")
   revalidatePath(`/admin/content/${id}`)
   redirect("/admin/content")
+}
+
+export async function transitionAction(
+  _prev: FormState,
+  formData: FormData,
+): Promise<FormState> {
+  const actorId = await requireUserId()
+  const itemId = String(formData.get("itemId") ?? "")
+  const to = String(formData.get("to") ?? "") as ContentStatus
+  const scheduledAtRaw = String(formData.get("scheduledAt") ?? "")
+  // datetime-local vem sem timezone → interpretado no fuso local do servidor.
+  const scheduledAt = scheduledAtRaw ? new Date(scheduledAtRaw) : null
+
+  try {
+    await contentTransition(itemId, to, actorId, { scheduledAt })
+  } catch (err) {
+    if (err instanceof TransitionError) return { error: err.message }
+    throw err
+  }
+  revalidatePath("/admin/content")
+  revalidatePath(`/admin/content/${itemId}`)
+  return {}
 }
 
 export async function deleteContentAction(formData: FormData) {
