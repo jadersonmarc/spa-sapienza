@@ -57,6 +57,9 @@ export function Header() {
     return pathname.startsWith(href)
   }
 
+  // O /admin tem chrome próprio — esconde o header institucional.
+  if (pathname.startsWith("/admin")) return null
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6">
       <div className="glass mx-auto flex h-16 max-w-6xl items-center justify-between rounded-full border border-white/8 px-4 shadow-[0_16px_48px_color-mix(in_oklch,var(--background)_72%,transparent)] md:h-[4.5rem] md:px-6">
