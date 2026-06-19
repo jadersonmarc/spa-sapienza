@@ -4,10 +4,10 @@ import * as schema from "./schema"
 
 const connectionString = process.env.DATABASE_URL
 if (!connectionString) {
-  throw new Error("DATABASE_URL não definida — configure o Supabase (ver SPEC.md, Passo 0).")
+  throw new Error("DATABASE_URL não definida — configure o Postgres (ver SPEC.md, Passo 0).")
 }
 
-// prepare:false é recomendado com o pooler de transação do Supabase (pgbouncer).
+// prepare:false p/ compatibilidade com poolers de transação (pgbouncer/supavisor).
 const client = postgres(connectionString, { prepare: false })
 
 export const db = drizzle(client, { schema })
