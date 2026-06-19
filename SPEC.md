@@ -13,7 +13,7 @@ do conteúdo de MDX para Postgres. Atualizar ao fim de cada fase junto com
   público (`2.24.82.211:5432`); em produção o app usa o host interno do Docker.
 - **Auth.js v5** (next-auth, App Router) com **Credentials provider** (e-mail + senha,
   hash argon2/bcrypt) e **sessão via JWT** — sem Supabase Auth.
-- **S3/MinIO** self-hosted no Coolify para imagens do editor — sem Supabase Storage.
+- **Storage S3-compatível (Cloudflare R2)** para imagens do editor — sem Supabase Storage.
 - **Drizzle ORM + drizzle-kit** como camada de dados (SQL explícito, migrations versionadas)
   sobre o Postgres (`DATABASE_URL`).
 - LinkedIn permanece como hoje.
@@ -102,15 +102,15 @@ draft → in_review → scheduled → published → archived
 ### Passo 0 — Provisionamento (concluído)
 - Postgres standalone provisionado na VPS (Coolify); schema aplicado (`pnpm db:push`):
   6 tabelas + 7 enums. Supabase removido do código e das deps.
-- Envs: `DATABASE_URL`, `AUTH_SECRET`, S3/MinIO (`S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`,
-  `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_PUBLIC_URL`), `ANTHROPIC_API_KEY`,
+- Envs: `DATABASE_URL`, `AUTH_SECRET`, S3 (Cloudflare R2: `S3_ENDPOINT`, `S3_REGION`,
+  `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_PUBLIC_URL`), `ANTHROPIC_API_KEY`,
   `WEBHOOK_SECRET`, `INSTAGRAM_ACCESS_TOKEN` (Page token longo).
 - Drizzle + drizzle-kit configurados; schema escrito; migrations aplicadas no Postgres.
 
 ### Fase 1 — Fundação + Gestão de Conteúdo
 schema+migrations (incl. `users.password_hash`); Auth.js (Credentials) + middleware `/admin`
 (roles) + seed do admin; CRUD; editor markdown (CodeMirror 6 + preview, toolbar, upload p/
-S3/MinIO); versionamento + diff; máquina de estados + revalidação; `/api/generate-draft` +
+Cloudflare R2); versionamento + diff; máquina de estados + revalidação; `/api/generate-draft` +
 ponte social; migração dos 10 MDX → DB. Testes: transições, versionamento/diff, autorização,
 geração. **(checkpoint)**
 
@@ -155,7 +155,7 @@ via API, por conteúdo e agregado.
 
 ## Itens a confirmar
 1. (resolvido) Banco = Postgres standalone na VPS; Auth = Auth.js (Credentials);
-   Storage = S3/MinIO. Supabase descontinuado.
+   Storage = S3-compatível (Cloudflare R2). Supabase descontinuado.
 2. Editor: **CodeMirror 6 + preview** (rec.) vs Milkdown vs TipTap.
 3. Analytics: **Umami** (rec.) vs Plausible vs PostHog.
 4. Aposentar `app/blog/posts/*.mdx` após migrar (slugs preservados).
