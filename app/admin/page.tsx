@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
@@ -33,10 +34,13 @@ export default async function AdminPage() {
       </div>
 
       <Card className="p-6">
-        <p className="text-sm text-muted-foreground">
-          Autenticação funcionando. Os módulos de conteúdo (CRUD, editor,
-          versionamento) entram nas próximas etapas da Fase 1.
+        <h2 className="mb-1 font-medium">Gestão de conteúdo</h2>
+        <p className="mb-4 text-sm text-muted-foreground">
+          Criar, editar e versionar posts e páginas.
         </p>
+        <Button asChild>
+          <Link href="/admin/content">Abrir conteúdo</Link>
+        </Button>
       </Card>
     </main>
   )
