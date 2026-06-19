@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { MarkdownEditor } from "./markdown-editor"
 import type { FormState } from "./actions"
 
 const PILAR_OPTIONS = [
@@ -50,6 +51,7 @@ export function ContentForm({
   const v = { ...EMPTY, ...initial }
   const [state, formAction, pending] = useActionState(action, {})
   const [type, setType] = useState<"post" | "page">(v.type)
+  const [body, setBody] = useState(v.bodyMarkdown)
 
   return (
     <form action={formAction} className="flex max-w-3xl flex-col gap-4">
@@ -96,16 +98,11 @@ export function ContentForm({
         <input name="excerpt" defaultValue={v.excerpt} className={field} />
       </label>
 
-      <label className="flex flex-col gap-1.5 text-sm">
+      <div className="flex flex-col gap-1.5 text-sm">
         <span className="text-muted-foreground">Corpo (Markdown)</span>
-        <textarea
-          name="bodyMarkdown"
-          defaultValue={v.bodyMarkdown}
-          required
-          rows={16}
-          className={`${field} font-mono text-sm`}
-        />
-      </label>
+        <MarkdownEditor value={body} onChange={setBody} />
+        <input type="hidden" name="bodyMarkdown" value={body} />
+      </div>
 
       <fieldset className="flex flex-col gap-4 rounded-md border border-white/10 p-4">
         <legend className="px-1 text-sm text-muted-foreground">SEO</legend>
