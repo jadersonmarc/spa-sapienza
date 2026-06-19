@@ -1,0 +1,72 @@
+---
+title: "Como a Sapienza Labs decide o que vai (e o que não vai) construir"
+slug: "como-a-sapienza-labs-decide-o-que-vai-e-o-que-nao-vai-construir"
+excerpt: "Bastidores do nosso processo de decisão: por que rejeitamos projetos, como priorizamos funcionalidades e o que guia cada linha de código que escrevemos para PMEs da Baixada."
+pillar: "bastidores"
+publishedAt: "2026-06-19"
+author: "Marc Jaderson"
+tags: ["bastidores","processo","desenvolvimento-de-software","PME","Sapienza-Labs"]
+coverImage: "/og-image.png"
+---
+
+Semana passada um cliente me perguntou por que eu tinha recusado o projeto dele. A resposta que dei em vinte minutos de conversa virou este artigo.
+
+A verdade é que a Sapienza Labs diz não com mais frequência do que a maioria dos estúdios de software do tamanho que a gente é. E isso não é arrogância — é método. Vou explicar exatamente como funciona por dentro.
+
+## O primeiro filtro: o problema precisa existir de verdade
+
+Quando alguém chega com uma ideia, a primeira coisa que faço é tentar matar ela. Não por maldade. É que o cemitério de software para PME está cheio de sistemas que resolveram problemas que ninguém tinha.
+
+Caso real: um contador de Nova Iguaçu veio até mim querendo um app para os clientes dele consultarem o status das declarações em tempo real. Parecia razoável. Mas quando perguntei quantas vezes por semana os clientes ligavam pedindo essa informação, ele demorou pra responder. A resposta foi "quase nunca". O problema real era outro — ele precisava de um jeito de organizar internamente o fluxo de trabalho dele, não de um portal bonito pro cliente.
+
+Reorientamos o projeto. Construímos uma ferramenta interna de controle de demandas, bem mais simples, por um terço do custo original. Funciona até hoje.
+
+Se eu tivesse simplesmente aceitado o briefing inicial e começado a codar, teríamos entregado algo tecnicamente correto e praticamente inútil.
+
+## O segundo filtro: escala e manutenção
+
+Toda decisão de arquitetura que tomamos passa por uma pergunta simples: quem vai manter isso daqui a dois anos?
+
+Isso muda tudo. Uma clínica de fisioterapia em Duque de Caxias não tem um time de TI interno. O dono é o fisioterapeuta. A recepcionista cuida do agendamento. Se o sistema cair na segunda de manhã, quem resolve?
+
+Por isso eu evito complexidade desnecessária como se evita goteira no servidor. Quando dá pra resolver com uma planilha bem estruturada integrada a um formulário do Google, eu falo isso abertamente. Quando o sistema precisa ser construído do zero, escolho tecnologias estáveis, documentadas, com comunidade ativa — não o framework da moda que vai mudar de API a cada seis meses.
+
+Já perdi cliente por causa disso. Tem empreendedor que quer o "mais moderno". Eu prefiro perder o projeto do que entregar uma bomba-relógio disfarçada de solução.
+
+## Como priorizamos funcionalidades dentro de um projeto
+
+Quando o projeto passa pelos dois filtros e a gente entra em desenvolvimento, usamos um critério que chamo internamente de **impacto por hora salva**.
+
+A lógica é direta: mapeamos quantas horas por semana uma funcionalidade específica vai economizar para o time do cliente. Dividimos pelo esforço de desenvolvimento. O que tem melhor relação vai primeiro.
+
+Exemplo prático: numa clínica médica que atendemos recentemente, levantamos três pedidos de funcionalidade:
+
+1. Relatório de faturamento mensal com exportação em PDF
+2. Confirmação automática de consulta por WhatsApp
+3. Cadastro de prontuário eletrônico completo
+
+O prontuário era o mais complexo e o mais "sexy" tecnicamente. Mas a confirmação por WhatsApp eliminava uma hora de ligações diárias da recepcionista — em média 22 horas por mês, além de reduzir faltas em cerca de 30%. Entregamos isso primeiro em duas semanas. O prontuário veio depois, com calma, sem atropelo.
+
+Prioridade não é sobre o que é mais interessante de construir. É sobre o que vai doer menos pra quem usa.
+
+## O que o cliente não vê e precisa saber
+
+Tem uma parte do processo que nunca aparece nas reuniões de kickoff e que acho que deveria: a conversa sobre o que acontece quando algo dá errado.
+
+Sistema trava. Banco de dados corrompe. Integração com terceiro quebra porque a API mudou sem aviso. Isso acontece. Não é incompetência — é realidade de software.
+
+O que diferencia um projeto bem feito de um pesadelo é ter combinado antes como vai ser tratado. Com cada cliente a gente define:
+
+- Qual é o tempo máximo aceitável de indisponibilidade para aquele negócio
+- Quem aciona quem em caso de problema
+- O que está coberto no contrato de manutenção e o que é demanda nova
+
+Parece burocrático. É o que evita aquela ligação raivosa às 19h de uma sexta-feira.
+
+E tem mais uma coisa que poucos estúdios falam: tem projeto que a Sapienza Labs não aceita não porque o cliente é ruim, mas porque o escopo não é compatível com o que sabemos fazer bem. Prefiro indicar outro profissional mais adequado do que pegar dinheiro e entregar algo mediano.
+
+---
+
+Se você tem uma operação pequena e está quebrando a cabeça tentando entender se precisa de um software, de uma automação ou só de um processo melhor organizado, me fala. A conversa inicial é sem compromisso e sem pitch de venda disfarçado de consultoria.
+
+Entra em contato com a Sapienza Labs e a gente descobre juntos o que faz sentido — ou o que não faz.
