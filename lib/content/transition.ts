@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
 import type { ContentStatus } from "./queries"
 
-const { contentItems, auditLog } = schema
+const { contentItems, contentRevisions, auditLog } = schema
 
 // Transições válidas da máquina de estados (SPEC §Máquina de estados).
 // draft → in_review → scheduled → published → archived; volta a draft em edição.
@@ -96,9 +96,51 @@ export async function contentTransition(
 
   // Webhook social só em → published (SPEC, princípio inviolável #2).
   if (result.to === "published") {
-    // TODO(ponte social): POST ao n8n (slug/title/excerpt/url/pilar/image_url)
-    // será adicionado na fatia "/api/generate-draft + ponte social".
+    await notifySocialWebhook(itemId).catch((err) => {
+      console.error("[social] falha no webhook de publicação:", err)
+    })
   }
 
   return result
+}
+
+const SITE_URL = process.env.SITE_URL ?? "https://sapienzalabs.com.br"
+
+// POST best-effort ao n8n com os dados do post publicado (contrato do SPEC).
+async function notifySocialWebhook(itemId: string) {
+  const url = process.env.N8N_PUBLISH_WEBHOOK_URL
+  const secret = process.env.WEBHOOK_SECRET
+  if (!url || !secret) return // não configurado → no-op
+
+  const [row] = await db
+    .select({
+      slug: contentItems.slug,
+      pilar: contentItems.pilar,
+      title: contentRevisions.title,
+      excerpt: contentRevisions.excerpt,
+    })
+    .from(contentItems)
+    .innerJoin(
+      contentRevisions,
+      eq(contentRevisions.id, contentItems.currentRevisionId),
+    )
+    .where(eq(contentItems.id, itemId))
+    .limit(1)
+  if (!row) return
+
+  const postUrl = `${SITE_URL}/blog/${row.slug}`
+  const payload = {
+    slug: row.slug,
+    title: row.title,
+    excerpt: row.excerpt,
+    url: postUrl,
+    pilar: row.pilar,
+    image_url: `${postUrl}/opengraph-image`,
+  }
+
+  await fetch(url, {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-webhook-secret": secret },
+    body: JSON.stringify(payload),
+  })
 }
