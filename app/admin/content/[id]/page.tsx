@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { notFound } from "next/navigation"
+import { Button } from "@/components/ui/button"
 import { getContentItem, type Seo } from "@/lib/content/queries"
 import { allowedTransitions } from "@/lib/content/transition"
 import { ContentForm, type ContentFormValues } from "../content-form"
@@ -37,10 +39,17 @@ export default async function EditContentPage({
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-10">
-      <h1 className="mb-1 text-2xl font-semibold">Editar conteúdo</h1>
-      <p className="mb-6 text-sm text-muted-foreground">
-        Salvar cria uma nova revisão (snapshot).
-      </p>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="mb-1 text-2xl font-semibold">Editar conteúdo</h1>
+          <p className="text-sm text-muted-foreground">
+            Salvar cria uma nova revisão (snapshot).
+          </p>
+        </div>
+        <Button asChild variant="outline">
+          <Link href={`/admin/content/${id}/history`}>Histórico</Link>
+        </Button>
+      </div>
 
       <div className="mb-6">
         <StatusControls

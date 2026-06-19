@@ -1,7 +1,7 @@
-import { and, desc, eq, ne } from "drizzle-orm"
+import { and, desc, eq, lt, ne } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
 
-const { contentItems, contentRevisions } = schema
+const { contentItems, contentRevisions, users } = schema
 
 export type ContentType = (typeof schema.contentType.enumValues)[number]
 export type ContentStatus = (typeof schema.contentStatus.enumValues)[number]
@@ -132,4 +132,48 @@ export async function saveContentItem(
 
 export async function deleteContentItem(id: string) {
   await db.delete(contentItems).where(eq(contentItems.id, id))
+}
+
+// Histórico de revisões de um item (mais recente primeiro), com e-mail do autor.
+export async function listRevisions(itemId: string) {
+  return db
+    .select({
+      id: contentRevisions.id,
+      title: contentRevisions.title,
+      createdAt: contentRevisions.createdAt,
+      authorEmail: users.email,
+    })
+    .from(contentRevisions)
+    .leftJoin(users, eq(users.id, contentRevisions.authorId))
+    .where(eq(contentRevisions.contentItemId, itemId))
+    .orderBy(desc(contentRevisions.createdAt))
+}
+
+// Uma revisão + a imediatamente anterior do mesmo item (para o diff "o que mudou").
+export async function getRevisionForDiff(itemId: string, revId: string) {
+  const [revision] = await db
+    .select()
+    .from(contentRevisions)
+    .where(
+      and(
+        eq(contentRevisions.id, revId),
+        eq(contentRevisions.contentItemId, itemId),
+      ),
+    )
+    .limit(1)
+  if (!revision) return null
+
+  const [previous] = await db
+    .select()
+    .from(contentRevisions)
+    .where(
+      and(
+        eq(contentRevisions.contentItemId, itemId),
+        lt(contentRevisions.createdAt, revision.createdAt),
+      ),
+    )
+    .orderBy(desc(contentRevisions.createdAt))
+    .limit(1)
+
+  return { revision, previous: previous ?? null }
 }
