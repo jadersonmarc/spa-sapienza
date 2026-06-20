@@ -107,12 +107,17 @@ draft → in_review → scheduled → published → archived
   `WEBHOOK_SECRET`, `INSTAGRAM_ACCESS_TOKEN` (Page token longo).
 - Drizzle + drizzle-kit configurados; schema escrito; migrations aplicadas no Postgres.
 
-### Fase 1 — Fundação + Gestão de Conteúdo
+### Fase 1 — Fundação + Gestão de Conteúdo ✅ (concluída)
 schema+migrations (incl. `users.password_hash`); Auth.js (Credentials) + middleware `/admin`
 (roles) + seed do admin; CRUD; editor markdown (CodeMirror 6 + preview, toolbar, upload p/
 Cloudflare R2); versionamento + diff; máquina de estados + revalidação; `/api/generate-draft` +
-ponte social; migração dos 10 MDX → DB. Testes: transições, versionamento/diff, autorização,
-geração. **(checkpoint)**
+ponte social; migração dos 10 MDX → DB; blog público lendo do Postgres. Testes (vitest):
+transições, versionamento/diff, autorização, geração (slug) — 16 testes + CI gate
+(lint+tsc+test). **(checkpoint atingido)**
+
+Pendências operacionais (fora de código): branch protection na `main` com o gate de CI;
+re-seedar admin com senha real; rotacionar senha do Postgres; envs no Coolify; n8n cron
+apontando p/ `/api/generate-draft`.
 
 ### Fase 2 — Recursos com IA (módulos plugáveis)
 
@@ -156,10 +161,11 @@ via API, por conteúdo e agregado.
 ## Itens a confirmar
 1. (resolvido) Banco = Postgres standalone na VPS; Auth = Auth.js (Credentials);
    Storage = S3-compatível (Cloudflare R2). Supabase descontinuado.
-2. Editor: **CodeMirror 6 + preview** (rec.) vs Milkdown vs TipTap.
-3. Analytics: **Umami** (rec.) vs Plausible vs PostHog.
-4. Aposentar `app/blog/posts/*.mdx` após migrar (slugs preservados).
-5. Branch protection na `main` com o gate de Actions.
+2. (resolvido) Editor: **CodeMirror 6 + preview**.
+3. Analytics: **Umami** (rec.) vs Plausible vs PostHog. (Fase 3)
+4. Aposentar `app/blog/posts/*.mdx`: conteúdo migrado e site lê do DB; os `.mdx`
+   continuam no repo como origem do import (não são mais lidos). Remoção definitiva pendente.
+5. Branch protection na `main` com o gate de CI (`.github/workflows/ci.yml`) — pendente (GitHub).
 
 ## Fora de escopo
 IA adicional (Fase 2+); permissões finas; agendamento avançado; i18n.

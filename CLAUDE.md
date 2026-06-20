@@ -14,6 +14,9 @@ comunicação direta com clientes.
 
 ## Roadmap ativo
 
+- **`SPEC.md`** — admin de gestão de conteúdo (CMS próprio). **Fase 1 concluída**
+  (auth, CRUD, editor, máquina de estados, blog lendo do Postgres, geração via
+  Claude + ponte social, testes). Fases 2 (IA) e 3 (analytics) pendentes.
 - **`docs/PLANO-DE-ACAO.md`** — plano vigente: SPEC-13 a SPEC-30 (backlog
   das auditorias de UX, branding e design) organizadas em 5 fases, com
   status por checkbox. Consultar antes de alterar conteúdo, copy ou
@@ -37,14 +40,22 @@ comunicação direta com clientes.
 - Tailwind CSS 4 (tokens em oklch, dark mode **permanente** — sem toggle)
 - shadcn/ui (estilo New York) + Radix UI + lucide-react
 - Gerenciador de pacotes: **pnpm**
+- **CMS (Fase 1)**: Postgres na VPS + Drizzle ORM; Auth.js v5 (Credentials/JWT);
+  Cloudflare R2 (imagens); CodeMirror 6 (editor); `@anthropic-ai/sdk` (geração);
+  vitest (testes).
 
 ## Comandos
 
 ```bash
-pnpm dev     # desenvolvimento em http://localhost:3000
-pnpm build   # build de produção
-pnpm start   # serve a build
-pnpm lint    # análise estática
+pnpm dev          # desenvolvimento em http://localhost:3000
+pnpm build        # build de produção (lê o Postgres — exige DATABASE_URL)
+pnpm start        # serve a build
+pnpm lint         # análise estática
+pnpm test         # testes unitários (vitest)
+pnpm db:generate  # gera migration a partir do schema (drizzle-kit)
+pnpm db:push      # aplica o schema no banco
+pnpm db:seed      # cria/atualiza admin: --email .. --password .. [--role admin]
+pnpm db:import-mdx # importa os .mdx para o Postgres (idempotente)
 ```
 
 ## Estrutura
@@ -54,15 +65,21 @@ pnpm lint    # análise estática
 - `components/` — seções da home (`hero.tsx`, `services.tsx`,
   `differentials.tsx`, `header.tsx`, `footer.tsx`, `whatsapp-button.tsx`) e
   `components/ui/` (shadcn).
-- `app/blog/posts/` — posts em `.mdx` (`YYYY-MM-DD-slug.mdx`), frontmatter
-  YAML + corpo Markdown. Pilares: `pme` | `engenharia` | `bastidores`.
-- `lib/blog.ts` — lê os `.mdx` no build via `gray-matter` e expõe
-  `getAllPosts` / `getPostBySlug` (interface `Post`); mapeia o frontmatter para
-  a interface e calcula `readingTime`. Parsing do corpo via regex em
-  `app/blog/[slug]/page.tsx`.
+- `app/blog/posts/` — posts originais em `.mdx`. **Não são mais lidos pelo site**
+  (origem do import para o DB; ver `pnpm db:import-mdx`). Remoção definitiva pendente.
+- `lib/blog.ts` — **lê do Postgres** (`getAllPosts` / `getPostBySlug`, interface
+  `Post`, só `published`); mapeia o pilar do enum (`p1`→engenharia, `p2`→pme,
+  `p3`→bastidores). Corpo renderizado por regex em `app/blog/[slug]/page.tsx`.
+- **Admin/CMS** (Fase 1): `app/admin/*` (login, CRUD, editor, histórico/diff),
+  `app/api/auth/*` (Auth.js), `app/api/generate-draft` (n8n→Claude), `app/api/admin/upload`
+  (R2); `middleware.ts` protege `/admin`. `auth.ts`/`auth.config.ts` (auth),
+  `lib/db/*` (Drizzle: `schema.ts`, `index.ts`), `lib/content/*` (queries, transição,
+  máquina de estados, diff, slug), `lib/ai/draft.ts`, `lib/storage/s3.ts`,
+  `lib/auth/webhook.ts`. Migrations em `drizzle/`.
 - `scripts/extract-post-meta.mjs` + `.github/workflows/publish-social.yml` +
-  `docs/n8n-workflows/editorial-automation.json` — pipeline editorial
-  automático (ver `docs/AUTOMACAO_EDITORIAL.md`).
+  `docs/n8n-workflows/editorial-automation.json` — pipeline editorial MDX legado
+  (ver `docs/AUTOMACAO_EDITORIAL.md`); a publicação agora também dispara a ponte
+  social via `lib/content/transition.ts` no `→published`.
 - `public/` — assets permitidos: `logo-sapienza.png` (logo principal),
   `icon.svg`, `icon-dark-32x32.png`, `icon-light-32x32.png`, `marc.png`.
 
@@ -76,7 +93,8 @@ VPS Hostinger via Coolify — **não é Vercel**. Por isso:
 
 ## Restrições
 
-- **Não alterar a stack**: Next.js App Router, Tailwind 4, shadcn/ui, pnpm.
+- **Não alterar a stack do front**: Next.js App Router, Tailwind 4, shadcn/ui, pnpm.
+  (As adições do CMS — Postgres/Drizzle/Auth.js/R2 etc. — são sancionadas pelo `SPEC.md`.)
 - **Não quebrar rotas existentes**: `/`, `/sobre`, `/blog`, `/blog/[slug]`
   (slugs do blog têm valor de SEO).
 - **Manter dark mode permanente** — não adicionar toggle de tema.
