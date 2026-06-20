@@ -170,9 +170,17 @@ resultado a partir do `payload`. Histórico de análises por revisão.
 **Extensibilidade** — adicionar um recurso novo = criar um módulo (prompt + parser) e
 registrá-lo; sem mexer no resto. Os recursos adicionais que o dono revelar entram assim.
 
-### Fase 3 — Analytics
-Provedor self-hosted (Umami no Coolify; PostHog se precisar funil/sessão). Dashboard no admin
-via API, por conteúdo e agregado.
+### Fase 3 — Analytics (Análise e Inteligência)
+Provedor self-hosted (Umami no Coolify; PostHog se precisar funil/sessão). Métricas **lidas
+via API do provedor em runtime** — **não** ficam no Postgres (ver §Modelo de dados).
+
+**Requisitos obrigatórios (devem ser contemplados):**
+- [ ] **Métricas de desempenho** consumidas do provedor de analytics (§10): **visualizações**,
+  **engajamento** e **comportamento do usuário**.
+- [ ] **Dashboard no admin** exibindo essas métricas **por conteúdo** (por post/slug) e
+  **agregado** (visão geral do site).
+- [ ] Dados lidos da **API do provedor** em runtime (sem persistir métricas no banco);
+  mapear cada post (slug) à sua métrica.
 
 ## Itens a confirmar
 1. (resolvido) Banco = Postgres standalone na VPS; Auth = Auth.js (Credentials);
