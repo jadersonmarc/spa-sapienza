@@ -1,4 +1,4 @@
-import { and, desc, eq, lt, ne } from "drizzle-orm"
+import { and, desc, eq, lt, lte, ne } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
 
 const { contentItems, contentRevisions, users, aiAnalyses, socialDrafts } = schema
@@ -136,6 +136,19 @@ export async function saveContentItem(
 
 export async function deleteContentItem(id: string) {
   await db.delete(contentItems).where(eq(contentItems.id, id))
+}
+
+// Itens agendados cujo horário já chegou (para o job de publicação).
+export async function listDueScheduled() {
+  return db
+    .select({ id: contentItems.id })
+    .from(contentItems)
+    .where(
+      and(
+        eq(contentItems.status, "scheduled"),
+        lte(contentItems.scheduledAt, new Date()),
+      ),
+    )
 }
 
 // Histórico de revisões de um item (mais recente primeiro), com e-mail do autor.

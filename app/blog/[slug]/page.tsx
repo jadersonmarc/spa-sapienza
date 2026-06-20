@@ -6,6 +6,9 @@ import { Calendar, Clock, ArrowLeft, MessageCircle } from "lucide-react"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { BlogBreadcrumb } from "@/components/blog-breadcrumb"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import rehypeSanitize from "rehype-sanitize"
 import { Button } from "@/components/ui/button"
 import { ArticleCover } from "@/components/article-cover"
 import { getPostBySlug, getAllPosts } from "@/lib/blog"
@@ -59,28 +62,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-function parseMarkdownContent(content: string): string {
-  return content
-    // Headers
-    .replace(/^### (.*$)/gim, '<h3 class="text-xl font-semibold text-foreground mt-8 mb-4">$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2 class="text-2xl font-semibold text-foreground mt-10 mb-4">$1</h2>')
-    // Bold
-    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-foreground">$1</strong>')
-    // Links
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary hover:underline">$1</a>')
-    // Lists
-    .replace(/^\d+\. (.*$)/gim, '<li class="ml-6 list-decimal text-muted-foreground leading-relaxed">$1</li>')
-    .replace(/^- (.*$)/gim, '<li class="ml-6 list-disc text-muted-foreground leading-relaxed">$1</li>')
-    // Paragraphs
-    .split('\n\n')
-    .map(block => {
-      if (block.startsWith('<h') || block.startsWith('<li')) return block
-      if (block.trim() === '') return ''
-      return `<p class="text-muted-foreground leading-relaxed mb-4">${block}</p>`
-    })
-    .join('\n')
-}
-
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params
   const post = await getPostBySlug(slug)
@@ -88,8 +69,6 @@ export default async function ArticlePage({ params }: PageProps) {
   if (!post) {
     notFound()
   }
-
-  const htmlContent = parseMarkdownContent(post.content)
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -164,10 +143,14 @@ export default async function ArticlePage({ params }: PageProps) {
               </h1>
             </header>
 
-            <div 
-              className="prose prose-invert max-w-none"
-              dangerouslySetInnerHTML={{ __html: htmlContent }}
-            />
+            <div className="markdown-preview max-w-none">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeSanitize]}
+              >
+                {post.content}
+              </ReactMarkdown>
+            </div>
 
             {/* Author block */}
             <div className="mt-12 pt-8 border-t border-border/50">
@@ -198,7 +181,7 @@ export default async function ArticlePage({ params }: PageProps) {
                 Precisa de ajuda com seu projeto?
               </h3>
               <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                A Sapienza Labs desenvolve soluções de software sob medida para empresas que buscam eficiencia e inovacao.
+                A Sapienza Labs desenvolve soluções de software sob medida para empresas que buscam eficiência e inovação.
               </p>
               <Button asChild className="w-full sm:w-auto">
                 <a 

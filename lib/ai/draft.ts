@@ -1,10 +1,8 @@
-import Anthropic from "@anthropic-ai/sdk"
 import type { Pilar, RevisionInput } from "@/lib/content/queries"
 import { slugify } from "@/lib/content/slug"
+import { callStructured, isAiConfigured } from "@/lib/ai/client"
 
-export function isAiConfigured(): boolean {
-  return Boolean(process.env.ANTHROPIC_API_KEY)
-}
+export { isAiConfigured }
 
 // Tema editorial por pilar (público: PMEs da Baixada Fluminense).
 const PILAR_BRIEF: Record<Pilar, string> = {
@@ -35,46 +33,24 @@ export type GeneratedDraft = {
 
 // Gera um rascunho de post para o pilar via Claude (structured output).
 export async function generateDraft(pilar: Pilar): Promise<GeneratedDraft> {
-  if (!isAiConfigured()) {
-    throw new Error("ANTHROPIC_API_KEY não configurada.")
-  }
-  const client = new Anthropic()
-  const model = "claude-opus-4-8"
-
   const system =
     "Você é redator(a) da Sapienza Labs, um estúdio de software sob medida para PMEs da " +
     "Baixada Fluminense. Escreva em pt-BR correto e natural, com acentuação adequada. " +
     "Conteúdo original, útil e específico — sem clichês de IA. Não invente dados ou clientes."
 
-  const response = await client.messages.create({
-    model,
-    max_tokens: 16000,
-    thinking: { type: "adaptive" },
-    output_config: { format: { type: "json_schema", schema: SCHEMA }, effort: "medium" },
-    system,
-    messages: [
-      {
-        role: "user",
-        content:
-          `Escreva um artigo de blog para o pilar abaixo.\n\nPILAR: ${PILAR_BRIEF[pilar]}\n\n` +
-          "Requisitos: título objetivo; slug em kebab-case; excerpt curto; corpo em Markdown " +
-          "(use ## para subtítulos, listas quando ajudar; 600–900 palavras); 5–8 keywords de SEO. " +
-          "Inclua um CTA leve para falar com a Sapienza Labs no WhatsApp ao final.",
-      },
-    ],
-  })
+  const user =
+    `Escreva um artigo de blog para o pilar abaixo.\n\nPILAR: ${PILAR_BRIEF[pilar]}\n\n` +
+    "Requisitos: título objetivo; slug em kebab-case; excerpt curto; corpo em Markdown " +
+    "(use ## para subtítulos, listas quando ajudar; 600–900 palavras); 5–8 keywords de SEO. " +
+    "Inclua um CTA leve para falar com a Sapienza Labs no WhatsApp ao final."
 
-  const text = response.content.find((b) => b.type === "text")
-  if (!text || text.type !== "text") {
-    throw new Error("Resposta do modelo sem conteúdo de texto.")
-  }
-  const data = JSON.parse(text.text) as {
+  const { data, model } = await callStructured<{
     title: string
     slug: string
     excerpt: string
     bodyMarkdown: string
     keywords: string[]
-  }
+  }>({ system, user, schema: SCHEMA, maxTokens: 16000 })
 
   return {
     pilar,
@@ -85,6 +61,6 @@ export async function generateDraft(pilar: Pilar): Promise<GeneratedDraft> {
       excerpt: data.excerpt.trim(),
       seo: { keywords: data.keywords },
     },
-    model: response.model,
+    model,
   }
 }

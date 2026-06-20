@@ -33,9 +33,20 @@ export async function callStructured<T>(
     messages: [{ role: "user", content: opts.user }],
   })
 
+  if (response.stop_reason === "refusal") {
+    throw new Error("O modelo recusou a solicitação (política de conteúdo).")
+  }
+  if (response.stop_reason === "max_tokens") {
+    throw new Error("Resposta truncada (max_tokens). Tente novamente ou reduza o conteúdo.")
+  }
+
   const text = response.content.find((b) => b.type === "text")
   if (!text || text.type !== "text") {
     throw new Error("Resposta do modelo sem conteúdo de texto.")
   }
-  return { data: JSON.parse(text.text) as T, model: response.model }
+  try {
+    return { data: JSON.parse(text.text) as T, model: response.model }
+  } catch {
+    throw new Error("Não foi possível interpretar a resposta do modelo (JSON inválido).")
+  }
 }

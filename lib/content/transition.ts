@@ -126,5 +126,6 @@ async function notifySocialWebhook(itemId: string) {
     method: "POST",
     headers: { "content-type": "application/json", "x-webhook-secret": secret },
     body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(5000),
   })
 }

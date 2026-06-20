@@ -6,6 +6,7 @@ import { auth } from "@/auth"
 import {
   createContentItem,
   deleteContentItem,
+  getContentItem,
   saveContentItem,
   slugExists,
   type ContentStatus,
@@ -16,6 +17,7 @@ import {
   type Seo,
 } from "@/lib/content/queries"
 import { contentTransition, TransitionError } from "@/lib/content/transition"
+import { requireUser, isAdmin, transitionRequiresAdmin } from "@/lib/auth/session"
 
 export type FormState = { error?: string }
 
@@ -103,15 +105,21 @@ export async function transitionAction(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
-  const actorId = await requireUserId()
+  const user = await requireUser()
   const itemId = String(formData.get("itemId") ?? "")
   const to = String(formData.get("to") ?? "") as ContentStatus
+
+  if (transitionRequiresAdmin(to) && !isAdmin(user.role)) {
+    return { error: "Apenas administradores podem publicar, agendar ou arquivar." }
+  }
+
+  // datetime-local não tem fuso → interpretamos como BRT (-03:00).
   const scheduledAtRaw = String(formData.get("scheduledAt") ?? "")
-  // datetime-local vem sem timezone → interpretado no fuso local do servidor.
-  const scheduledAt = scheduledAtRaw ? new Date(scheduledAtRaw) : null
+  const normalized = scheduledAtRaw.length === 16 ? `${scheduledAtRaw}:00` : scheduledAtRaw
+  const scheduledAt = scheduledAtRaw ? new Date(`${normalized}-03:00`) : null
 
   try {
-    await contentTransition(itemId, to, actorId, { scheduledAt })
+    await contentTransition(itemId, to, user.id, { scheduledAt })
   } catch (err) {
     if (err instanceof TransitionError) return { error: err.message }
     throw err
@@ -122,10 +130,15 @@ export async function transitionAction(
 }
 
 export async function deleteContentAction(formData: FormData) {
-  await requireUserId()
+  const user = await requireUser()
+  if (!isAdmin(user.role)) return // só admin exclui
   const id = String(formData.get("id") ?? "")
-  if (id) {
-    await deleteContentItem(id)
-    revalidatePath("/admin/content")
-  }
+  if (!id) return
+
+  const data = await getContentItem(id)
+  if (!data) return
+  if (data.item.status === "published") return // arquive antes de excluir
+
+  await deleteContentItem(id)
+  revalidatePath("/admin/content")
 }

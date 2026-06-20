@@ -4,13 +4,13 @@ import { auth } from "@/auth"
 import { isStorageConfigured, uploadObject } from "@/lib/storage/s3"
 
 const MAX_BYTES = 5 * 1024 * 1024 // 5 MB
-const ALLOWED = new Set(["image/png", "image/jpeg", "image/webp", "image/gif", "image/svg+xml"])
+// SVG fora da allowlist (pode conter <script> → XSS quando servido inline).
+const ALLOWED = new Set(["image/png", "image/jpeg", "image/webp", "image/gif"])
 const EXT: Record<string, string> = {
   "image/png": "png",
   "image/jpeg": "jpg",
   "image/webp": "webp",
   "image/gif": "gif",
-  "image/svg+xml": "svg",
 }
 
 export async function POST(req: Request) {
