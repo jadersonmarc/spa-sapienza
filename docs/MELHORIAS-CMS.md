@@ -37,6 +37,16 @@ ficam para próximas sessões. Prioridades: **P0** crítico/segurança · **P1**
 - [ ] **Permissões mais finas** (ex.: editor submeter a revisão; aprovação social por
   admin) — modelo atual é grosso; refinar se o time crescer. *(futuro)*
 
+## Rotação de segredos (radar)
+Vários segredos circularam no histórico de chat → tratar como comprometidos e trocar o valor.
+- [x] `AUTH_SECRET` — regenerado no `.env.local` local. **Pendente:** rotacionar no Coolify
+  se o valor de produção for o mesmo.
+- [ ] **Senha do Postgres** — rotacionar (apareceu várias vezes) + fechar porta pública.
+- [ ] **Senha do admin** (`Teste@123`) — re-seedar com senha forte.
+- [ ] Senhas do **Postgres do Supabase** (testes) — só se aquela instância ainda existir.
+- [ ] R2 / `ANTHROPIC_API_KEY` / `WEBHOOK_SECRET` — não foram colados no chat (baixo risco);
+  rotacionar só por precaução.
+
 ## Pendências operacionais (produção — fora de código)
 - Rotacionar senha do Postgres; fechar porta pública (ver P0).
 - Re-seedar admin com senha real (trocar `Teste@123`).
