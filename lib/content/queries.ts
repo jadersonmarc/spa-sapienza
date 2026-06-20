@@ -1,7 +1,9 @@
 import { and, desc, eq, lt, ne } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
 
-const { contentItems, contentRevisions, users } = schema
+const { contentItems, contentRevisions, users, aiAnalyses } = schema
+
+export type AnalysisType = (typeof schema.analysisType.enumValues)[number]
 
 export type ContentType = (typeof schema.contentType.enumValues)[number]
 export type ContentStatus = (typeof schema.contentStatus.enumValues)[number]
@@ -176,4 +178,47 @@ export async function getRevisionForDiff(itemId: string, revId: string) {
     .limit(1)
 
   return { revision, previous: previous ?? null }
+}
+
+// Revisão única (escopada ao item) — usada para montar o snapshot de análise.
+export async function getRevision(itemId: string, revId: string) {
+  const [revision] = await db
+    .select()
+    .from(contentRevisions)
+    .where(
+      and(
+        eq(contentRevisions.id, revId),
+        eq(contentRevisions.contentItemId, itemId),
+      ),
+    )
+    .limit(1)
+  return revision ?? null
+}
+
+export async function insertAnalysis(input: {
+  contentItemId: string
+  revisionId: string
+  type: AnalysisType
+  payload: unknown
+  model: string
+}) {
+  const [row] = await db
+    .insert(aiAnalyses)
+    .values(input)
+    .returning({ id: aiAnalyses.id })
+  return row.id
+}
+
+export async function listAnalysesByRevision(revisionId: string) {
+  return db
+    .select({
+      id: aiAnalyses.id,
+      type: aiAnalyses.type,
+      payload: aiAnalyses.payload,
+      model: aiAnalyses.model,
+      createdAt: aiAnalyses.createdAt,
+    })
+    .from(aiAnalyses)
+    .where(eq(aiAnalyses.revisionId, revisionId))
+    .orderBy(desc(aiAnalyses.createdAt))
 }

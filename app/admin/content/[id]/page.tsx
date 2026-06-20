@@ -2,10 +2,16 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { getContentItem, type Seo } from "@/lib/content/queries"
+import {
+  getContentItem,
+  listAnalysesByRevision,
+  type Seo,
+} from "@/lib/content/queries"
 import { allowedTransitions } from "@/lib/content/transition"
+import { ANALYZER_LIST } from "@/lib/ai/analyzers"
 import { ContentForm, type ContentFormValues } from "../content-form"
 import { StatusControls } from "../status-controls"
+import { AnalysisPanel } from "../analysis-panel"
 import { saveContentAction } from "../actions"
 
 export const metadata: Metadata = {
@@ -24,6 +30,9 @@ export default async function EditContentPage({
 
   const { item, revision } = data
   const seo = (revision?.seo ?? {}) as Seo
+  const analyses = item.currentRevisionId
+    ? await listAnalysesByRevision(item.currentRevisionId)
+    : []
 
   const initial: Partial<ContentFormValues> = {
     type: item.type,
@@ -64,6 +73,17 @@ export default async function EditContentPage({
         initial={initial}
         submitLabel="Salvar revisão"
       />
+
+      {item.currentRevisionId ? (
+        <div className="mt-8">
+          <AnalysisPanel
+            itemId={item.id}
+            revisionId={item.currentRevisionId}
+            analyzers={ANALYZER_LIST}
+            analyses={analyses}
+          />
+        </div>
+      ) : null}
     </main>
   )
 }
