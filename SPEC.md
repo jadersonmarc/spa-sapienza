@@ -119,25 +119,26 @@ Pendências operacionais (fora de código): branch protection na `main` com o ga
 re-seedar admin com senha real; rotacionar senha do Postgres; envs no Coolify; n8n cron
 apontando p/ `/api/generate-draft`.
 
-### Fase 2 — Recursos com IA (módulos plugáveis)
+### Fase 2 — Recursos com IA (módulos plugáveis) ✅ (concluída)
 
 Camada de IA estruturada como **registry de módulos**, para novos recursos entrarem sem
 refatorar (a lista vai crescer — §12).
 
-**Requisitos obrigatórios (devem ser contemplados):**
-- [ ] Cada recurso é uma **server action / route handler** chamando a Claude API com
-  **prompt dedicado**; resultado persistido em `ai_analyses` (ou `social_drafts`),
+**Requisitos obrigatórios — todos contemplados:**
+- [x] Cada recurso é uma **server action** chamando a Claude API com **prompt dedicado**
+  (`lib/ai/client.ts` → `callStructured`); resultado em `ai_analyses` / `social_drafts`,
   **vinculado à revisão** (`revision_id`).
-- [ ] **Análise de Conteúdo** (`quality`) — qualidade, legibilidade e estrutura; score +
-  recomendações acionáveis.
-- [ ] **Otimização de SEO** (`seo`) — título, meta, headings, keywords, densidade.
-- [ ] **Análise de Impacto Emocional** (`emotional`) — tom emocional e impacto do texto.
-- [ ] **Análise Temática** (`thematic`) — tópicos principais + áreas relacionadas
-  (alimenta o calendário editorial).
-- [ ] **Geração de posts sociais** — `social_drafts` por plataforma (Instagram/LinkedIn)
-  a partir do conteúdo; **revisáveis antes do envio** (draft→approved→sent).
-- [ ] Reuso da base existente: `claude-opus-4-8` + structured output (`lib/ai/draft.ts`),
-  enums `analysis_type`/`platform`/`social_status` e tabelas já no schema.
+- [x] **Análise de Conteúdo** (`quality`) — score + pontos fortes + recomendações.
+- [x] **Otimização de SEO** (`seo`) — título, meta, keywords, headings, densidade.
+- [x] **Análise de Impacto Emocional** (`emotional`) — tom dominante, impacto, sugestões.
+- [x] **Análise Temática** (`thematic`) — tópicos + áreas relacionadas (calendário editorial).
+- [x] **Geração de posts sociais** — `social_drafts` por plataforma (Instagram/LinkedIn),
+  **revisáveis** (draft→approved→sent) em `lib/content/social-status.ts`.
+- [x] Reuso de `claude-opus-4-8` + structured output e dos enums/tabelas do schema.
+
+Implementação: `lib/ai/{client,analyzers,social}.ts`, server actions
+`app/admin/content/{ai-actions,social-actions}.ts`, UI `analysis-panel.tsx` /
+`social-panel.tsx` no editor. Testes das máquinas de status (state-machine, social-status).
 
 **Contrato do módulo (analisador):**
 ```ts
