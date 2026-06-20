@@ -124,6 +124,21 @@ apontando p/ `/api/generate-draft`.
 Camada de IA estruturada como **registry de módulos**, para novos recursos entrarem sem
 refatorar (a lista vai crescer — §12).
 
+**Requisitos obrigatórios (devem ser contemplados):**
+- [ ] Cada recurso é uma **server action / route handler** chamando a Claude API com
+  **prompt dedicado**; resultado persistido em `ai_analyses` (ou `social_drafts`),
+  **vinculado à revisão** (`revision_id`).
+- [ ] **Análise de Conteúdo** (`quality`) — qualidade, legibilidade e estrutura; score +
+  recomendações acionáveis.
+- [ ] **Otimização de SEO** (`seo`) — título, meta, headings, keywords, densidade.
+- [ ] **Análise de Impacto Emocional** (`emotional`) — tom emocional e impacto do texto.
+- [ ] **Análise Temática** (`thematic`) — tópicos principais + áreas relacionadas
+  (alimenta o calendário editorial).
+- [ ] **Geração de posts sociais** — `social_drafts` por plataforma (Instagram/LinkedIn)
+  a partir do conteúdo; **revisáveis antes do envio** (draft→approved→sent).
+- [ ] Reuso da base existente: `claude-opus-4-8` + structured output (`lib/ai/draft.ts`),
+  enums `analysis_type`/`platform`/`social_status` e tabelas já no schema.
+
 **Contrato do módulo (analisador):**
 ```ts
 interface Analyzer<TPayload> {
