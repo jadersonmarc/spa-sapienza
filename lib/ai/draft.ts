@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk"
 import type { Pilar, RevisionInput } from "@/lib/content/queries"
+import { slugify } from "@/lib/content/slug"
 
 export function isAiConfigured(): boolean {
   return Boolean(process.env.ANTHROPIC_API_KEY)
@@ -24,16 +25,6 @@ const SCHEMA = {
   required: ["title", "slug", "excerpt", "bodyMarkdown", "keywords"],
   additionalProperties: false,
 } as const
-
-function slugify(s: string): string {
-  return s
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80)
-}
 
 export type GeneratedDraft = {
   pilar: Pilar

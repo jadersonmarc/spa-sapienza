@@ -2,28 +2,12 @@ import { revalidatePath } from "next/cache"
 import { eq } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
 import type { ContentStatus } from "./queries"
+import { canTransition, TransitionError } from "./state-machine"
+
+// Reexporta a lógica pura da máquina de estados (consumidores existentes a importam daqui).
+export { canTransition, allowedTransitions, TransitionError } from "./state-machine"
 
 const { contentItems, contentRevisions, auditLog } = schema
-
-// Transições válidas da máquina de estados (SPEC §Máquina de estados).
-// draft → in_review → scheduled → published → archived; volta a draft em edição.
-const TRANSITIONS: Record<ContentStatus, ContentStatus[]> = {
-  draft: ["in_review"],
-  in_review: ["scheduled", "published", "draft"],
-  scheduled: ["published", "draft"],
-  published: ["archived", "draft"],
-  archived: ["draft"],
-}
-
-export function canTransition(from: ContentStatus, to: ContentStatus): boolean {
-  return TRANSITIONS[from]?.includes(to) ?? false
-}
-
-export function allowedTransitions(from: ContentStatus): ContentStatus[] {
-  return TRANSITIONS[from] ?? []
-}
-
-export class TransitionError extends Error {}
 
 type TransitionOpts = {
   scheduledAt?: Date | null

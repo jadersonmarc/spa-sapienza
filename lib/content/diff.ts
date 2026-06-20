@@ -2,8 +2,9 @@ export type DiffLine = { type: "eq" | "add" | "del"; text: string }
 
 // Diff de linhas via LCS (sem dependências). Bom o suficiente para revisões de conteúdo.
 export function lineDiff(oldText: string, newText: string): DiffLine[] {
-  const a = oldText.split("\n")
-  const b = newText.split("\n")
+  // Documento vazio = zero linhas (evita um "" fantasma no diff).
+  const a = oldText ? oldText.split("\n") : []
+  const b = newText ? newText.split("\n") : []
   const n = a.length
   const m = b.length
 

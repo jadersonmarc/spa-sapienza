@@ -1,19 +1,11 @@
 import { NextResponse } from "next/server"
-import { createHash, timingSafeEqual } from "node:crypto"
 import { eq } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
 import { createContentItem, slugExists, type Pilar } from "@/lib/content/queries"
 import { generateDraft, isAiConfigured } from "@/lib/ai/draft"
+import { secretMatches } from "@/lib/auth/webhook"
 
 const PILARES: Pilar[] = ["p1", "p2", "p3"]
-
-// Comparação em tempo constante (hash p/ igualar tamanho antes do compare).
-function secretMatches(provided: string | null, expected: string): boolean {
-  if (!provided) return false
-  const a = createHash("sha256").update(provided).digest()
-  const b = createHash("sha256").update(expected).digest()
-  return timingSafeEqual(a, b)
-}
 
 async function uniqueSlug(base: string): Promise<string> {
   if (!(await slugExists(base))) return base
