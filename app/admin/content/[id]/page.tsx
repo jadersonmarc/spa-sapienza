@@ -5,13 +5,16 @@ import { Button } from "@/components/ui/button"
 import {
   getContentItem,
   listAnalysesByRevision,
+  listSocialDraftsByRevision,
   type Seo,
 } from "@/lib/content/queries"
 import { allowedTransitions } from "@/lib/content/transition"
 import { ANALYZER_LIST } from "@/lib/ai/analyzers"
+import { SOCIAL_PLATFORMS } from "@/lib/ai/social"
 import { ContentForm, type ContentFormValues } from "../content-form"
 import { StatusControls } from "../status-controls"
 import { AnalysisPanel } from "../analysis-panel"
+import { SocialPanel } from "../social-panel"
 import { saveContentAction } from "../actions"
 
 export const metadata: Metadata = {
@@ -32,6 +35,9 @@ export default async function EditContentPage({
   const seo = (revision?.seo ?? {}) as Seo
   const analyses = item.currentRevisionId
     ? await listAnalysesByRevision(item.currentRevisionId)
+    : []
+  const socialDrafts = item.currentRevisionId
+    ? await listSocialDraftsByRevision(item.currentRevisionId)
     : []
 
   const initial: Partial<ContentFormValues> = {
@@ -75,12 +81,18 @@ export default async function EditContentPage({
       />
 
       {item.currentRevisionId ? (
-        <div className="mt-8">
+        <div className="mt-8 flex flex-col gap-6">
           <AnalysisPanel
             itemId={item.id}
             revisionId={item.currentRevisionId}
             analyzers={ANALYZER_LIST}
             analyses={analyses}
+          />
+          <SocialPanel
+            itemId={item.id}
+            revisionId={item.currentRevisionId}
+            platforms={SOCIAL_PLATFORMS}
+            drafts={socialDrafts}
           />
         </div>
       ) : null}

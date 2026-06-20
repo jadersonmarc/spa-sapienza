@@ -1,9 +1,11 @@
 import { and, desc, eq, lt, ne } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
 
-const { contentItems, contentRevisions, users, aiAnalyses } = schema
+const { contentItems, contentRevisions, users, aiAnalyses, socialDrafts } = schema
 
 export type AnalysisType = (typeof schema.analysisType.enumValues)[number]
+export type Platform = (typeof schema.platform.enumValues)[number]
+export type SocialStatus = (typeof schema.socialStatus.enumValues)[number]
 
 export type ContentType = (typeof schema.contentType.enumValues)[number]
 export type ContentStatus = (typeof schema.contentStatus.enumValues)[number]
@@ -221,4 +223,51 @@ export async function listAnalysesByRevision(revisionId: string) {
     .from(aiAnalyses)
     .where(eq(aiAnalyses.revisionId, revisionId))
     .orderBy(desc(aiAnalyses.createdAt))
+}
+
+// ── social_drafts ──────────────────────────────────────────────────────────
+export async function insertSocialDraft(input: {
+  contentItemId: string
+  revisionId: string
+  platform: Platform
+  body: string
+  hashtags: string[]
+}) {
+  const [row] = await db
+    .insert(socialDrafts)
+    .values(input)
+    .returning({ id: socialDrafts.id })
+  return row.id
+}
+
+export async function listSocialDraftsByRevision(revisionId: string) {
+  return db
+    .select({
+      id: socialDrafts.id,
+      platform: socialDrafts.platform,
+      body: socialDrafts.body,
+      hashtags: socialDrafts.hashtags,
+      status: socialDrafts.status,
+      createdAt: socialDrafts.createdAt,
+    })
+    .from(socialDrafts)
+    .where(eq(socialDrafts.revisionId, revisionId))
+    .orderBy(desc(socialDrafts.createdAt))
+}
+
+export async function getSocialDraft(id: string) {
+  const [row] = await db
+    .select({ id: socialDrafts.id, status: socialDrafts.status, contentItemId: socialDrafts.contentItemId })
+    .from(socialDrafts)
+    .where(eq(socialDrafts.id, id))
+    .limit(1)
+  return row ?? null
+}
+
+export async function updateSocialStatus(id: string, status: SocialStatus) {
+  await db.update(socialDrafts).set({ status }).where(eq(socialDrafts.id, id))
+}
+
+export async function deleteSocialDraft(id: string) {
+  await db.delete(socialDrafts).where(eq(socialDrafts.id, id))
 }
