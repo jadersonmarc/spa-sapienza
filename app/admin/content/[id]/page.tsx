@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import {
   getContentItem,
   listAnalysesByRevision,
+  listProposedRevisions,
   listSocialDraftsByRevision,
   type Seo,
 } from "@/lib/content/queries"
@@ -14,6 +15,7 @@ import { SOCIAL_PLATFORMS } from "@/lib/ai/social"
 import { ContentForm, type ContentFormValues } from "../content-form"
 import { StatusControls } from "../status-controls"
 import { AnalysisPanel } from "../analysis-panel"
+import { ProposalsPanel } from "../proposals-panel"
 import { SocialPanel } from "../social-panel"
 import { saveContentAction } from "../actions"
 
@@ -39,6 +41,7 @@ export default async function EditContentPage({
   const socialDrafts = item.currentRevisionId
     ? await listSocialDraftsByRevision(item.currentRevisionId)
     : []
+  const proposals = await listProposedRevisions(item.id)
 
   const initial: Partial<ContentFormValues> = {
     type: item.type,
@@ -80,8 +83,12 @@ export default async function EditContentPage({
         submitLabel="Salvar revisão"
       />
 
+      <div className="mt-8">
+        <ProposalsPanel itemId={item.id} proposals={proposals} />
+      </div>
+
       {item.currentRevisionId ? (
-        <div className="mt-8 flex flex-col gap-6">
+        <div className="mt-6 flex flex-col gap-6">
           <AnalysisPanel
             itemId={item.id}
             revisionId={item.currentRevisionId}

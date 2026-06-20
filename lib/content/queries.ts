@@ -179,7 +179,12 @@ export async function listRevisions(itemId: string) {
     })
     .from(contentRevisions)
     .leftJoin(users, eq(users.id, contentRevisions.authorId))
-    .where(eq(contentRevisions.contentItemId, itemId))
+    .where(
+      and(
+        eq(contentRevisions.contentItemId, itemId),
+        eq(contentRevisions.isProposed, false), // propostas (R1) não entram no histórico
+      ),
+    )
     .orderBy(desc(contentRevisions.createdAt))
 }
 
@@ -203,6 +208,7 @@ export async function getRevisionForDiff(itemId: string, revId: string) {
     .where(
       and(
         eq(contentRevisions.contentItemId, itemId),
+        eq(contentRevisions.isProposed, false),
         lt(contentRevisions.createdAt, revision.createdAt),
       ),
     )
@@ -210,6 +216,90 @@ export async function getRevisionForDiff(itemId: string, revId: string) {
     .limit(1)
 
   return { revision, previous: previous ?? null }
+}
+
+// ── R1: revisões propostas pela IA ───────────────────────────────────────────
+export async function insertProposedRevision(
+  itemId: string,
+  rev: RevisionInput,
+  authorId: string,
+  proposedFrom: { analysisType: AnalysisType; recommendation: string },
+) {
+  const [row] = await db
+    .insert(contentRevisions)
+    .values({ ...rev, contentItemId: itemId, authorId, isProposed: true, proposedFrom })
+    .returning({ id: contentRevisions.id })
+  return row.id
+}
+
+export async function listProposedRevisions(itemId: string) {
+  return db
+    .select({
+      id: contentRevisions.id,
+      title: contentRevisions.title,
+      proposedFrom: contentRevisions.proposedFrom,
+      createdAt: contentRevisions.createdAt,
+    })
+    .from(contentRevisions)
+    .where(
+      and(
+        eq(contentRevisions.contentItemId, itemId),
+        eq(contentRevisions.isProposed, true),
+      ),
+    )
+    .orderBy(desc(contentRevisions.createdAt))
+}
+
+// Proposta + revisão ATUAL do item (para o diff proposta × current).
+export async function getProposalDiff(itemId: string, proposalId: string) {
+  const [proposal] = await db
+    .select()
+    .from(contentRevisions)
+    .where(
+      and(
+        eq(contentRevisions.id, proposalId),
+        eq(contentRevisions.contentItemId, itemId),
+        eq(contentRevisions.isProposed, true),
+      ),
+    )
+    .limit(1)
+  if (!proposal) return null
+
+  const [item] = await db
+    .select({ currentRevisionId: contentItems.currentRevisionId })
+    .from(contentItems)
+    .where(eq(contentItems.id, itemId))
+    .limit(1)
+
+  let current = null
+  if (item?.currentRevisionId) {
+    ;[current] = await db
+      .select()
+      .from(contentRevisions)
+      .where(eq(contentRevisions.id, item.currentRevisionId))
+      .limit(1)
+  }
+  return { proposal, current: current ?? null }
+}
+
+// Aceitar: a proposta vira a revisão atual (deixa de ser proposta).
+export async function acceptProposal(itemId: string, proposalId: string) {
+  await db.transaction(async (tx) => {
+    await tx
+      .update(contentRevisions)
+      .set({ isProposed: false, proposedFrom: null })
+      .where(eq(contentRevisions.id, proposalId))
+    await tx
+      .update(contentItems)
+      .set({ currentRevisionId: proposalId, updatedAt: new Date() })
+      .where(eq(contentItems.id, itemId))
+  })
+}
+
+export async function discardProposal(proposalId: string) {
+  await db
+    .delete(contentRevisions)
+    .where(and(eq(contentRevisions.id, proposalId), eq(contentRevisions.isProposed, true)))
 }
 
 // Revisão única (escopada ao item) — usada para montar o snapshot de análise.
