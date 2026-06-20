@@ -26,11 +26,16 @@ export default async function AdminPage() {
             {email} · <span className="uppercase">{role}</span>
           </p>
         </div>
-        <form action={signOutAction}>
-          <Button type="submit" variant="outline">
-            Sair
+        <div className="flex gap-2">
+          <Button asChild variant="outline">
+            <Link href="/admin/conta">Conta</Link>
           </Button>
-        </form>
+          <form action={signOutAction}>
+            <Button type="submit" variant="outline">
+              Sair
+            </Button>
+          </form>
+        </div>
       </div>
 
       <Card className="p-6">

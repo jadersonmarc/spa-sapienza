@@ -1,4 +1,4 @@
-import { and, desc, eq, lt, lte, ne } from "drizzle-orm"
+import { and, desc, eq, lt, lte, ne, sql } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
 
 const { contentItems, contentRevisions, users, aiAnalyses, socialDrafts } = schema
@@ -136,6 +136,23 @@ export async function saveContentItem(
 
 export async function deleteContentItem(id: string) {
   await db.delete(contentItems).where(eq(contentItems.id, id))
+}
+
+// ── usuário (R4: troca de senha) ─────────────────────────────────────────────
+export async function getUserCredById(id: string) {
+  const [row] = await db
+    .select({ id: users.id, passwordHash: users.passwordHash })
+    .from(users)
+    .where(eq(users.id, id))
+    .limit(1)
+  return row ?? null
+}
+
+export async function updateUserPassword(id: string, passwordHash: string) {
+  await db
+    .update(users)
+    .set({ passwordHash, sessionVersion: sql`${users.sessionVersion} + 1`, updatedAt: new Date() })
+    .where(eq(users.id, id))
 }
 
 // Itens agendados cujo horário já chegou (para o job de publicação).

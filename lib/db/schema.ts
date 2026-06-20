@@ -5,6 +5,8 @@ import {
   text,
   timestamp,
   jsonb,
+  boolean,
+  integer,
   index,
   uniqueIndex,
 } from "drizzle-orm/pg-core"
@@ -35,6 +37,8 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   role: userRole("role").notNull().default("editor"),
+  // R4: bump invalida sessões JWT antigas (após troca de senha).
+  sessionVersion: integer("session_version").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 })
@@ -78,6 +82,12 @@ export const contentRevisions = pgTable(
     excerpt: text("excerpt").notNull().default(""),
     // { title?: string; description?: string; keywords?: string[] }
     seo: jsonb("seo").notNull().default({}),
+    // Páginas (type='page'): blocos nomeados por seção. Null para posts.
+    blocks: jsonb("blocks"),
+    // R1: revisão proposta por IA (não vira current até aceita).
+    isProposed: boolean("is_proposed").notNull().default(false),
+    // R1: rastreio { analysisType, recommendation } da recomendação que gerou.
+    proposedFrom: jsonb("proposed_from"),
     authorId: uuid("author_id")
       .notNull()
       .references(() => users.id),
@@ -120,6 +130,8 @@ export const socialDrafts = pgTable(
     body: text("body").notNull(),
     hashtags: jsonb("hashtags").notNull().default([]),
     status: socialStatus("status").notNull().default("draft"),
+    imageUrl: text("image_url"), // R2-img: capa (OG PNG) servida via R2
+    postUrl: text("post_url"), // link do post após o envio
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("social_drafts_item_idx").on(t.contentItemId)],

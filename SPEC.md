@@ -182,6 +182,26 @@ via API do provedor em runtime** — **não** ficam no Postgres (ver §Modelo de
 - [ ] Dados lidos da **API do provedor** em runtime (sem persistir métricas no banco);
   mapear cada post (slug) à sua métrica.
 
+## Lote 01 — Refatorações (em andamento)
+Ordem: **R4 → R3 → R1 → R2**. Migration `0002` adiciona as colunas abaixo.
+
+- **Schema**: `content_revisions.{blocks jsonb, is_proposed bool, proposed_from jsonb}`,
+  `social_drafts.{image_url, post_url}`, `users.session_version`.
+- **R4 — troca de senha** (self-service): `/admin/conta`; `changePasswordAction` valida senha
+  atual (bcrypt), força da nova, atualiza hash; opcional bump `session_version` (desloga outras).
+- **R3 — páginas DB-driven**: `content_items.type='page'` com `revision.blocks` (blocos nomeados
+  por seção). Começa pela **home**; componentes viram Server Components com **fallback** ao texto
+  hardcoded até publicar; `revalidatePath('/')` no publish. Workflow draft→published.
+- **R1 — aplicar recomendação**: botão por recomendação → Claude gera **revisão proposta**
+  (`is_proposed`, `proposed_from`) → diff proposta×current → aceitar (vira current) / descartar.
+  `listRevisions` exclui propostas.
+- **R2 — remover n8n + social por botão**:
+  - **n8n eliminado**; agendamento via **GitHub Actions** (gerar rascunho seg/qua/sex; `publish-scheduled`).
+  - **Social por botão** no admin (não no `→published`): gerar → aprovar → "Publicar no IG/LinkedIn"
+    (`postSocialAction`) → grava `post_url`, marca `sent`. IG via **Facebook Graph (EAA)**.
+  - **Imagem**: OG PNG do artigo → R2 → `social_drafts.image_url`.
+  - Remover `notifySocialWebhook`, workflows/scripts/docs/env do n8n.
+
 ## Itens a confirmar
 1. (resolvido) Banco = Postgres standalone na VPS; Auth = Auth.js (Credentials);
    Storage = S3-compatível (Cloudflare R2). Supabase descontinuado.
