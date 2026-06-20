@@ -4,7 +4,8 @@ import type { ContentStatus } from "./queries"
 // db/next aqui, para ser testável isoladamente.
 // draft → in_review → scheduled → published → archived; volta a draft em edição.
 export const TRANSITIONS: Record<ContentStatus, ContentStatus[]> = {
-  draft: ["in_review"],
+  // draft→published direto p/ páginas (workflow simplificado); admin-gated.
+  draft: ["in_review", "published"],
   in_review: ["scheduled", "published", "draft"],
   scheduled: ["published", "draft"],
   published: ["archived", "draft"],

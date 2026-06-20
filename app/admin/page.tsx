@@ -38,15 +38,27 @@ export default async function AdminPage() {
         </div>
       </div>
 
-      <Card className="p-6">
-        <h2 className="mb-1 font-medium">Gestão de conteúdo</h2>
-        <p className="mb-4 text-sm text-muted-foreground">
-          Criar, editar e versionar posts e páginas.
-        </p>
-        <Button asChild>
-          <Link href="/admin/content">Abrir conteúdo</Link>
-        </Button>
-      </Card>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Card className="p-6">
+          <h2 className="mb-1 font-medium">Conteúdo (blog)</h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Criar, editar e versionar posts; análises de IA e posts sociais.
+          </p>
+          <Button asChild>
+            <Link href="/admin/content">Abrir conteúdo</Link>
+          </Button>
+        </Card>
+
+        <Card className="p-6">
+          <h2 className="mb-1 font-medium">Páginas do site</h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Editar os textos das seções da home (DB-driven).
+          </p>
+          <Button asChild>
+            <Link href="/admin/pages">Abrir páginas</Link>
+          </Button>
+        </Card>
+      </div>
     </main>
   )
 }

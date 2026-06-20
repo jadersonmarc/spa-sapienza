@@ -28,6 +28,7 @@ export async function contentTransition(
         status: contentItems.status,
         publishedAt: contentItems.publishedAt,
         slug: contentItems.slug,
+        type: contentItems.type,
       })
       .from(contentItems)
       .where(eq(contentItems.id, itemId))
@@ -66,20 +67,24 @@ export async function contentTransition(
       note: opts.note ?? null,
     })
 
-    return { from, to, slug: item.slug }
+    return { from, to, slug: item.slug, type: item.type }
   })
 
   // Revalida o site quando a visibilidade pública muda (entra/sai de published).
-  // O blog lê do Postgres, então publicar/despublicar reflete sem deploy.
   const visibilityChanged = result.to === "published" || result.from === "published"
   if (visibilityChanged) {
-    revalidatePath("/blog")
-    revalidatePath(`/blog/${result.slug}`)
-    revalidatePath("/sitemap.xml")
+    if (result.type === "page") {
+      // Página: home → '/'; outras → '/{slug}'.
+      revalidatePath(result.slug === "home" ? "/" : `/${result.slug}`)
+    } else {
+      revalidatePath("/blog")
+      revalidatePath(`/blog/${result.slug}`)
+      revalidatePath("/sitemap.xml")
+    }
   }
 
-  // Webhook social só em → published (SPEC, princípio inviolável #2).
-  if (result.to === "published") {
+  // Webhook social só em → published (SPEC, princípio inviolável #2) — só posts.
+  if (result.to === "published" && result.type === "post") {
     await notifySocialWebhook(itemId).catch((err) => {
       console.error("[social] falha no webhook de publicação:", err)
     })

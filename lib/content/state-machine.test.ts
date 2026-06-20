@@ -17,8 +17,11 @@ describe("máquina de estados", () => {
     expect(canTransition("archived", "draft")).toBe(true)
   })
 
+  it("permite publicar direto do rascunho (páginas)", () => {
+    expect(canTransition("draft", "published")).toBe(true)
+  })
+
   it("bloqueia transições inválidas", () => {
-    expect(canTransition("draft", "published")).toBe(false)
     expect(canTransition("draft", "scheduled")).toBe(false)
     expect(canTransition("published", "in_review")).toBe(false)
     expect(canTransition("archived", "published")).toBe(false)
@@ -29,7 +32,7 @@ describe("máquina de estados", () => {
   })
 
   it("lista as transições permitidas por estado", () => {
-    expect(allowedTransitions("draft")).toEqual(["in_review"])
+    expect(allowedTransitions("draft")).toEqual(["in_review", "published"])
     expect(allowedTransitions("archived")).toEqual(["draft"])
     expect(allowedTransitions("in_review")).toContain("published")
   })

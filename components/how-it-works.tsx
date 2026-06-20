@@ -1,5 +1,6 @@
 import { ClipboardCheck, FileCheck2, Code2, LifeBuoy } from "lucide-react"
 import { Tag } from "@/components/tag"
+import { DEFAULT_HOME, type SectionHeader } from "@/lib/content/pages"
 
 const steps = [
   {
@@ -28,19 +29,19 @@ const steps = [
   },
 ]
 
-export function HowItWorks() {
+export function HowItWorks({ header = DEFAULT_HOME.howItWorks }: { header?: SectionHeader }) {
   return (
     <section className="px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 text-center sm:mb-16">
           <Tag tone="primary" size="sm" className="mb-4">
-            Como funciona
+            {header.eyebrow}
           </Tag>
           <h2 className="mb-3 text-2xl font-semibold text-foreground text-balance font-display sm:mb-4 sm:text-3xl md:text-4xl">
-            Da conversa inicial ao sistema em produção.
+            {header.title}
           </h2>
           <p className="mx-auto max-w-2xl text-base text-muted-foreground sm:text-lg">
-            Um processo simples para transformar necessidade de negócio em software com escopo claro.
+            {header.subtitle}
           </p>
         </div>
 
