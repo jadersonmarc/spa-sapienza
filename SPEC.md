@@ -204,6 +204,28 @@ Ordem: **R4 → R3 → R1 → R2**. Migration `0002` adiciona as colunas abaixo.
   - **Imagem**: OG PNG do artigo → R2 → `social_drafts.image_url`.
   - Remover `notifySocialWebhook`, workflows/scripts/docs/env do n8n.
 
+## Sistema de design (Lote Design — UX/UI)
+Tese: **precisão que vira confiança**. Assinatura = **monospace** em números, eyebrows e
+metadados (encoda "engenharia" sem dizer). Site e admin usam o **mesmo** sistema de tokens.
+
+**Anti-clichê:** nada de creme+serifa+terracota; nada de preto+verde-ácido; nada de broadsheet.
+
+**Tokens** (CSS vars **OKLCH**, semânticas, valor p/ light e dark; Tailwind consome):
+`--bg, --fg, --muted, --accent, --accent-soft, --border, --card, --ring, --signal`.
+Paleta-fonte: `ink #0E1116`, `surface #F7F8FA`, `petrol #0E6E73`, `petrol-soft #3A9BA0`,
+`line #D7DCE2`, `line-dark #222833`, `signal #C9683A` (parcimônia). Escala única de
+espaçamento, radii e elevação (sombras suaves).
+
+**Tipografia (3 papéis, `next/font`):** Display **Bricolage Grotesque** (títulos, tracking
+apertado); Corpo/UI **IBM Plex Sans**; Mono **IBM Plex Mono** (assinatura).
+
+**Dark/Light:** **next-themes** (class, default system, persistido, sem FOUC); toggle
+acessível no site e no admin; AA nos dois temas. (Supera a antiga regra de "dark mode
+permanente" do CLAUDE.md.)
+
+**Copy (texto = material):** voz ativa, sentence case; o controle diz o que faz; erros dizem
+o que houve e como resolver; tela vazia é convite à ação.
+
 ## Itens a confirmar
 1. (resolvido) Banco = Postgres standalone na VPS; Auth = Auth.js (Credentials);
    Storage = S3-compatível (Cloudflare R2). Supabase descontinuado.
