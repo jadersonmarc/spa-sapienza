@@ -1,4 +1,4 @@
-import { Tag } from "@/components/tag"
+import { Eyebrow } from "@/components/eyebrow"
 import { ClipboardCheck, Wrench, ShieldCheck } from "lucide-react"
 import { DEFAULT_HOME, type DiffBlock } from "@/lib/content/pages"
 
@@ -30,9 +30,7 @@ export function Differentials({ block = DEFAULT_HOME.differentials }: { block?: 
 
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="glass rounded-2xl p-6 text-center border-border/50 sm:p-8 md:p-12">
-          <Tag tone="accent" size="sm" className="mb-4 sm:mb-6">
-            {block.eyebrow}
-          </Tag>
+          <Eyebrow className="mb-4 sm:mb-6">{block.eyebrow}</Eyebrow>
 
           <h2 className="text-xl font-semibold text-foreground mb-4 text-balance leading-tight font-display sm:text-2xl sm:mb-6 md:text-3xl lg:text-4xl">
             {block.titleLead}{" "}

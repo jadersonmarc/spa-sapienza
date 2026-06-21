@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { BadgeCheck, Handshake, ShieldCheck } from "lucide-react"
 import { Tag } from "@/components/tag"
+import { Eyebrow } from "@/components/eyebrow"
 import { DEFAULT_HOME, type SectionHeader } from "@/lib/content/pages"
 
 const guarantees = [
@@ -29,9 +30,7 @@ export function Trust({ header = DEFAULT_HOME.trust }: { header?: SectionHeader 
     <section className="px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 text-center sm:mb-16">
-          <Tag tone="accent" size="sm" className="mb-4">
-            {header.eyebrow}
-          </Tag>
+          {header.eyebrow && <Eyebrow className="mb-4">{header.eyebrow}</Eyebrow>}
           <h2 className="mb-3 text-2xl font-semibold text-foreground text-balance font-display sm:mb-4 sm:text-3xl md:text-4xl">
             {header.title}
           </h2>

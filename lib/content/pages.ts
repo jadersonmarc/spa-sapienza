@@ -39,6 +39,7 @@ export const DEFAULT_HOME: HomeBlocks = {
     ctaLabel: "Diagnóstico gratuito — 30 minutos",
   },
   services: {
+    eyebrow: "O que fazemos",
     title: "Nossos Serviços",
     subtitle: "Soluções tecnológicas sob medida para impulsionar seu negócio",
   },
@@ -49,6 +50,7 @@ export const DEFAULT_HOME: HomeBlocks = {
       "Um processo simples para transformar necessidade de negócio em software com escopo claro.",
   },
   portfolio: {
+    eyebrow: "Produtos próprios",
     title: "Portfólio",
     subtitle: "Produtos que estamos construindo — e a engenharia por trás deles",
   },

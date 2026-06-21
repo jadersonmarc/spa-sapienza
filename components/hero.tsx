@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { MessageCircle } from "lucide-react"
+import { Eyebrow } from "@/components/eyebrow"
 import { DEFAULT_HOME, type HeroBlock } from "@/lib/content/pages"
 
 export function Hero({ block = DEFAULT_HOME.hero }: { block?: HeroBlock }) {
@@ -11,11 +12,7 @@ export function Hero({ block = DEFAULT_HOME.hero }: { block?: HeroBlock }) {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        {/* Eyebrow em mono — assinatura "engenharia" */}
-        <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground sm:mb-6">
-          <span className="size-1.5 rounded-full bg-primary" aria-hidden />
-          {block.badge}
-        </p>
+        <Eyebrow className="mb-5 sm:mb-6">{block.badge}</Eyebrow>
 
         <h1 className="font-display text-[2rem] font-semibold leading-[1.08] tracking-tight text-foreground text-balance mb-4 sm:text-5xl sm:mb-6 md:text-6xl">
           {block.titleLead}{" "}

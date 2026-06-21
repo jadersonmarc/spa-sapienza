@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Scale, Bot, Layers } from "lucide-react"
+import { Eyebrow } from "@/components/eyebrow"
 import { DEFAULT_HOME, type SectionHeader } from "@/lib/content/pages"
 
 const services = [
@@ -25,6 +26,7 @@ export function Services({ header = DEFAULT_HOME.services }: { header?: SectionH
     <section className="py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10 sm:mb-16">
+          {header.eyebrow && <Eyebrow className="mb-4">{header.eyebrow}</Eyebrow>}
           <h2 className="text-2xl font-semibold text-foreground mb-3 text-balance font-display sm:text-3xl sm:mb-4 md:text-4xl">
             {header.title}
           </h2>
