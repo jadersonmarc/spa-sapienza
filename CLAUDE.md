@@ -37,7 +37,8 @@ comunicação direta com clientes.
 ## Stack
 
 - Next.js 16 (App Router) + React 19 + TypeScript
-- Tailwind CSS 4 (tokens em oklch, dark mode **permanente** — sem toggle)
+- Tailwind CSS 4 (tokens semânticos em oklch; **dark/light via next-themes**,
+  default `system`, com toggle — ver Sistema de design)
 - shadcn/ui (estilo New York) + Radix UI + lucide-react
 - Gerenciador de pacotes: **pnpm**
 - **CMS (Fase 1)**: Postgres na VPS + Drizzle ORM; Auth.js v5 (Credentials/JWT);
@@ -98,7 +99,29 @@ VPS Hostinger via Coolify — **não é Vercel**. Por isso:
   (As adições do CMS — Postgres/Drizzle/Auth.js/R2 etc. — são sancionadas pelo `SPEC.md`.)
 - **Não quebrar rotas existentes**: `/`, `/sobre`, `/blog`, `/blog/[slug]`
   (slugs do blog têm valor de SEO).
-- **Manter dark mode permanente** — não adicionar toggle de tema.
-- **Não alterar o glassmorphism do header** — está bem resolvido.
+- **Dark/light com toggle** (next-themes, default `system`). Ao estilizar, use
+  **tokens semânticos** (`bg-background`, `text-foreground`, `border-border`,
+  `bg-card`, `text-muted-foreground`, `bg-primary`…). **Nunca** usar tints fixos
+  como `white/x`, `bg-black`, `text-red-400` direto — quebram no tema claro;
+  prefira `foreground/[x]`, `border-border`, `text-destructive`, ou pares
+  `*-700 dark:*-300`. AA nos dois temas.
 - **Não usar imagens externas ou de stock** — apenas assets já em `/public`.
 - Conteúdo do site é **pt-BR** — atenção à acentuação correta em toda copy.
+
+## Sistema de design (Lote Design)
+
+Tese: *precisão que vira confiança* — engenharia sinalizada por estrutura e
+**monospace** (números, rótulos, metadados), mas calorosa e legível para dono de PME.
+
+- **Tipografia (3 papéis, `next/font`)**: Bricolage Grotesque (`font-display`,
+  títulos), IBM Plex Sans (`font-sans`, corpo/UI), IBM Plex Mono (`font-mono`,
+  assinatura: números, eyebrows, metadados, código).
+- **Eyebrows**: usar `components/eyebrow.tsx` (mono, caixa-alta, dot petrol) —
+  unifica hero, seções e páginas. No admin, headers em `font-display`.
+- **Paleta** (tokens em `app/globals.css`, `:root` = light, `.dark` = dark):
+  petrol/petrol-soft (`--primary`), ink/surface (`--background`/`--foreground`),
+  line (`--border`), `--signal` (#C9683A, só destaque/alerta pontual).
+- **Anti-clichê**: nada de creme+serifa+terracota, nem quase-preto+verde-ácido,
+  nem broadsheet. Acento é petrol; ousadia só na assinatura mono.
+- **A11y**: `prefers-reduced-motion` respeitado globalmente; foco visível (ring);
+  status do admin com cor semântica.

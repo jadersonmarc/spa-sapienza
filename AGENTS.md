@@ -30,5 +30,8 @@ pnpm db:generate | db:push | db:seed | db:import-mdx
 
 ## Antes de mexer
 - Não quebrar rotas do site (`/`, `/sobre`, `/blog`, `/blog/[slug]`) — slugs têm SEO.
-- Manter dark mode permanente e o glass do header; sem imagens de stock.
+- Dark/light com toggle (next-themes, default `system`): estilizar só com tokens
+  semânticos (`bg-background`, `border-border`, `text-destructive`…); nunca `white/x`
+  ou cores fixas que quebram no claro. Sem imagens de stock. Ver "Sistema de design"
+  no `CLAUDE.md` (tipografia display/sans/mono, `components/eyebrow.tsx`, paleta petrol).
 - Rodar `pnpm lint && pnpm exec tsc --noEmit && pnpm test` antes de commitar.
