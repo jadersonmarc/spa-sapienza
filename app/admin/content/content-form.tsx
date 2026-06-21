@@ -37,7 +37,7 @@ const EMPTY: ContentFormValues = {
 }
 
 const field =
-  "rounded-md border border-white/10 bg-background px-3 py-2 text-foreground outline-none focus:border-white/30"
+  "rounded-md border border-border bg-background px-3 py-2 text-foreground outline-none focus:border-ring focus:ring-1 focus:ring-ring"
 
 export function ContentForm({
   action,
@@ -104,7 +104,7 @@ export function ContentForm({
         <input type="hidden" name="bodyMarkdown" value={body} />
       </div>
 
-      <fieldset className="flex flex-col gap-4 rounded-md border border-white/10 p-4">
+      <fieldset className="flex flex-col gap-4 rounded-md border border-border p-4">
         <legend className="px-1 text-sm text-muted-foreground">SEO</legend>
         <label className="flex flex-col gap-1.5 text-sm">
           <span className="text-muted-foreground">Título SEO</span>
@@ -131,7 +131,7 @@ export function ContentForm({
       </fieldset>
 
       {state.error ? (
-        <p className="text-sm text-red-400" role="alert">
+        <p className="text-sm text-destructive" role="alert">
           {state.error}
         </p>
       ) : null}

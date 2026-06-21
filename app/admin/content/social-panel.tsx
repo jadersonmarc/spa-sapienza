@@ -55,7 +55,7 @@ export function SocialPanel({
   )
 
   return (
-    <div className="flex flex-col gap-4 rounded-md border border-white/10 p-4">
+    <div className="flex flex-col gap-4 rounded-md border border-border p-4">
       <div>
         <h2 className="font-medium">Posts sociais</h2>
         <p className="text-sm text-muted-foreground">
@@ -77,10 +77,10 @@ export function SocialPanel({
       </div>
 
       {state.error ? (
-        <p className="text-sm text-red-400" role="alert">{state.error}</p>
+        <p className="text-sm text-destructive" role="alert">{state.error}</p>
       ) : null}
       {postState.error ? (
-        <p className="text-sm text-red-400" role="alert">{postState.error}</p>
+        <p className="text-sm text-destructive" role="alert">{postState.error}</p>
       ) : null}
 
       {drafts.length === 0 ? (
@@ -90,11 +90,11 @@ export function SocialPanel({
           {drafts.map((d) => {
             const tags = Array.isArray(d.hashtags) ? (d.hashtags as string[]) : []
             return (
-              <div key={d.id} className="rounded-md border border-white/10 p-3">
+              <div key={d.id} className="rounded-md border border-border p-3">
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <span className="text-sm font-medium">
                     {PLATFORM_LABEL[d.platform] ?? d.platform}
-                    <span className="ml-2 rounded-full bg-white/10 px-2 py-0.5 text-xs uppercase">
+                    <span className="ml-2 rounded-full bg-foreground/[0.08] px-2 py-0.5 text-xs uppercase">
                       {STATUS_LABEL[d.status]}
                     </span>
                   </span>

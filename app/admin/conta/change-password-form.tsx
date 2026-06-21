@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { changePasswordAction, type AccountFormState } from "./actions"
 
 const field =
-  "rounded-md border border-white/10 bg-background px-3 py-2 text-foreground outline-none focus:border-white/30"
+  "rounded-md border border-border bg-background px-3 py-2 text-foreground outline-none focus:border-ring focus:ring-1 focus:ring-ring"
 
 export function ChangePasswordForm() {
   const [state, formAction, pending] = useActionState<AccountFormState, FormData>(
@@ -29,10 +29,10 @@ export function ChangePasswordForm() {
       </label>
 
       {state.error ? (
-        <p className="text-sm text-red-400" role="alert">{state.error}</p>
+        <p className="text-sm text-destructive" role="alert">{state.error}</p>
       ) : null}
       {state.ok ? (
-        <p className="text-sm text-green-400">Senha alterada com sucesso.</p>
+        <p className="text-sm text-emerald-600 dark:text-emerald-400">Senha alterada com sucesso.</p>
       ) : null}
 
       <Button type="submit" disabled={pending} className="mt-2">

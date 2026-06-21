@@ -18,7 +18,7 @@ export function LoginForm() {
           type="email"
           required
           autoComplete="email"
-          className="rounded-md border border-white/10 bg-background px-3 py-2 text-foreground outline-none focus:border-white/30"
+          className="rounded-md border border-border bg-background px-3 py-2 text-foreground outline-none focus:border-ring focus:ring-1 focus:ring-ring"
         />
       </label>
 
@@ -29,12 +29,12 @@ export function LoginForm() {
           type="password"
           required
           autoComplete="current-password"
-          className="rounded-md border border-white/10 bg-background px-3 py-2 text-foreground outline-none focus:border-white/30"
+          className="rounded-md border border-border bg-background px-3 py-2 text-foreground outline-none focus:border-ring focus:ring-1 focus:ring-ring"
         />
       </label>
 
       {state.error ? (
-        <p className="text-sm text-red-400" role="alert">
+        <p className="text-sm text-destructive" role="alert">
           {state.error}
         </p>
       ) : null}

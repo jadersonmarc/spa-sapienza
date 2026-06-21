@@ -37,7 +37,7 @@ export function ProposalsPanel({
       {proposals.map((p) => {
         const from = (p.proposedFrom ?? {}) as { analysisType?: string; recommendation?: string }
         return (
-          <div key={p.id} className="rounded-md border border-white/10 p-3">
+          <div key={p.id} className="rounded-md border border-border p-3">
             <p className="text-xs text-muted-foreground">
               {from.analysisType ? `${TYPE_LABEL[from.analysisType] ?? from.analysisType} · ` : ""}
               {new Date(p.createdAt).toLocaleString("pt-BR")}

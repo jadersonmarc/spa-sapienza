@@ -48,7 +48,7 @@ export default async function HistoryPage({
         </Button>
       </div>
 
-      <Card className="divide-y divide-white/10 p-0">
+      <Card className="divide-y divide-border p-0">
         {revisions.map((rev, idx) => {
           const isCurrent = rev.id === currentId
           // O último da lista (mais antigo) não tem predecessora para diff.

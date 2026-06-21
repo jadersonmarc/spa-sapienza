@@ -18,8 +18,8 @@ function FieldChange({ label, before, after }: { label: string; before: string; 
   return (
     <div className="text-sm">
       <p className="mb-1 text-muted-foreground">{label}</p>
-      <p className="rounded bg-red-500/10 px-2 py-1 text-red-300 line-through">{before || "(vazio)"}</p>
-      <p className="mt-1 rounded bg-green-500/10 px-2 py-1 text-green-300">{after || "(vazio)"}</p>
+      <p className="rounded bg-red-500/10 px-2 py-1 text-red-700 dark:text-red-300 line-through">{before || "(vazio)"}</p>
+      <p className="mt-1 rounded bg-green-500/10 px-2 py-1 text-green-700 dark:text-green-300">{after || "(vazio)"}</p>
     </div>
   )
 }
@@ -45,8 +45,8 @@ export default async function DiffPage({
           <h1 className="text-2xl font-semibold">Mudanças nesta revisão</h1>
           <p className="text-sm text-muted-foreground">
             {previous ? "Comparado com a revisão anterior" : "Revisão inicial (tudo novo)"} ·{" "}
-            <span className="text-green-400">+{added}</span>{" "}
-            <span className="text-red-400">−{removed}</span>
+            <span className="text-emerald-600 dark:text-emerald-400">+{added}</span>{" "}
+            <span className="text-destructive">−{removed}</span>
           </p>
         </div>
         <Button asChild variant="outline">
@@ -60,7 +60,7 @@ export default async function DiffPage({
       </div>
 
       <Card className="overflow-hidden p-0">
-        <div className="border-b border-white/10 px-4 py-2 text-sm text-muted-foreground">
+        <div className="border-b border-border px-4 py-2 text-sm text-muted-foreground">
           Corpo (Markdown)
         </div>
         <pre className="overflow-x-auto p-0 text-sm leading-relaxed">
@@ -69,9 +69,9 @@ export default async function DiffPage({
               key={i}
               className={
                 l.type === "add"
-                  ? "bg-green-500/10 text-green-300"
+                  ? "bg-green-500/10 text-green-700 dark:text-green-300"
                   : l.type === "del"
-                    ? "bg-red-500/10 text-red-300"
+                    ? "bg-red-500/10 text-red-700 dark:text-red-300"
                     : "text-muted-foreground"
               }
             >

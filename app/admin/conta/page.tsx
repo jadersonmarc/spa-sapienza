@@ -1,8 +1,6 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
-import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ChangePasswordForm } from "./change-password-form"
 
@@ -17,16 +15,11 @@ export default async function ContaPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Conta</h1>
-          <p className="text-sm text-muted-foreground">
-            {session.user.email} · <span className="uppercase">{session.user.role}</span>
-          </p>
-        </div>
-        <Button asChild variant="outline">
-          <Link href="/admin">Voltar</Link>
-        </Button>
+      <div className="mb-6">
+        <h1 className="font-display text-2xl font-semibold">Conta</h1>
+        <p className="font-mono text-xs text-muted-foreground">
+          {session.user.email} · <span className="uppercase">{session.user.role}</span>
+        </p>
       </div>
 
       <Card className="p-6">

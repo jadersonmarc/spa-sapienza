@@ -101,7 +101,7 @@ export function AnalysisPanel({
   )
 
   return (
-    <div className="flex flex-col gap-4 rounded-md border border-white/10 p-4">
+    <div className="flex flex-col gap-4 rounded-md border border-border p-4">
       <div>
         <h2 className="font-medium">Análises de IA</h2>
         <p className="text-sm text-muted-foreground">
@@ -122,10 +122,10 @@ export function AnalysisPanel({
         ))}
       </div>
 
-      {state.error ? <p className="text-sm text-red-400" role="alert">{state.error}</p> : null}
-      {applyState.error ? <p className="text-sm text-red-400" role="alert">{applyState.error}</p> : null}
+      {state.error ? <p className="text-sm text-destructive" role="alert">{state.error}</p> : null}
+      {applyState.error ? <p className="text-sm text-destructive" role="alert">{applyState.error}</p> : null}
       {applyState.ok ? (
-        <p className="text-sm text-green-400">Proposta criada — veja em &ldquo;Propostas pendentes&rdquo;.</p>
+        <p className="text-sm text-emerald-600 dark:text-emerald-400">Proposta criada — veja em &ldquo;Propostas pendentes&rdquo;.</p>
       ) : null}
 
       {analyses.length === 0 ? (
@@ -133,7 +133,7 @@ export function AnalysisPanel({
       ) : (
         <div className="flex flex-col gap-3">
           {analyses.map((a) => (
-            <div key={a.id} className="rounded-md border border-white/10 p-3">
+            <div key={a.id} className="rounded-md border border-border p-3">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm font-medium">{TYPE_LABEL[a.type] ?? a.type}</span>
                 <span className="text-xs text-muted-foreground">

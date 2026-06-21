@@ -27,7 +27,7 @@ type Props = {
 }
 
 const tbBtn =
-  "inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-white/10 hover:text-foreground disabled:opacity-50"
+  "inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-foreground/[0.06] hover:text-foreground disabled:opacity-50"
 
 export function MarkdownEditor({ value, onChange }: Props) {
   const ref = useRef<ReactCodeMirrorRef>(null)
@@ -92,8 +92,8 @@ export function MarkdownEditor({ value, onChange }: Props) {
   }
 
   return (
-    <div className="overflow-hidden rounded-md border border-white/10">
-      <div className="flex flex-wrap items-center gap-1 border-b border-white/10 bg-white/5 p-1.5">
+    <div className="overflow-hidden rounded-md border border-border">
+      <div className="flex flex-wrap items-center gap-1 border-b border-border bg-muted/40 p-1.5">
         <button type="button" className={tbBtn} title="Negrito" onClick={() => wrap("**")}>
           <Bold className="size-4" />
         </button>
@@ -148,12 +148,12 @@ export function MarkdownEditor({ value, onChange }: Props) {
       </div>
 
       {uploadError ? (
-        <p className="border-b border-white/10 bg-red-500/10 px-3 py-1.5 text-xs text-red-400">
+        <p className="border-b border-border bg-destructive/10 px-3 py-1.5 text-xs text-destructive">
           {uploadError}
         </p>
       ) : null}
       {uploading ? (
-        <p className="border-b border-white/10 px-3 py-1.5 text-xs text-muted-foreground">
+        <p className="border-b border-border px-3 py-1.5 text-xs text-muted-foreground">
           Enviando imagem…
         </p>
       ) : null}

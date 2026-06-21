@@ -6,7 +6,7 @@ import { savePageAction, type PageFormState } from "./actions"
 import type { HomeBlocks } from "@/lib/content/pages"
 
 const field =
-  "rounded-md border border-white/10 bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-white/30"
+  "rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring focus:ring-1 focus:ring-ring"
 
 type FieldDef = { name: string; label: string; long?: boolean }
 const SECTIONS: { title: string; fields: FieldDef[] }[] = [
@@ -58,7 +58,7 @@ export function HomeForm({ initial }: { initial: HomeBlocks }) {
   return (
     <form action={formAction} className="flex max-w-3xl flex-col gap-6">
       {SECTIONS.map((sec) => (
-        <fieldset key={sec.title} className="flex flex-col gap-3 rounded-md border border-white/10 p-4">
+        <fieldset key={sec.title} className="flex flex-col gap-3 rounded-md border border-border p-4">
           <legend className="px-1 text-sm text-muted-foreground">{sec.title}</legend>
           {sec.fields.map((f) => (
             <label key={f.name} className="flex flex-col gap-1.5 text-sm">
@@ -73,8 +73,8 @@ export function HomeForm({ initial }: { initial: HomeBlocks }) {
         </fieldset>
       ))}
 
-      {state.error ? <p className="text-sm text-red-400" role="alert">{state.error}</p> : null}
-      {state.ok ? <p className="text-sm text-green-400">Salvo (rascunho). Publique para refletir no site.</p> : null}
+      {state.error ? <p className="text-sm text-destructive" role="alert">{state.error}</p> : null}
+      {state.ok ? <p className="text-sm text-emerald-600 dark:text-emerald-400">Salvo (rascunho). Publique para refletir no site.</p> : null}
 
       <Button type="submit" disabled={pending} className="self-start">
         {pending ? "Salvando..." : "Salvar rascunho"}
