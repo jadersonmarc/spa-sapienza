@@ -1,13 +1,16 @@
 import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google'
 import { Header } from '@/components/header'
+import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
 const GTAG_ID = 'AW-18174652706'
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+// Tipografia (3 papéis): display grotesk, corpo Plex Sans, assinatura Plex Mono.
+const display = Bricolage_Grotesque({ subsets: ['latin'], variable: '--font-display' })
+const sans = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-sans' })
+const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-mono' })
 
 const SITE_TITLE = 'Sapienza Labs | Product Studio de Inteligência Tecnológica'
 const SITE_DESCRIPTION = 'Especialistas em desenvolvimento de software, automações inteligentes e soluções RegTech sob medida. Transformamos complexidade técnica em ativos digitais de alto valor.'
@@ -54,10 +57,16 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" className="bg-background">
-      <body className="font-sans antialiased">
-        <Header />
-        {children}
+    <html
+      lang="pt-BR"
+      suppressHydrationWarning
+      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+    >
+      <body className="bg-background font-sans text-foreground antialiased">
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          <Header />
+          {children}
+        </ThemeProvider>
 
         {/* Google tag (gtag.js) */}
         <Script

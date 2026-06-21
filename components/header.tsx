@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { ArrowUpRight, MessageCircle, Menu, X } from "lucide-react"
 
 const navLinks = [
@@ -98,7 +99,9 @@ export function Header() {
             <p className="text-[11px] uppercase tracking-[0.26em] text-muted-foreground">Briefing rápido</p>
             <p className="text-sm text-foreground">Resposta via WhatsApp</p>
           </div>
-          
+
+          <ThemeToggle />
+
           {/* Desktop CTA Button */}
           <Button size="sm" className="group hidden rounded-full sm:inline-flex" asChild>
             <a
