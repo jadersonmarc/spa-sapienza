@@ -110,7 +110,7 @@ export function BlogFilter({ posts }: BlogFilterProps) {
                       size: "md",
                       interactive: n !== currentPage,
                     }),
-                    "min-w-9 justify-center"
+                    "min-w-9 justify-center font-mono"
                   )}
                 >
                   {n}

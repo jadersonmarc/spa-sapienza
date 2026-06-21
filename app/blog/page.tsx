@@ -3,6 +3,7 @@ import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { BlogBreadcrumb } from "@/components/blog-breadcrumb"
 import { BlogFilter } from "@/components/blog-filter"
+import { Eyebrow } from "@/components/eyebrow"
 import { getAllPosts } from "@/lib/blog"
 
 export const metadata: Metadata = {
@@ -31,7 +32,8 @@ export default async function BlogPage() {
           <BlogBreadcrumb />
           
           <div className="mt-6 mb-8 sm:mt-8 sm:mb-12">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-foreground mb-3 sm:mb-4">
+            <Eyebrow className="mb-4">Diário de engenharia</Eyebrow>
+            <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-foreground mb-3 sm:mb-4">
               Blog
             </h1>
             <p className="text-muted-foreground text-base sm:text-lg max-w-2xl">

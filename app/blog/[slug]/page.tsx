@@ -123,7 +123,7 @@ export default async function ArticlePage({ params }: PageProps) {
             )}
 
             <header className="mt-6 mb-8 sm:mb-10">
-              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm text-muted-foreground mb-3 sm:mb-4">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 font-mono text-sm text-muted-foreground mb-3 sm:mb-4">
                 <span className="flex items-center gap-1.5">
                   <Calendar className="h-4 w-4" />
                   {new Date(post.date).toLocaleDateString("pt-BR", {
@@ -138,12 +138,12 @@ export default async function ArticlePage({ params }: PageProps) {
                 </span>
               </div>
               
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-foreground leading-tight text-balance">
+              <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-foreground leading-tight tracking-tight text-balance">
                 {post.title}
               </h1>
             </header>
 
-            <div className="markdown-preview max-w-none">
+            <div className="markdown-preview max-w-none text-[1.0625rem] leading-[1.75]">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[rehypeSanitize]}

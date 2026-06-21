@@ -32,7 +32,7 @@ export function ArticleCard({ post }: ArticleCardProps) {
           <ArticleCover pilar={post.pilar} variant="card" />
         )}
         <CardHeader className="p-4 sm:p-6">
-          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-2 sm:gap-4">
+          <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-muted-foreground mb-2 sm:gap-4">
             <span className="flex items-center gap-1">
               <Calendar className="h-3.5 w-3.5" />
               {new Date(post.date).toLocaleDateString("pt-BR", {
@@ -49,7 +49,7 @@ export function ArticleCard({ post }: ArticleCardProps) {
           <Tag tone={pilarConfig[post.pilar].tone} className="mb-2">
             {pilarConfig[post.pilar].label}
           </Tag>
-          <CardTitle className="text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2 sm:text-lg">
+          <CardTitle className="font-display text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2 sm:text-lg">
             {post.title}
           </CardTitle>
         </CardHeader>
