@@ -69,17 +69,18 @@ pnpm db:import-mdx # importa os .mdx para o Postgres (idempotente)
   (origem do import para o DB; ver `pnpm db:import-mdx`). Remoção definitiva pendente.
 - `lib/blog.ts` — **lê do Postgres** (`getAllPosts` / `getPostBySlug`, interface
   `Post`, só `published`); mapeia o pilar do enum (`p1`→engenharia, `p2`→pme,
-  `p3`→bastidores). Corpo renderizado por regex em `app/blog/[slug]/page.tsx`.
-- **Admin/CMS** (Fase 1): `app/admin/*` (login, CRUD, editor, histórico/diff),
-  `app/api/auth/*` (Auth.js), `app/api/generate-draft` (n8n→Claude), `app/api/admin/upload`
-  (R2); `middleware.ts` protege `/admin`. `auth.ts`/`auth.config.ts` (auth),
-  `lib/db/*` (Drizzle: `schema.ts`, `index.ts`), `lib/content/*` (queries, transição,
-  máquina de estados, diff, slug), `lib/ai/draft.ts`, `lib/storage/s3.ts`,
-  `lib/auth/webhook.ts`. Migrations em `drizzle/`.
-- `scripts/extract-post-meta.mjs` + `.github/workflows/publish-social.yml` +
-  `docs/n8n-workflows/editorial-automation.json` — pipeline editorial MDX legado
-  (ver `docs/AUTOMACAO_EDITORIAL.md`); a publicação agora também dispara a ponte
-  social via `lib/content/transition.ts` no `→published`.
+  `p3`→bastidores). Corpo renderizado com `react-markdown`+`rehype-sanitize`.
+- **Admin/CMS**: `app/admin/*` (login, CRUD, editor, histórico/diff, propostas de IA,
+  páginas, conta), `app/api/auth/*` (Auth.js), `app/api/generate-draft` e
+  `app/api/publish-scheduled` (acionados por GitHub Actions), `app/api/admin/upload` (R2);
+  `middleware.ts` protege `/admin`. `auth.ts`/`auth.config.ts` + `lib/auth/*`
+  (sessão, permissões, senha, webhook), `lib/db/*` (Drizzle), `lib/content/*` (queries,
+  transição, máquina de estados, diff, slug, pages), `lib/ai/*` (client, analyzers, social,
+  draft), `lib/social/*` (instagram, linkedin, image), `lib/storage/s3.ts`. Migrations em `drizzle/`.
+- **Automação editorial**: `.github/workflows/generate-draft.yml` (cron seg/qua/sex) e
+  `publish-scheduled.yml` chamam os endpoints com `x-webhook-secret`. Postagem social
+  (Instagram via Facebook Graph EAA; LinkedIn) é **por botão** no admin, na revisão social.
+  (n8n foi removido.)
 - `public/` — assets permitidos: `logo-sapienza.png` (logo principal),
   `icon.svg`, `icon-dark-32x32.png`, `icon-light-32x32.png`, `marc.png`.
 

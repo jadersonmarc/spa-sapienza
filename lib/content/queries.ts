@@ -368,6 +368,7 @@ export async function listSocialDraftsByRevision(revisionId: string) {
       body: socialDrafts.body,
       hashtags: socialDrafts.hashtags,
       status: socialDrafts.status,
+      postUrl: socialDrafts.postUrl,
       createdAt: socialDrafts.createdAt,
     })
     .from(socialDrafts)
@@ -382,6 +383,35 @@ export async function getSocialDraft(id: string) {
     .where(eq(socialDrafts.id, id))
     .limit(1)
   return row ?? null
+}
+
+// Draft + slug/título do conteúdo (para a postagem social).
+export async function getSocialDraftForPost(id: string) {
+  const [row] = await db
+    .select({
+      id: socialDrafts.id,
+      contentItemId: socialDrafts.contentItemId,
+      platform: socialDrafts.platform,
+      body: socialDrafts.body,
+      hashtags: socialDrafts.hashtags,
+      status: socialDrafts.status,
+      imageUrl: socialDrafts.imageUrl,
+      slug: contentItems.slug,
+      title: contentRevisions.title,
+    })
+    .from(socialDrafts)
+    .innerJoin(contentItems, eq(contentItems.id, socialDrafts.contentItemId))
+    .leftJoin(contentRevisions, eq(contentRevisions.id, socialDrafts.revisionId))
+    .where(eq(socialDrafts.id, id))
+    .limit(1)
+  return row ?? null
+}
+
+export async function markSocialSent(id: string, postUrl: string | null, imageUrl: string) {
+  await db
+    .update(socialDrafts)
+    .set({ status: "sent", postUrl, imageUrl })
+    .where(eq(socialDrafts.id, id))
 }
 
 export async function updateSocialStatus(id: string, status: SocialStatus) {

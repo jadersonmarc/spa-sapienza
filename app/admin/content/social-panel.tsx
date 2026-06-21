@@ -7,6 +7,7 @@ import type { SocialStatus } from "@/lib/content/queries"
 import {
   deleteSocialAction,
   generateSocialAction,
+  postSocialAction,
   setSocialStatusAction,
   type SocialFormState,
 } from "./social-actions"
@@ -17,10 +18,10 @@ const STATUS_LABEL: Record<SocialStatus, string> = {
   approved: "Aprovado",
   sent: "Enviado",
 }
-const ACTION_LABEL: Record<SocialStatus, string> = {
+// "sent" sai via botão Publicar (postagem real), não por mudança manual de status.
+const ACTION_LABEL: Partial<Record<SocialStatus, string>> = {
   draft: "Voltar a rascunho",
   approved: "Aprovar",
-  sent: "Marcar enviado",
 }
 
 type Draft = {
@@ -29,6 +30,7 @@ type Draft = {
   body: string
   hashtags: unknown
   status: SocialStatus
+  postUrl: string | null
   createdAt: Date
 }
 
@@ -45,6 +47,10 @@ export function SocialPanel({
 }) {
   const [state, formAction, pending] = useActionState<SocialFormState, FormData>(
     generateSocialAction,
+    {},
+  )
+  const [postState, postAction, posting] = useActionState<SocialFormState, FormData>(
+    postSocialAction,
     {},
   )
 
@@ -71,9 +77,10 @@ export function SocialPanel({
       </div>
 
       {state.error ? (
-        <p className="text-sm text-red-400" role="alert">
-          {state.error}
-        </p>
+        <p className="text-sm text-red-400" role="alert">{state.error}</p>
+      ) : null}
+      {postState.error ? (
+        <p className="text-sm text-red-400" role="alert">{postState.error}</p>
       ) : null}
 
       {drafts.length === 0 ? (
@@ -104,16 +111,34 @@ export function SocialPanel({
                   </p>
                 ) : null}
 
+                {d.status === "sent" && d.postUrl ? (
+                  <p className="mt-2 text-xs">
+                    <a href={d.postUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+                      Ver post publicado ↗
+                    </a>
+                  </p>
+                ) : null}
+
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {allowedSocialTransitions(d.status).map((to) => (
-                    <form key={to} action={setSocialStatusAction}>
+                  {allowedSocialTransitions(d.status)
+                    .filter((to) => to !== "sent")
+                    .map((to) => (
+                      <form key={to} action={setSocialStatusAction}>
+                        <input type="hidden" name="id" value={d.id} />
+                        <input type="hidden" name="to" value={to} />
+                        <Button type="submit" variant="outline" size="sm">
+                          {ACTION_LABEL[to]}
+                        </Button>
+                      </form>
+                    ))}
+                  {d.status === "approved" ? (
+                    <form action={postAction}>
                       <input type="hidden" name="id" value={d.id} />
-                      <input type="hidden" name="to" value={to} />
-                      <Button type="submit" variant="outline" size="sm">
-                        {ACTION_LABEL[to]}
+                      <Button type="submit" size="sm" disabled={posting}>
+                        {posting ? "Publicando..." : `Publicar no ${PLATFORM_LABEL[d.platform] ?? d.platform}`}
                       </Button>
                     </form>
-                  ))}
+                  ) : null}
                   <form action={deleteSocialAction}>
                     <input type="hidden" name="id" value={d.id} />
                     <Button type="submit" variant="destructive" size="sm">

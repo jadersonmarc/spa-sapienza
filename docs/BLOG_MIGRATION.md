@@ -1,8 +1,8 @@
 # Migração do Blog para MDX — Planejamento
 
-> **Status**: ✅ CONCLUÍDA (antecipada). A migração foi executada como base da
-> automação editorial (ver `docs/AUTOMACAO_EDITORIAL.md`), antes do gatilho
-> original. Diferenças em relação a este planejamento: os posts vivem em
+> **Status**: ✅ CONCLUÍDA (histórico). O blog migrou de MDX para Postgres (ver
+> `SPEC.md`); os `.mdx` em `app/blog/posts/` ficam só como origem do import.
+> Diferenças em relação a este planejamento: os posts viveram em
 > `app/blog/posts/*.mdx` (não em `/content/blog/<pilar>/`); o pilar é um campo
 > do frontmatter (`pme`/`engenharia`/`bastidores`), não derivado do diretório;
 > e o corpo é renderizado pelo parser regex existente (restrição: única dep

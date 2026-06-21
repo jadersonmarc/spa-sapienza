@@ -7,7 +7,7 @@ import { canTransition, TransitionError } from "./state-machine"
 // Reexporta a lógica pura da máquina de estados (consumidores existentes a importam daqui).
 export { canTransition, allowedTransitions, TransitionError } from "./state-machine"
 
-const { contentItems, contentRevisions, auditLog } = schema
+const { contentItems, auditLog } = schema
 
 type TransitionOpts = {
   scheduledAt?: Date | null
@@ -83,54 +83,6 @@ export async function contentTransition(
     }
   }
 
-  // Webhook social só em → published (SPEC, princípio inviolável #2) — só posts.
-  if (result.to === "published" && result.type === "post") {
-    await notifySocialWebhook(itemId).catch((err) => {
-      console.error("[social] falha no webhook de publicação:", err)
-    })
-  }
-
+  // Postagem social agora é por botão no admin (R2) — não dispara no publish.
   return result
-}
-
-const SITE_URL = process.env.SITE_URL ?? "https://sapienzalabs.com.br"
-
-// POST best-effort ao n8n com os dados do post publicado (contrato do SPEC).
-async function notifySocialWebhook(itemId: string) {
-  const url = process.env.N8N_PUBLISH_WEBHOOK_URL
-  const secret = process.env.WEBHOOK_SECRET
-  if (!url || !secret) return // não configurado → no-op
-
-  const [row] = await db
-    .select({
-      slug: contentItems.slug,
-      pilar: contentItems.pilar,
-      title: contentRevisions.title,
-      excerpt: contentRevisions.excerpt,
-    })
-    .from(contentItems)
-    .innerJoin(
-      contentRevisions,
-      eq(contentRevisions.id, contentItems.currentRevisionId),
-    )
-    .where(eq(contentItems.id, itemId))
-    .limit(1)
-  if (!row) return
-
-  const postUrl = `${SITE_URL}/blog/${row.slug}`
-  const payload = {
-    slug: row.slug,
-    title: row.title,
-    excerpt: row.excerpt,
-    url: postUrl,
-    pilar: row.pilar,
-    image_url: `${postUrl}/opengraph-image`,
-  }
-
-  await fetch(url, {
-    method: "POST",
-    headers: { "content-type": "application/json", "x-webhook-secret": secret },
-    body: JSON.stringify(payload),
-    signal: AbortSignal.timeout(5000),
-  })
 }

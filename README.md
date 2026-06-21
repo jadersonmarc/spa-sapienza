@@ -39,11 +39,13 @@ A aplicação ficará disponível em `http://localhost:3000`.
 
 ## Blog e automação editorial
 
-Os posts ficam em `app/blog/posts/*.mdx` (frontmatter YAML + corpo Markdown).
-Há um pipeline editorial que, ao entrar um post novo na `main`, dispara uma
-GitHub Action que aciona um webhook do n8n e publica nas redes (Instagram e
-LinkedIn). Detalhes, pré-requisitos e troubleshooting em
-[`docs/AUTOMACAO_EDITORIAL.md`](docs/AUTOMACAO_EDITORIAL.md).
+O conteúdo vive no Postgres e é gerido pelo admin (`/admin`). A automação roda
+via **GitHub Actions**: `generate-draft.yml` (cron seg/qua/sex) cria rascunhos
+via Claude e `publish-scheduled.yml` publica conteúdo agendado — ambos chamam os
+endpoints do admin com `x-webhook-secret`. A **postagem social** (Instagram via
+Facebook Graph; LinkedIn) é feita **por botão** no admin, após revisar e aprovar
+o post. (O blog também mantém os `.mdx` originais em `app/blog/posts/` como
+origem do import — não são mais lidos pelo site.)
 
 ## Deploy
 

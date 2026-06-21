@@ -24,24 +24,25 @@ do conteúdo de MDX para Postgres. Atualizar ao fim de cada fase junto com
 1. **Publicar conteúdo NÃO dispara deploy.** Conteúdo é dado em Postgres, lido em
    runtime. Deploy é só para mudança de código.
 2. Toda transição de status passa por **um único serviço** (`lib/content/transition.ts`);
-   efeitos colaterais (revalidação + webhook social) só em `→ published`.
+   efeito colateral (revalidação do site) só quando muda a visibilidade pública.
 3. TypeScript estrito; dependências mínimas e justificadas; segredos só em env/Secrets.
 4. **Auth por tipo de chamador:**
    - **Humano** (`/admin` UI + Server Actions) → **Auth.js** (Credentials, sessão JWT;
-     `role` checado no middleware).
-   - **Máquina/externo** (n8n cron → `/api/generate-draft`, webhooks de entrada) →
+     `role` checado nas actions; publicar/excluir exigem admin).
+   - **Máquina/externo** (GitHub Actions → `/api/generate-draft`, `/api/publish-scheduled`) →
      **webhook secret** no header (`x-webhook-secret` vs env; 401 se difere; compare em
      tempo constante). Toda rota acionável por máquina sem sessão verifica o secret.
-   - Webhook de **saída** (admin → n8n no publish) → admin envia o secret; n8n valida.
+   - **Postagem social** (IG/LinkedIn) → **por botão** no admin (não há webhook de saída).
 
 ## Arquitetura
 
 ```
-n8n cron (seg/qua/sex 08h BRT) → POST /api/generate-draft (x-webhook-secret)
+GitHub Actions cron (seg/qua/sex 08h BRT) → POST /api/generate-draft (x-webhook-secret)
   → admin chama Claude API (prompt por pilar) → grava content_item (draft) + revision
 
-Pessoa em /admin: revisa/edita (editor markdown + versionamento/diff) → muda status
-  → published: contentTransition dispara revalidateTag/Path + POST webhook → n8n → IG + LinkedIn
+Pessoa em /admin: revisa/edita (editor + versionamento/diff + análises/propostas de IA)
+  → published: contentTransition revalida o site (sem deploy)
+  → posts sociais: gerar → aprovar → botão "Publicar no IG/LinkedIn" (com imagem OG)
 
 Deploy (separado): PR → GitHub Actions (build/lint/typecheck/test) → merge → Coolify
 ```
@@ -91,11 +92,12 @@ draft → in_review → scheduled → published → archived
 ## Contratos de endpoint
 
 - `POST /api/generate-draft` — header `x-webhook-secret`; body `{ pilar }`. Gera via Claude,
-  cria item `draft` + revision. `200 { itemId }`; `401` se secret inválido.
-- Webhook de saída → n8n (na transição → published): `{ slug, title, excerpt, url, pilar,
-  image_url: "{url}/opengraph-image" }` + header `x-webhook-secret`.
+  cria item `draft` + revision. `200 { itemId }`; `401` se secret inválido. (GitHub Actions)
+- `POST /api/publish-scheduled` — header `x-webhook-secret`. Publica os `scheduled` vencidos.
+  `200 { published, failed }`. (GitHub Actions)
 - Server Actions do admin (sessão): CRUD content, saveRevision, runAnalysis(type),
-  generateSocialDrafts(platform), transition(to).
+  applyRecommendation, generateSocialDrafts(platform), **postSocial(platform)**, transition(to),
+  savePage, changePassword.
 
 ## Fases
 
@@ -116,8 +118,8 @@ transições, versionamento/diff, autorização, geração (slug) — 16 testes 
 (lint+tsc+test). **(checkpoint atingido)**
 
 Pendências operacionais (fora de código): branch protection na `main` com o gate de CI;
-re-seedar admin com senha real; rotacionar senha do Postgres; envs no Coolify; n8n cron
-apontando p/ `/api/generate-draft`.
+re-seedar admin com senha real; rotacionar senha do Postgres; envs no Coolify; secrets do
+GitHub Actions (`SITE_URL`, `WEBHOOK_SECRET`) para os workflows agendados.
 
 ### Fase 2 — Recursos com IA (módulos plugáveis) ✅ (concluída)
 
@@ -162,7 +164,7 @@ chama Claude → grava em `ai_analyses` (payload jsonb + model), **atado à revi
 
 **Geração de posts sociais** — registry análogo por `platform` (instagram|linkedin):
 gera `social_drafts` (body + hashtags) a partir da revisão; **revisáveis antes do envio**
-(status draft→approved→sent). Automatiza o que hoje é feito à mão no n8n.
+(status draft→approved→sent). Postagem por botão no admin (IG/LinkedIn).
 
 **UI** — painel no editor lista os módulos disponíveis, botão "rodar", e renderiza o
 resultado a partir do `payload`. Histórico de análises por revisão.

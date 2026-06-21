@@ -7,7 +7,9 @@ import {
   getContentItem,
   getRevision,
   getSocialDraft,
+  getSocialDraftForPost,
   insertSocialDraft,
+  markSocialSent,
   updateSocialStatus,
   type Platform,
   type SocialStatus,
@@ -15,6 +17,9 @@ import {
 import { getSocialGenerator } from "@/lib/ai/social"
 import { canSocialTransition } from "@/lib/content/social-status"
 import { callStructured, isAiConfigured } from "@/lib/ai/client"
+import { getSocialImageUrl } from "@/lib/social/image"
+import { postToInstagram } from "@/lib/social/instagram"
+import { postToLinkedin } from "@/lib/social/linkedin"
 
 export type SocialFormState = { error?: string; ok?: boolean }
 
@@ -76,6 +81,44 @@ export async function setSocialStatusAction(formData: FormData) {
   if (!canSocialTransition(draft.status, to)) return
   await updateSocialStatus(id, to)
   revalidatePath(`/admin/content/${draft.contentItemId}`)
+}
+
+// Postagem por BOTÃO: posta o draft aprovado no IG/LinkedIn, grava post_url e marca sent.
+export async function postSocialAction(
+  _prev: SocialFormState,
+  formData: FormData,
+): Promise<SocialFormState> {
+  const user = await requireUser()
+  if (!isAdmin(user.role)) return { error: "Apenas administradores publicam nas redes." }
+
+  const id = String(formData.get("id") ?? "")
+  const draft = await getSocialDraftForPost(id)
+  if (!draft) return { error: "Post não encontrado." }
+  if (draft.status !== "approved") return { error: "Aprove o post antes de publicar." }
+
+  const tags = Array.isArray(draft.hashtags) ? (draft.hashtags as string[]) : []
+  const articleUrl = `${SITE_URL}/blog/${draft.slug}`
+
+  try {
+    const imageUrl = await getSocialImageUrl(draft.slug)
+    let postUrl: string | null = null
+
+    if (draft.platform === "instagram") {
+      const caption = tags.length ? `${draft.body}\n\n${tags.map((t) => `#${t}`).join(" ")}` : draft.body
+      const r = await postToInstagram({ caption, imageUrl })
+      postUrl = r.permalink ?? null
+    } else {
+      const text = tags.length ? `${draft.body}\n\n${tags.map((t) => `#${t}`).join(" ")}` : draft.body
+      const r = await postToLinkedin({ text, articleUrl, title: draft.title ?? draft.slug })
+      postUrl = r.permalink ?? null
+    }
+
+    await markSocialSent(id, postUrl, imageUrl)
+    revalidatePath(`/admin/content/${draft.contentItemId}`)
+    return { ok: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Falha ao publicar." }
+  }
 }
 
 export async function deleteSocialAction(formData: FormData) {
