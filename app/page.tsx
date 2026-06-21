@@ -7,29 +7,31 @@ import { Portfolio } from "@/components/portfolio"
 import { Trust } from "@/components/trust"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
+import { getHomeBlocks } from "@/lib/content/pages"
 
 export const metadata: Metadata = {
   alternates: { canonical: "https://sapienzalabs.com.br" },
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const home = await getHomeBlocks()
   return (
     <main className="min-h-screen">
-      <Hero />
+      <Hero block={home.hero} />
       <section id="servicos">
-        <Services />
+        <Services header={home.services} />
       </section>
       <section id="como-funciona">
-        <HowItWorks />
+        <HowItWorks header={home.howItWorks} />
       </section>
       <section id="portfolio">
-        <Portfolio />
+        <Portfolio header={home.portfolio} />
       </section>
       <section id="confianca">
-        <Trust />
+        <Trust header={home.trust} />
       </section>
       <section id="diferenciais">
-        <Differentials />
+        <Differentials block={home.differentials} />
       </section>
       <Footer />
       <WhatsAppButton />

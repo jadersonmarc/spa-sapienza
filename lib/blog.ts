@@ -1,11 +1,10 @@
-import { readFileSync, readdirSync } from "node:fs"
-import { join } from "node:path"
-import matter from "gray-matter"
+import { and, desc, eq } from "drizzle-orm"
+import { db, schema } from "@/lib/db"
 
 export type Pilar =
-  | "pme"          // Pilar 1 — Negócio / PME
-  | "engenharia"   // Pilar 2 — Engenharia + IA
-  | "bastidores"   // Pilar 3 — Bastidores
+  | "pme"          // Negócio / PME (enum DB: p2)
+  | "engenharia"   // Engenharia + IA (enum DB: p1)
+  | "bastidores"   // Bastidores (enum DB: p3)
 
 export interface Post {
   title: string
@@ -24,67 +23,90 @@ export interface Post {
   keywords: string[]
 }
 
-const POSTS_DIR = join(process.cwd(), "app/blog/posts")
-const PILARES: Pilar[] = ["pme", "engenharia", "bastidores"]
-const DEFAULT_AUTHOR = { name: "Marc Jaderson", role: "Fundador, Sapienza Labs", avatarUrl: "/marc.webp" }
+const DEFAULT_AUTHOR = {
+  name: "Marc Jaderson",
+  role: "Fundador, Sapienza Labs",
+  avatarUrl: "/marc.webp",
+}
 
-// Conteúdo gerado pela automação chega em Markdown; ~200 palavras/minuto.
+// Mapeia o enum de pilar do banco para o vocabulário do site.
+const PILAR_FROM_DB: Record<string, Pilar> = {
+  p1: "engenharia",
+  p2: "pme",
+  p3: "bastidores",
+}
+
+// ~200 palavras/minuto.
 function readingTimeFromContent(content: string): string {
   const words = content.trim().split(/\s+/).filter(Boolean).length
   return `${Math.max(1, Math.round(words / 200))} min`
 }
 
-function normalizePilar(value: unknown, slug: string): Pilar {
-  if (typeof value === "string" && PILARES.includes(value as Pilar)) {
-    return value as Pilar
-  }
-  console.warn(`[blog] pilar inválido "${value}" em "${slug}" — usando "pme"`)
-  return "pme"
-}
+type Seo = { title?: string; description?: string; keywords?: string[] }
 
-// Lê um arquivo .mdx e mapeia o frontmatter para a interface Post.
-// Retorna null para arquivos sem os campos mínimos.
-function parsePost(fileName: string): Post | null {
-  const raw = readFileSync(join(POSTS_DIR, fileName), "utf-8")
-  const { data, content } = matter(raw)
-
-  const slug = typeof data.slug === "string" ? data.slug : fileName.replace(/^\d{4}-\d{2}-\d{2}-/, "").replace(/\.mdx$/, "")
-  if (!data.title || !data.publishedAt) {
-    console.warn(`[blog] frontmatter incompleto em "${fileName}" — ignorando`)
-    return null
-  }
-
-  const author = typeof data.author === "string"
-    ? { ...DEFAULT_AUTHOR, name: data.author }
-    : { ...DEFAULT_AUTHOR, ...(data.author ?? {}) }
-
+function toPost(row: {
+  slug: string
+  pilar: string | null
+  publishedAt: Date | null
+  title: string
+  excerpt: string
+  bodyMarkdown: string
+  seo: unknown
+}): Post {
+  const seo = (row.seo ?? {}) as Seo
   return {
-    title: String(data.title),
-    slug,
-    excerpt: String(data.excerpt ?? ""),
-    content: content.trim(),
-    date: String(data.publishedAt),
-    readingTime: readingTimeFromContent(content),
-    pilar: normalizePilar(data.pillar, slug),
-    coverImage: data.coverImage ? String(data.coverImage) : undefined,
-    author,
-    keywords: Array.isArray(data.tags) ? data.tags.map(String) : [],
+    title: row.title,
+    slug: row.slug,
+    excerpt: row.excerpt,
+    content: row.bodyMarkdown.trim(),
+    date: (row.publishedAt ?? new Date()).toISOString(),
+    readingTime: readingTimeFromContent(row.bodyMarkdown),
+    pilar: PILAR_FROM_DB[row.pilar ?? "p2"] ?? "pme",
+    author: { ...DEFAULT_AUTHOR },
+    keywords: Array.isArray(seo.keywords) ? seo.keywords : [],
   }
 }
 
-function readAllPosts(): Post[] {
-  const files = readdirSync(POSTS_DIR).filter((f) => f.endsWith(".mdx"))
-  return files
-    .map(parsePost)
-    .filter((p): p is Post => p !== null)
+// Base: posts juntando a revisão atual (filtro de where aplicado por função).
+function baseSelect() {
+  const { contentItems, contentRevisions } = schema
+  return db
+    .select({
+      slug: contentItems.slug,
+      pilar: contentItems.pilar,
+      publishedAt: contentItems.publishedAt,
+      title: contentRevisions.title,
+      excerpt: contentRevisions.excerpt,
+      bodyMarkdown: contentRevisions.bodyMarkdown,
+      seo: contentRevisions.seo,
+    })
+    .from(contentItems)
+    .innerJoin(
+      contentRevisions,
+      eq(contentRevisions.id, contentItems.currentRevisionId),
+    )
 }
 
-export function getAllPosts(): Post[] {
-  return readAllPosts().sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  )
+export async function getAllPosts(): Promise<Post[]> {
+  const { contentItems } = schema
+  const rows = await baseSelect()
+    .where(
+      and(eq(contentItems.type, "post"), eq(contentItems.status, "published")),
+    )
+    .orderBy(desc(contentItems.publishedAt))
+  return rows.map(toPost)
 }
 
-export function getPostBySlug(slug: string): Post | undefined {
-  return readAllPosts().find((post) => post.slug === slug)
+export async function getPostBySlug(slug: string): Promise<Post | undefined> {
+  const { contentItems } = schema
+  const [row] = await baseSelect()
+    .where(
+      and(
+        eq(contentItems.type, "post"),
+        eq(contentItems.status, "published"),
+        eq(contentItems.slug, slug),
+      ),
+    )
+    .limit(1)
+  return row ? toPost(row) : undefined
 }

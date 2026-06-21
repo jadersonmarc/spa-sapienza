@@ -1,5 +1,6 @@
 import { Tag } from "@/components/tag"
 import { ClipboardCheck, Wrench, ShieldCheck } from "lucide-react"
+import { DEFAULT_HOME, type DiffBlock } from "@/lib/content/pages"
 
 const features = [
   {
@@ -19,7 +20,7 @@ const features = [
   }
 ]
 
-export function Differentials() {
+export function Differentials({ block = DEFAULT_HOME.differentials }: { block?: DiffBlock }) {
   return (
     <section className="py-16 px-4 relative sm:py-24 sm:px-6 lg:px-8">
       {/* Background accent */}
@@ -30,16 +31,16 @@ export function Differentials() {
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="glass rounded-2xl p-6 text-center border-border/50 sm:p-8 md:p-12">
           <Tag tone="accent" size="sm" className="mb-4 sm:mb-6">
-            Por que Sapienza Labs?
+            {block.eyebrow}
           </Tag>
 
           <h2 className="text-xl font-semibold text-foreground mb-4 text-balance leading-tight font-display sm:text-2xl sm:mb-6 md:text-3xl lg:text-4xl">
-            Porque não entregamos apenas código; entregamos{" "}
-            <span className="text-primary">inteligência</span>.
+            {block.titleLead}{" "}
+            <span className="text-primary">{block.titleHighlight}</span>.
           </h2>
 
           <p className="text-muted-foreground text-base mb-8 max-w-2xl mx-auto leading-relaxed sm:text-lg sm:mb-10">
-            Nossa abordagem vai além do desenvolvimento tradicional. Combinamos expertise técnica com visão estratégica de negócio.
+            {block.subtitle}
           </p>
 
           <div className="grid gap-4 text-left sm:grid-cols-3">

@@ -1,0 +1,33 @@
+name: Gerar rascunho (editorial)
+
+# Substitui o cron do n8n. Seg/Qua/Sex 08h BRT (11h UTC), pilar por dia.
+# Secrets necessários: SITE_URL, WEBHOOK_SECRET.
+on:
+  schedule:
+    - cron: "0 11 * * 1,3,5"
+  workflow_dispatch:
+    inputs:
+      pilar:
+        description: "Pilar (p1|p2|p3). Vazio = por dia."
+        required: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: POST /api/generate-draft
+        run: |
+          PILAR="${{ github.event.inputs.pilar }}"
+          if [ -z "$PILAR" ]; then
+            case "$(date -u +%u)" in
+              1) PILAR=p1 ;;  # seg
+              3) PILAR=p2 ;;  # qua
+              5) PILAR=p3 ;;  # sex
+              *) PILAR=p2 ;;
+            esac
+          fi
+          echo "Gerando rascunho para pilar: $PILAR"
+          curl -fsS -X POST "${{ secrets.SITE_URL }}/api/generate-draft" \
+            -H "x-webhook-secret: ${{ secrets.WEBHOOK_SECRET }}" \
+            -H "content-type: application/json" \
+            -d "{\"pilar\":\"$PILAR\"}"

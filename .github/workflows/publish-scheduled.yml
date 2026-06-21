@@ -1,0 +1,17 @@
+name: Publicar agendados
+
+# Publica conteúdo "scheduled" cujo horário já chegou. A cada 15 min.
+# Secrets necessários: SITE_URL, WEBHOOK_SECRET.
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: POST /api/publish-scheduled
+        run: |
+          curl -fsS -X POST "${{ secrets.SITE_URL }}/api/publish-scheduled" \
+            -H "x-webhook-secret: ${{ secrets.WEBHOOK_SECRET }}"

@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button"
 import { Tag } from "@/components/tag"
 import { MessageCircle } from "lucide-react"
+import { DEFAULT_HOME, type HeroBlock } from "@/lib/content/pages"
 
-export function Hero() {
+export function Hero({ block = DEFAULT_HOME.hero }: { block?: HeroBlock }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center px-4 py-24 overflow-hidden sm:px-6 lg:px-8">
       {/* Background gradient effects */}
@@ -12,16 +13,16 @@ export function Hero() {
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <Tag tone="primary" size="sm" className="mb-4 sm:mb-6">
-          Software sob medida · Baixada Fluminense
+          {block.badge}
         </Tag>
 
         <h1 className="text-3xl font-semibold tracking-tight text-foreground mb-4 text-balance font-display sm:text-4xl sm:mb-6 md:text-5xl lg:text-6xl">
-          Seu negócio merece sistema feito para ele —{" "}
-          <span className="text-primary glow-text">não template comprado de fora.</span>
+          {block.titleLead}{" "}
+          <span className="text-primary glow-text">{block.titleHighlight}</span>
         </h1>
 
         <p className="text-base text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty leading-relaxed sm:text-lg sm:mb-10 md:text-xl">
-          Desenvolvemos software sob medida para escritórios de advocacia, contabilidade e clínicas da Baixada Fluminense. Levantamento de requisitos conduzido por engenheiro, entrega com qualidade de produção.
+          {block.subtitle}
         </p>
 
         <Button 
@@ -35,7 +36,7 @@ export function Hero() {
             rel="noopener noreferrer"
           >
             <MessageCircle className="mr-2 h-5 w-5" />
-            Diagnóstico gratuito — 30 minutos
+            {block.ctaLabel}
           </a>
         </Button>
       </div>

@@ -1,5 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tag, type TagTone } from "@/components/tag"
+import { DEFAULT_HOME, type SectionHeader } from "@/lib/content/pages"
 
 type TagColor = "blue" | "yellow" | "purple"
 
@@ -55,16 +56,16 @@ const projects: {
   }
 ]
 
-export function Portfolio() {
+export function Portfolio({ header = DEFAULT_HOME.portfolio }: { header?: SectionHeader }) {
   return (
     <section className="py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10 sm:mb-16">
           <h2 className="text-2xl font-semibold text-foreground mb-3 text-balance font-display sm:text-3xl sm:mb-4 md:text-4xl">
-            Portfólio
+            {header.title}
           </h2>
           <p className="text-muted-foreground text-base max-w-2xl mx-auto sm:text-lg">
-            Produtos que estamos construindo — e a engenharia por trás deles
+            {header.subtitle}
           </p>
         </div>
 
