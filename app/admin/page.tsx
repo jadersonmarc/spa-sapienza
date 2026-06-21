@@ -4,7 +4,6 @@ import { redirect } from "next/navigation"
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { signOutAction } from "./actions"
 
 export const metadata: Metadata = {
   title: "Painel — Admin",
@@ -15,27 +14,13 @@ export default async function AdminPage() {
   const session = await auth()
   if (!session?.user) redirect("/admin/login")
 
-  const { email, role } = session.user
-
   return (
     <main className="mx-auto max-w-5xl px-4 py-10">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">Painel de conteúdo</h1>
-          <p className="text-sm text-muted-foreground">
-            {email} · <span className="uppercase">{role}</span>
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button asChild variant="outline">
-            <Link href="/admin/conta">Conta</Link>
-          </Button>
-          <form action={signOutAction}>
-            <Button type="submit" variant="outline">
-              Sair
-            </Button>
-          </form>
-        </div>
+      <div className="mb-8">
+        <p className="mb-1 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+          Painel
+        </p>
+        <h1 className="font-display text-2xl font-semibold">Painel de conteúdo</h1>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
