@@ -8,9 +8,9 @@ import './globals.css'
 const GTAG_ID = 'AW-18174652706'
 
 // Tipografia (3 papéis): display grotesk, corpo Plex Sans, assinatura Plex Mono.
-const display = Bricolage_Grotesque({ subsets: ['latin'], variable: '--font-display' })
-const sans = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-sans' })
-const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-mono' })
+const display = Bricolage_Grotesque({ subsets: ['latin'], weight: ['600', '700'], display: 'swap', variable: '--font-display' })
+const sans = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'], display: 'swap', variable: '--font-sans' })
+const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], display: 'swap', variable: '--font-mono' })
 
 const SITE_TITLE = 'Sapienza Labs | Product Studio de Inteligência Tecnológica'
 const SITE_DESCRIPTION = 'Especialistas em desenvolvimento de software, automações inteligentes e soluções RegTech sob medida. Transformamos complexidade técnica em ativos digitais de alto valor.'

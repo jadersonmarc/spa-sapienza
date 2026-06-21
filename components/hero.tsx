@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-import { Tag } from "@/components/tag"
 import { MessageCircle } from "lucide-react"
 import { DEFAULT_HOME, type HeroBlock } from "@/lib/content/pages"
 
@@ -12,13 +11,15 @@ export function Hero({ block = DEFAULT_HOME.hero }: { block?: HeroBlock }) {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        <Tag tone="primary" size="sm" className="mb-4 sm:mb-6">
+        {/* Eyebrow em mono — assinatura "engenharia" */}
+        <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground sm:mb-6">
+          <span className="size-1.5 rounded-full bg-primary" aria-hidden />
           {block.badge}
-        </Tag>
+        </p>
 
-        <h1 className="text-3xl font-semibold tracking-tight text-foreground mb-4 text-balance font-display sm:text-4xl sm:mb-6 md:text-5xl lg:text-6xl">
+        <h1 className="font-display text-[2rem] font-semibold leading-[1.08] tracking-tight text-foreground text-balance mb-4 sm:text-5xl sm:mb-6 md:text-6xl">
           {block.titleLead}{" "}
-          <span className="text-primary glow-text">{block.titleHighlight}</span>
+          <span className="text-primary">{block.titleHighlight}</span>
         </h1>
 
         <p className="text-base text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty leading-relaxed sm:text-lg sm:mb-10 md:text-xl">
