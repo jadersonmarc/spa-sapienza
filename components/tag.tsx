@@ -35,7 +35,7 @@ const tagVariants = cva(
         false: "",
       },
       interactive: {
-        true: "hover:bg-white/6 hover:text-foreground",
+        true: "hover:bg-foreground/[0.06] hover:text-foreground",
         false: "",
       },
     },

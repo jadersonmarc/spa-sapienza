@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
+import { Eyebrow } from "@/components/eyebrow"
 import { ArrowRight, Leaf, HeartPulse, Building2 } from "lucide-react"
 import Image from "next/image"
 
@@ -74,6 +75,7 @@ export default function SobrePage() {
         {/* Hero Section */}
         <section className="px-4 sm:px-6">
           <div className="mx-auto max-w-3xl">
+            <Eyebrow className="mb-5">Sobre a Sapienza</Eyebrow>
             <h1 className="text-3xl font-bold tracking-tight text-foreground font-display sm:text-4xl md:text-5xl text-balance">
               Quem somos
             </h1>
@@ -160,7 +162,7 @@ export default function SobrePage() {
         {/* CTA Section */}
         <section className="mt-16 px-4 sm:mt-20 sm:px-6">
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-xl font-semibold text-foreground sm:text-2xl">
+            <h2 className="text-xl font-semibold text-foreground font-display sm:text-2xl">
               Quer construir algo junto?
             </h2>
             <p className="mt-2 text-muted-foreground">Fale com a gente.</p>

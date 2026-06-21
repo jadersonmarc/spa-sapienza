@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { Tag } from "@/components/tag"
+import { Eyebrow } from "@/components/eyebrow"
 import { MessageCircle, Mail, MapPin, ArrowUpRight } from "lucide-react"
 
 export const metadata: Metadata = {
@@ -68,9 +68,7 @@ export default function ContatoPage() {
         {/* Hero */}
         <section className="px-4 sm:px-6">
           <div className="mx-auto max-w-3xl text-center">
-            <Tag tone="primary" size="sm" className="mb-4">
-              Contato
-            </Tag>
+            <Eyebrow className="mb-4">Contato</Eyebrow>
             <h1 className="text-3xl font-bold tracking-tight text-foreground font-display sm:text-4xl md:text-5xl text-balance">
               Vamos transformar sua operação em software.
             </h1>
