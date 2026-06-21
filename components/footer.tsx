@@ -52,7 +52,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-border/30 text-center sm:mt-10">
-          <p className="text-muted-foreground text-xs sm:text-sm">
+          <p className="font-mono text-muted-foreground text-xs">
             © {new Date().getFullYear()} Sapienza Labs. Todos os direitos reservados.
           </p>
         </div>

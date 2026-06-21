@@ -63,7 +63,7 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6">
-      <div className="glass mx-auto flex h-16 max-w-6xl items-center justify-between rounded-full border border-white/8 px-4 shadow-[0_16px_48px_color-mix(in_oklch,var(--background)_72%,transparent)] md:h-[4.5rem] md:px-6">
+      <div className="glass mx-auto flex h-16 max-w-6xl items-center justify-between rounded-full border border-border/60 px-4 shadow-[0_16px_48px_color-mix(in_oklch,var(--background)_72%,transparent)] md:h-[4.5rem] md:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center text-foreground" aria-label="Sapienza Labs — início">
           <Image
@@ -77,14 +77,14 @@ export function Header() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 rounded-full border border-white/8 bg-white/4 p-1 lg:flex" aria-label="Menu principal">
+        <nav className="hidden items-center gap-1 rounded-full border border-border/60 bg-foreground/[0.03] p-1 lg:flex" aria-label="Menu principal">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-            className={`rounded-full px-3 py-2 text-[11px] uppercase tracking-wider transition-colors hover:bg-white/6 hover:text-foreground xl:px-4 ${
+            className={`rounded-full px-3 py-2 font-mono text-[11px] uppercase tracking-wider transition-colors hover:bg-foreground/[0.06] hover:text-foreground xl:px-4 ${
                 isActive(link.href)
-                  ? "bg-white/8 text-foreground"
+                  ? "bg-foreground/[0.08] text-foreground"
                   : "text-muted-foreground"
               }`}
             >
@@ -96,7 +96,7 @@ export function Header() {
         {/* Desktop CTA + Mobile Menu Button */}
         <div className="flex items-center gap-2">
           <div className="hidden text-right lg:block">
-            <p className="text-[11px] uppercase tracking-[0.26em] text-muted-foreground">Briefing rápido</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">Briefing rápido</p>
             <p className="text-sm text-foreground">Resposta via WhatsApp</p>
           </div>
 
@@ -119,7 +119,7 @@ export function Header() {
           <button
             type="button"
             onClick={toggleMenu}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/8 bg-white/4 text-foreground transition-colors hover:bg-white/8 lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-foreground/[0.03] text-foreground transition-colors hover:bg-foreground/[0.08] lg:hidden"
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
