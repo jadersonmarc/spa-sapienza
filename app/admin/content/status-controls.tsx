@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/admin/submit-button"
 import { transitionAction } from "./actions"
 import type { ContentStatus } from "@/lib/content/queries"
 
@@ -29,7 +29,7 @@ export function StatusControls({
   status: ContentStatus
   allowed: ContentStatus[]
 }) {
-  const [state, formAction, pending] = useActionState(transitionAction, {})
+  const [state, formAction] = useActionState(transitionAction, {})
   const [scheduledAt, setScheduledAt] = useState("")
 
   return (
@@ -61,24 +61,19 @@ export function StatusControls({
                     className="rounded-md border border-border bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-ring focus:ring-1 focus:ring-ring"
                   />
                 </label>
-                <Button type="submit" variant="outline" size="sm" disabled={pending}>
+                <SubmitButton variant="outline" size="sm">
                   Agendar
-                </Button>
+                </SubmitButton>
               </form>
             ) : (
               <form key={to} action={formAction}>
                 <input type="hidden" name="itemId" value={itemId} />
                 <input type="hidden" name="to" value={to} />
-                <Button
-                  type="submit"
-                  variant={VARIANT[to] ?? "outline"}
-                  size="sm"
-                  disabled={pending}
-                >
+                <SubmitButton variant={VARIANT[to] ?? "outline"} size="sm">
                   {to === "draft" && status !== "draft"
                     ? "Voltar a rascunho"
                     : STATUS_LABEL[to]}
-                </Button>
+                </SubmitButton>
               </form>
             ),
           )}

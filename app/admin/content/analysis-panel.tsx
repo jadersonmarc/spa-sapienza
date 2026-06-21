@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState } from "react"
-import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/admin/submit-button"
 import {
   applyRecommendationAction,
   runAnalysisAction,
@@ -38,14 +38,12 @@ function PayloadView({
   itemId,
   revisionId,
   applyAction,
-  applyPending,
 }: {
   payload: unknown
   analysisType: string
   itemId: string
   revisionId: string
   applyAction: ApplyAction
-  applyPending: boolean
 }) {
   if (!payload || typeof payload !== "object") {
     return <p className="text-sm text-muted-foreground">{String(payload)}</p>
@@ -66,9 +64,9 @@ function PayloadView({
                       <input type="hidden" name="revisionId" value={revisionId} />
                       <input type="hidden" name="type" value={analysisType} />
                       <input type="hidden" name="recommendation" value={String(v)} />
-                      <Button type="submit" variant="outline" size="sm" disabled={applyPending}>
-                        {applyPending ? "..." : "Aplicar"}
-                      </Button>
+                      <SubmitButton variant="outline" size="sm" pendingLabel="...">
+                        Aplicar
+                      </SubmitButton>
                     </form>
                   ) : null}
                 </li>
@@ -94,8 +92,8 @@ export function AnalysisPanel({
   analyzers: { type: string; label: string }[]
   analyses: Analysis[]
 }) {
-  const [state, formAction, pending] = useActionState<AiFormState, FormData>(runAnalysisAction, {})
-  const [applyState, applyAction, applyPending] = useActionState<AiFormState, FormData>(
+  const [state, formAction] = useActionState<AiFormState, FormData>(runAnalysisAction, {})
+  const [applyState, applyAction] = useActionState<AiFormState, FormData>(
     applyRecommendationAction,
     {},
   )
@@ -115,9 +113,9 @@ export function AnalysisPanel({
             <input type="hidden" name="itemId" value={itemId} />
             <input type="hidden" name="revisionId" value={revisionId} />
             <input type="hidden" name="type" value={a.type} />
-            <Button type="submit" variant="outline" size="sm" disabled={pending}>
-              {pending ? "Rodando..." : a.label}
-            </Button>
+            <SubmitButton variant="outline" size="sm" pendingLabel="Rodando...">
+              {a.label}
+            </SubmitButton>
           </form>
         ))}
       </div>
@@ -146,7 +144,6 @@ export function AnalysisPanel({
                 itemId={itemId}
                 revisionId={revisionId}
                 applyAction={applyAction}
-                applyPending={applyPending}
               />
             </div>
           ))}
