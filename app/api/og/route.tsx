@@ -37,5 +37,9 @@ export async function GET(req: Request) {
     caption: p.get("caption")?.slice(0, 200) ?? undefined,
   })
 
-  return renderBrandImage(format, node)
+  // Cache pela URL completa (texto/pilar/aspecto entram na chave): editar o
+  // título gera nova URL, então o cache nunca serve uma peça desatualizada.
+  return renderBrandImage(format, node, {
+    headers: { "Cache-Control": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800" },
+  })
 }
