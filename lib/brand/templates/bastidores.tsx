@@ -21,6 +21,8 @@ export function Bastidores({ format, imageUrl, caption, eyebrow = "BASTIDORES", 
 
   const backdrop = (
     <div style={{ position: "absolute", top: 0, left: 0, width: format.w, height: format.h, display: "flex" }}>
+      {/* Satori rende para PNG; não é <img> de DOM (next/image e alt não se aplicam). */}
+      {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
       <img
         src={imageUrl}
         width={format.w}

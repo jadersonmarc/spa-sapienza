@@ -37,7 +37,8 @@ export function Diagrama({ format, field, eyebrow, nodes, footer }: DiagramaProp
                   display: "flex",
                   fontFamily: fonts.mono,
                   fontSize: arrowPx,
-                  color: n.key ? c.accent : c.line,
+                  // setas sempre neutras: o único acento é o nó-chave.
+                  color: c.line,
                   paddingLeft: Math.round(format.w * 0.012),
                   paddingRight: Math.round(format.w * 0.012),
                 }}

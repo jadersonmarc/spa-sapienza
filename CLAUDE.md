@@ -78,6 +78,9 @@ pnpm db:import-mdx # importa os .mdx para o Postgres (idempotente)
   (sessão, permissões, senha, webhook), `lib/db/*` (Drizzle), `lib/content/*` (queries,
   transição, máquina de estados, diff, slug, pages), `lib/ai/*` (client, analyzers, social,
   draft), `lib/social/*` (instagram, linkedin, image), `lib/storage/s3.ts`. Migrations em `drizzle/`.
+- **Sistema de imagens**: `lib/brand/*` — renderer tipográfico (`next/og`/Satori) que gera
+  OG do blog e cards sociais on-brand. Rota on-demand `app/api/og` (preview do composer);
+  OG do blog (`app/blog/[slug]/opengraph-image.tsx`) é estática no build. Ver "Sistema de imagens".
 - **Automação editorial**: `.github/workflows/generate-draft.yml` (cron seg/qua/sex) e
   `publish-scheduled.yml` chamam os endpoints com `x-webhook-secret`. Postagem social
   (Instagram via Facebook Graph EAA; LinkedIn) é **por botão** no admin, na revisão social.
@@ -125,3 +128,20 @@ Tese: *precisão que vira confiança* — engenharia sinalizada por estrutura e
   nem broadsheet. Acento é petrol; ousadia só na assinatura mono.
 - **A11y**: `prefers-reduced-motion` respeitado globalmente; foco visível (ring);
   status do admin com cor semântica.
+
+## Sistema de imagens (Lote Imagens)
+
+Capas/OG do blog e cards sociais (IG/LinkedIn) são **renderizados pelo app** (`next/og`/
+Satori), derivando do mesmo sistema de design. Regra dura (impossível sair da marca):
+só campo `ink`/`surface`, **um** acento petrol, **sem gradiente**, assinatura mono
+obrigatória (trilho + crop mark). Referência de aparência: `docs/guia-identidade-visual-imagens.html`.
+
+- **Fonte única**: `lib/brand/tokens.ts` (sRGB p/ Satori + OKLCH de referência; `tokens.test.ts`
+  falha se divergir do `globals.css`). Presets em `lib/brand/formats.ts` (canal × aspecto).
+- **Renderer/arquétipos**: `lib/brand/render.tsx` + `lib/brand/templates/*` (capa-editorial,
+  card-conceito, diagrama, carrossel-slide, bastidores; assinatura em `signature.tsx`).
+  `compose.ts` mapeia entrada→arquétipo e monta a chave R2 (`sapienza_{pilar}_{slug}_{canal}_{aspecto}`).
+- **Fontes**: TTFs em `assets/fonts/` (Bricolage Grotesque + IBM Plex Sans/Mono) — Satori
+  não aceita woff2/CSS; embutidas no PNG sem FOUT.
+- **Floor (testes)**: contraste AA, guarda anti-cor-solta (templates só usam `tokens.ts`),
+  determinismo do PNG. Rodar `pnpm test` ao mexer em `lib/brand/*`.
