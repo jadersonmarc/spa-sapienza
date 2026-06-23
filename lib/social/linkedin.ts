@@ -33,7 +33,10 @@ export async function postToLinkedin(opts: {
 }): Promise<{ id: string; permalink?: string }> {
   const token = process.env.LINKEDIN_ACCESS_TOKEN
   const author = process.env.LINKEDIN_AUTHOR_URN
-  if (!token || !author) throw new Error("LinkedIn não configurado (token/author urn).")
+  if (!token || !author) {
+    const missing = [!token && "LINKEDIN_ACCESS_TOKEN", !author && "LINKEDIN_AUTHOR_URN"].filter(Boolean)
+    throw new Error(`LinkedIn não configurado no ambiente de execução: ${missing.join(", ")} ausente(s).`)
+  }
 
   const { uploadUrl, asset } = await registerUpload(token, author)
 
