@@ -10,7 +10,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeSanitize from "rehype-sanitize"
 import { Button } from "@/components/ui/button"
-import { ArticleCover } from "@/components/article-cover"
+import { BrandCover } from "@/components/brand-cover"
 import { getPostBySlug, getAllPosts } from "@/lib/blog"
 
 interface PageProps {
@@ -115,9 +115,10 @@ export default async function ArticlePage({ params }: PageProps) {
                 className="mt-6 aspect-[5/2] w-full rounded-xl border border-border/50 object-cover sm:mt-8"
               />
             ) : (
-              <ArticleCover
+              <BrandCover
                 pilar={post.pilar}
-                variant="feature"
+                title={post.title}
+                priority
                 className="mt-6 rounded-xl border border-border/50 sm:mt-8"
               />
             )}

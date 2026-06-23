@@ -226,6 +226,66 @@ permanente" do CLAUDE.md.)
 **Copy (texto = material):** voz ativa, sentence case; o controle diz o que faz; erros dizem
 o que houve e como resolver; tela vazia é convite à ação.
 
+## Lote Imagens — Sistema de imagens de marca (auditoria, **não iniciado**)
+
+Objetivo: capas de blog, OG e imagens sociais (IG/LinkedIn) passam a ser **renderizadas
+pelo próprio app**, on-brand, derivando do mesmo sistema de design. Renderer tipográfico
+(`next/og`/Satori), **fonte única de tokens**, presets de formato e arquétipos. Regra dura:
+o sistema deve **tornar impossível** sair da marca (só `ink`/`surface`, um acento petrol, sem
+gradiente, assinatura mono obrigatória). **Fora do lote:** geração de imagem por modelo.
+
+### Estado atual (o que existe hoje)
+- **Único renderer:** `app/blog/[slug]/opengraph-image.tsx` — `next/og` `ImageResponse` 1200×630,
+  **gerado estático no build** (`generateStaticParams`; comentário "sem runtime no Coolify").
+- **Render IG/LinkedIn:** não existe. `lib/social/image.ts` (`getSocialImageUrl`) **reusa o PNG
+  da OG do blog** (busca `/blog/{slug}/opengraph-image`, re-hospeda no R2 como `social/{slug}.png`).
+- **Composer do admin:** `app/admin/content/social-panel.tsx` + `social-actions.ts` geram só a
+  **legenda** (texto via Claude). **Sem imagem, sem preview, sem escolha de canal/aspecto.**
+- **Tokens:** só em **OKLCH** no `app/globals.css` (`:root`/`.dark`); comentários já citam os hex
+  da marca. **Não há** `tailwind.config` (Tailwind 4 CSS-first) nem módulo TS de tokens.
+- **Fontes:** site usa `next/font/google` (Bricolage/Plex). Vendorizado em `assets/fonts/` há
+  **só `Geist-Regular.ttf`** — e é o que o OG usa hoje.
+- **R2:** `lib/storage/s3.ts` `uploadObject(key, body, contentType) → URL pública`. Funciona.
+- **Pilar:** `lib/blog.ts` → `pme | engenharia | bastidores` (map do enum `p1/p2/p3`).
+- **Next 16.2.0** → `next/og` disponível (não precisa `@vercel/og`).
+
+### Achados priorizados
+- **[P0] Falta a fonte única de tokens.** Satori não lê CSS vars. Criar `lib/brand/tokens.ts`
+  (sRGB resolvido + OKLCH de referência) e **amarrar** ao `globals.css` para não divergir.
+- **[P0] Faltam as fontes da marca em TTF.** Satori não aceita `.woff2`/CSS; precisa de TTF de
+  Bricolage Grotesque + IBM Plex Sans + IBM Plex Mono vendorizados (peso embutido, sem FOUT).
+- **[P0] A OG atual está FORA da marca.** `opengraph-image.tsx` usa **Geist**, cores antigas
+  (`#0a0a0b`, azul/verde/laranja `#60a5fa/#4ade80/#fb923c`) e **`radial-gradient`** — viola §0
+  (gradiente proibido; acento único petrol). Refatorar p/ tokens + arquétipo `capa-editorial`.
+- **[P1] Sociais com aspecto errado.** IG/LinkedIn herdam 1.91:1 da OG; faltam 4:5, 1:1, 9:16 e
+  carrossel. Trocar `getSocialImageUrl` por render por `canal × aspecto` (`formats.ts`) + nomes §6.
+- **[P1] Composer sem imagem/preview.** Adicionar escolha de canal/aspecto/arquétipo + preview
+  renderizado (rota de render) antes de publicar; só então gravar no R2 e seguir o fluxo atual.
+- **[P2] Floor verificável.** Não há guarda de contraste AA, guarda anti-cor-solta, nem snapshots.
+
+### Reaproveitar vs. refatorar
+- **Reusar:** `uploadObject` (R2); pipeline de publicação IG/LinkedIn (`instagram.ts`/`linkedin.ts`);
+  `next/og`; vocabulário `Pilar` (`lib/blog.ts`); vitest (`vitest.config.mts`) p/ os testes do floor.
+- **Refatorar:** `opengraph-image.tsx` (passa a consumir o renderer/arquétipo); `lib/social/image.ts`
+  (deixa de copiar a OG e passa a renderizar o aspecto certo).
+
+### Decisões (resolvidas)
+1. **Render:** OG do blog **continua estática no build**; **route handler on-demand** serve preview
+   do composer e os aspectos sociais. (`pnpm start`/node no Coolify serve rotas dinâmicas.)
+2. **Fontes:** **vendorizar TTFs** de Bricolage Grotesque + IBM Plex Sans/Mono em `assets/fonts/`.
+3. **Amarração tokens.ts ↔ globals.css:** **teste vitest** que falha se os OKLCH divergirem do TS.
+4. **Vocabulário de pilar:** seguir o código (`engenharia`, tag `ENG/AI`), **não** `engai`.
+5. **LinkedIn:** **upload de imagem dedicada** (UGC image share) — `linkedin.ts` muda para subir o
+   binário do card social (deixa de depender só da OG do artigo).
+6. **Pendência do usuário:** enviar `guia-identidade-visual-imagens.html` p/ commitar em `docs/`.
+
+### Plano de execução (commits curtos, nesta ordem)
+1. `tokens.ts` + `formats.ts` + amarração com `globals.css` (sem regressão visual nos 2 temas).
+2. Vendorizar TTFs + renderer base com 1 arquétipo (`capa-editorial`) nos 2 campos/2 aspectos.
+3. Demais arquétipos + presets de todos os canais/aspectos (stories com zona segura; bastidores-overlay).
+4. Integração: capa+OG no publish do blog; composer com preview + nomes R2 §6.
+5. Floor: contraste AA, guarda anti-cor-solta, fontes embutidas, snapshots por arquétipo.
+
 ## Itens a confirmar
 1. (resolvido) Banco = Postgres standalone na VPS; Auth = Auth.js (Credentials);
    Storage = S3-compatível (Cloudflare R2). Supabase descontinuado.

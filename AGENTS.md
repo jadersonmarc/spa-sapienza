@@ -26,7 +26,10 @@ pnpm db:generate | db:push | db:seed | db:import-mdx
 - **GitHub Actions** acionam `/api/generate-draft` (cron seg/qua/sex) e
   `/api/publish-scheduled` (~15 min) com `x-webhook-secret`.
 - **Postagem social** (Instagram via Facebook Graph EAA; LinkedIn) é **por botão**
-  no admin, após aprovar o post — `lib/social/*`.
+  no admin, após aprovar o post — `lib/social/*`. As imagens (OG do blog, cards
+  IG/LinkedIn) são **renderizadas pelo app** via `lib/brand/*` — ver "Sistema de
+  imagens" no `CLAUDE.md`. Templates só consomem `lib/brand/tokens.ts` (testes
+  travam contraste AA, cor literal e divergência com `globals.css`).
 
 ## Antes de mexer
 - Não quebrar rotas do site (`/`, `/sobre`, `/blog`, `/blog/[slug]`) — slugs têm SEO.

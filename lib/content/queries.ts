@@ -397,6 +397,7 @@ export async function getSocialDraftForPost(id: string) {
       status: socialDrafts.status,
       imageUrl: socialDrafts.imageUrl,
       slug: contentItems.slug,
+      pilar: contentItems.pilar,
       title: contentRevisions.title,
     })
     .from(socialDrafts)

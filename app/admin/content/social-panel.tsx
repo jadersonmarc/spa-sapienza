@@ -34,16 +34,33 @@ type Draft = {
   createdAt: Date
 }
 
+// Aspecto principal por plataforma (espelha lib/social/image.ts).
+const FORMAT_BY_PLATFORM: Record<string, string> = { instagram: "ig-feed", linkedin: "li-feed" }
+
+function previewUrl(platform: string, pilar: string, title: string): string {
+  const qs = new URLSearchParams({
+    archetype: "capa",
+    format: FORMAT_BY_PLATFORM[platform] ?? "ig-feed",
+    pilar,
+    text: title,
+  })
+  return `/api/og?${qs.toString()}`
+}
+
 export function SocialPanel({
   itemId,
   revisionId,
   platforms,
   drafts,
+  pilar,
+  title,
 }: {
   itemId: string
   revisionId: string
   platforms: { platform: string; label: string }[]
   drafts: Draft[]
+  pilar: string
+  title: string
 }) {
   const [state, formAction] = useActionState<SocialFormState, FormData>(
     generateSocialAction,
@@ -104,6 +121,19 @@ export function SocialPanel({
                 </div>
 
                 <p className="whitespace-pre-wrap text-sm">{d.body}</p>
+
+                <div className="mt-3">
+                  <p className="mb-1 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+                    Card · {FORMAT_BY_PLATFORM[d.platform] === "li-feed" ? "1:1" : "4:5"}
+                  </p>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={previewUrl(d.platform, pilar, title)}
+                    alt={`Preview do card para ${PLATFORM_LABEL[d.platform] ?? d.platform}`}
+                    loading="lazy"
+                    className="w-full max-w-[280px] rounded-md border border-border"
+                  />
+                </div>
 
                 {tags.length ? (
                   <p className="mt-2 text-xs text-primary">

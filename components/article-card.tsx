@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Calendar, Clock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { ArticleCover } from "@/components/article-cover"
+import { BrandCover } from "@/components/brand-cover"
 import { Tag, type TagTone } from "@/components/tag"
 import type { Pilar, Post } from "@/lib/blog"
 
@@ -29,7 +29,7 @@ export function ArticleCard({ post }: ArticleCardProps) {
             className="aspect-[16/9] w-full object-cover"
           />
         ) : (
-          <ArticleCover pilar={post.pilar} variant="card" />
+          <BrandCover pilar={post.pilar} title={post.title} />
         )}
         <CardHeader className="p-4 sm:p-6">
           <div className="flex flex-wrap items-center gap-2 font-mono text-xs text-muted-foreground mb-2 sm:gap-4">

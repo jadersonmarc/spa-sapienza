@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sapienza Labs — Guia de Identidade Visual · Imagens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* tokens da marca (eixo trocável — espelham o sistema do repo) */
+    --ink:#0E1116;
+    --surface:#F7F8FA;
+    --petrol:#0E6E73;
+    --petrol-soft:#3A9BA0;
+    --line:#D7DCE2;
+    --line-dark:#222833;
+    --signal:#C9683A;
+
+    /* chrome do guia (lado escuro/autoridade do sistema) */
+    --bg:#0E1116;
+    --fg:#E8EDF3;
+    --muted:#8C97A6;
+    --muted-2:#56616E;
+    --card:#141922;
+    --border:#222833;
+    --border-soft:#1A1F29;
+
+    --font-display:'Bricolage Grotesque', system-ui, sans-serif;
+    --font-sans:'IBM Plex Sans', system-ui, sans-serif;
+    --font-mono:'IBM Plex Mono', ui-monospace, monospace;
+
+    --maxw:1160px;
+    --gut:clamp(20px, 5vw, 64px);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:var(--font-sans);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  ::selection{background:var(--petrol);color:#fff}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+
+  /* ---- eyebrow / mono labels (a assinatura) ---- */
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--petrol-soft);
+    font-weight:500;
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+  }
+  .mono{font-family:var(--font-mono)}
+  .num{font-family:var(--font-mono);color:var(--muted)}
+
+  /* crop mark / registration tick — detalhe de assinatura */
+  .crop{position:relative;width:11px;height:11px;flex:0 0 auto;display:inline-block}
+  .crop::before,.crop::after{content:"";position:absolute;background:var(--petrol-soft)}
+  .crop::before{left:0;top:0;width:11px;height:1.5px}
+  .crop::after{left:0;top:0;width:1.5px;height:11px}
+
+  /* ---- masthead ---- */
+  .masthead{
+    border-bottom:1px solid var(--border);
+    padding:clamp(40px,9vh,96px) 0 clamp(34px,7vh,68px);
+    position:relative;
+  }
+  .masthead .topline{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    gap:24px;flex-wrap:wrap;margin-bottom:clamp(40px,11vh,120px);
+  }
+  .masthead h1{
+    font-family:var(--font-display);
+    font-weight:800;
+    letter-spacing:-.025em;
+    line-height:.98;
+    margin:0;
+    font-size:clamp(44px,9vw,108px);
+  }
+  .masthead h1 .l2{color:var(--muted);font-weight:600}
+  .thesis{
+    margin:26px 0 0;
+    max-width:60ch;
+    font-size:clamp(16px,2vw,20px);
+    color:#C3CCD7;
+  }
+  .thesis b{color:var(--fg);font-weight:600}
+  .thesis .acc{color:var(--petrol-soft);font-weight:600}
+
+  /* ---- section index ---- */
+  .toc{
+    border-bottom:1px solid var(--border);
+    padding:22px 0;
+    position:sticky;top:0;z-index:20;
+    background:rgba(14,17,22,.86);
+    backdrop-filter:blur(8px);
+  }
+  .toc ol{
+    list-style:none;margin:0;padding:0;
+    display:flex;gap:6px 28px;flex-wrap:wrap;
+    font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;
+  }
+  .toc a{color:var(--muted);text-decoration:none;transition:color .15s}
+  .toc a:hover,.toc a:focus-visible{color:var(--fg)}
+  .toc a span{color:var(--petrol-soft);margin-right:7px}
+
+  /* ---- sections ---- */
+  .section{
+    padding:clamp(56px,10vh,104px) 0;
+    border-bottom:1px solid var(--border-soft);
+  }
+  .section-head{margin-bottom:clamp(30px,5vh,52px);max-width:72ch}
+  .section-head h2{
+    font-family:var(--font-display);
+    font-weight:700;letter-spacing:-.02em;line-height:1.04;
+    font-size:clamp(28px,4.4vw,48px);
+    margin:14px 0 0;
+  }
+  .section-head p{margin:18px 0 0;color:#B9C2CE;max-width:66ch}
+  .lead-num{font-family:var(--font-mono);color:var(--muted-2);font-size:13px;letter-spacing:.1em}
+
+  .grid{display:grid;gap:20px}
+  @media(min-width:680px){.cols-2{grid-template-columns:1fr 1fr}.cols-3{grid-template-columns:1fr 1fr 1fr}}
+  @media(min-width:920px){.cols-4{grid-template-columns:repeat(4,1fr)}}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:22px;
+  }
+  .card h3{font-family:var(--font-display);font-weight:600;font-size:19px;margin:0 0 8px;letter-spacing:-.01em}
+  .card p{margin:0;color:#AEB8C4;font-size:14.5px;line-height:1.55}
+  .card .tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--petrol-soft);display:block;margin-bottom:12px}
+
+  /* ---- swatches ---- */
+  .swatch{
+    border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card);
+  }
+  .swatch .chip{height:88px;display:flex;align-items:flex-end;padding:10px}
+  .swatch .meta{padding:14px 16px}
+  .swatch .name{font-family:var(--font-display);font-weight:600;font-size:16px}
+  .swatch .hex{font-family:var(--font-mono);font-size:12.5px;color:var(--muted);margin-top:2px;letter-spacing:.02em}
+  .swatch .use{font-size:13px;color:#AEB8C4;margin-top:9px;line-height:1.5}
+  .chip .pin{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px;border-radius:4px;background:rgba(0,0,0,.32);color:#fff}
+
+  /* ---- type specimens ---- */
+  .spec-row{border:1px solid var(--border);border-radius:10px;background:var(--card);padding:24px;margin-bottom:16px}
+  .spec-row .label{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--petrol-soft);margin-bottom:14px}
+  .spec-display{font-family:var(--font-display);font-weight:800;font-size:clamp(34px,6vw,64px);letter-spacing:-.025em;line-height:1;margin:0}
+  .spec-sans{font-family:var(--font-sans);font-weight:400;font-size:clamp(18px,2.4vw,24px);margin:0;color:#D3DBE5}
+  .spec-mono{font-family:var(--font-mono);font-weight:500;font-size:clamp(15px,2vw,19px);margin:0;color:#D3DBE5;letter-spacing:.02em}
+  .spec-row .note{font-size:13px;color:var(--muted);margin-top:14px;font-family:var(--font-mono);letter-spacing:.02em}
+
+  /* ---- aspect-ratio frames (renderizam na proporção real) ---- */
+  .frames{display:grid;gap:26px}
+  .frame-item .cap{
+    font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);margin-top:11px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  }
+  .frame-item .cap b{color:var(--fg);font-weight:600}
+  .frame{
+    position:relative;overflow:hidden;border:1px solid var(--border);border-radius:8px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:clamp(14px,3.2%,26px);
+    container-type:inline-size;
+  }
+  .frame.ink{background:var(--ink);color:var(--fg)}
+  .frame.surface{background:var(--surface);color:var(--ink)}
+  .frame .f-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .frame .f-eye{font-family:var(--font-mono);font-size:clamp(9px,2.6cqw,12px);letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+  .frame.ink .f-eye{color:var(--petrol-soft)}
+  .frame.surface .f-eye{color:var(--petrol)}
+  .frame .f-title{
+    font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;line-height:1;
+    font-size:clamp(20px,9cqw,52px);margin:0;max-width:14ch;
+  }
+  .frame .f-underline{height:3px;width:clamp(40px,18cqw,96px);background:var(--petrol);margin-top:14px;border-radius:2px}
+  .frame.ink .f-underline{background:var(--petrol-soft)}
+  .frame .f-rail{display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:var(--font-mono);font-size:clamp(8px,2.4cqw,11px);letter-spacing:.1em;text-transform:uppercase}
+  .frame.ink .f-rail{color:var(--muted)}
+  .frame.surface .f-rail{color:var(--muted-2)}
+  .frame .f-crop{position:relative;width:clamp(9px,2.6cqw,13px);aspect-ratio:1;flex:0 0 auto}
+  .frame .f-crop::before,.frame .f-crop::after{content:"";position:absolute;left:0;top:0}
+  .frame.ink .f-crop::before,.frame.ink .f-crop::after{background:var(--petrol-soft)}
+  .frame.surface .f-crop::before,.frame.surface .f-crop::after{background:var(--petrol)}
+  .frame .f-crop::before{width:100%;height:1.5px}
+  .frame .f-crop::after{width:1.5px;height:100%}
+
+  /* aspectos */
+  .ar-16-9{aspect-ratio:16/9}
+  .ar-191-1{aspect-ratio:1.91/1}
+  .ar-1-1{aspect-ratio:1/1}
+  .ar-4-5{aspect-ratio:4/5}
+  .ar-9-16{aspect-ratio:9/16}
+
+  /* zonas seguras (stories) */
+  .safe{position:absolute;left:0;right:0;background:repeating-linear-gradient(135deg,rgba(201,104,58,.16) 0 8px,transparent 8px 16px);pointer-events:none;display:flex;align-items:center;justify-content:center}
+  .safe.top{top:0;height:13%;border-bottom:1px dashed rgba(201,104,58,.5)}
+  .safe.bot{bottom:0;height:13%;border-top:1px dashed rgba(201,104,58,.5)}
+  .safe span{font-family:var(--font-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#E0A07F}
+
+  /* carrossel demo */
+  .carousel{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+  .carousel .frame{flex:0 0 200px;scroll-snap-align:start}
+  @media(min-width:680px){.carousel .frame{flex:0 0 236px}}
+
+  /* ---- pilares ---- */
+  .pillar{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card)}
+  .pillar .swatchbar{height:6px}
+  .pillar .body{padding:20px}
+  .pillar .tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+  .pillar .pct{font-family:var(--font-mono);font-size:12px;color:var(--muted);float:right}
+  .pillar h3{font-family:var(--font-display);font-weight:600;font-size:20px;margin:6px 0 10px;clear:both}
+  .pillar p{margin:0 0 14px;color:#AEB8C4;font-size:14px;line-height:1.55}
+  .pillar ul{margin:0;padding:0;list-style:none}
+  .pillar li{font-family:var(--font-mono);font-size:12px;color:var(--muted);padding:5px 0;border-top:1px solid var(--border-soft);letter-spacing:.02em}
+  .pillar li b{color:#CBD4DE;font-weight:500}
+
+  /* ---- tabela de dimensões ---- */
+  .tablewrap{border:1px solid var(--border);border-radius:10px;overflow:hidden;overflow-x:auto}
+  table{border-collapse:collapse;width:100%;min-width:680px}
+  thead th{
+    font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--petrol-soft);text-align:left;padding:14px 18px;background:#10141c;border-bottom:1px solid var(--border);font-weight:500;
+  }
+  tbody td{padding:13px 18px;border-bottom:1px solid var(--border-soft);font-size:14px;color:#CBD4DE;vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  td.ch{font-family:var(--font-display);font-weight:600;color:var(--fg);white-space:nowrap}
+  td.px,td.ar{font-family:var(--font-mono);font-size:13px;color:var(--fg);letter-spacing:.02em;white-space:nowrap}
+  td.us{color:var(--muted);font-size:13px}
+  tbody tr:hover td{background:rgba(58,155,160,.05)}
+
+  /* ---- faça / não faça ---- */
+  .dd{display:grid;gap:20px}
+  @media(min-width:760px){.dd{grid-template-columns:1fr 1fr}}
+  .dd-card{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--card)}
+  .dd-head{display:flex;align-items:center;gap:10px;padding:13px 18px;font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;border-bottom:1px solid var(--border)}
+  .dd-head.no{color:#E0A07F}
+  .dd-head.yes{color:var(--petrol-soft)}
+  .dd-mark{width:18px;height:18px;border-radius:4px;display:grid;place-items:center;font-size:12px;line-height:1}
+  .dd-head.no .dd-mark{background:rgba(201,104,58,.16);color:#E0A07F}
+  .dd-head.yes .dd-mark{background:rgba(58,155,160,.16);color:var(--petrol-soft)}
+  .dd-demo{aspect-ratio:16/9;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:18px}
+  .demo-bad{background:linear-gradient(135deg,#6d28d9,#2563eb 55%,#06b6d4);text-align:center}
+  .demo-bad .t{font-family:var(--font-sans);font-weight:600;color:#fff;font-size:clamp(16px,4vw,26px);text-shadow:0 2px 12px rgba(0,0,0,.3)}
+  .demo-bad .s{font-family:var(--font-sans);color:rgba(255,255,255,.85);font-size:13px;margin-top:6px}
+  .demo-bad::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 30% 20%,rgba(255,255,255,.28),transparent 60%)}
+  .demo-good{background:var(--ink);flex-direction:column;align-items:flex-start;justify-content:space-between}
+  .demo-good .f-eye{color:var(--petrol-soft);font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .demo-good .gt{font-family:var(--font-display);font-weight:700;font-size:clamp(20px,4.6vw,30px);letter-spacing:-.02em;line-height:1;margin:8px 0;color:var(--fg)}
+  .demo-good .gline{height:3px;width:72px;background:var(--petrol-soft);border-radius:2px}
+  .demo-good .grail{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);align-self:stretch;display:flex;justify-content:space-between}
+  .dd-list{padding:16px 18px}
+  .dd-list li{font-size:13.5px;color:#AEB8C4;padding:6px 0 6px 22px;position:relative;line-height:1.5;list-style:none}
+  .dd-list li::before{position:absolute;left:0;top:6px;font-family:var(--font-mono);font-size:13px}
+  .dd-list.no li::before{content:"✕";color:#C9683A}
+  .dd-list.yes li::before{content:"✓";color:var(--petrol-soft)}
+  .dd-list ul{margin:0;padding:0}
+
+  /* ---- code blocks (operacional) ---- */
+  .code{
+    background:#0A0D12;border:1px solid var(--border);border-radius:10px;
+    font-family:var(--font-mono);font-size:13px;line-height:1.7;color:#CBD4DE;
+    padding:20px 22px;overflow-x:auto;letter-spacing:.01em;
+  }
+  .code .c{color:var(--muted-2)}
+  .code .k{color:var(--petrol-soft)}
+  .code .v{color:#E0A07F}
+  .code b{color:var(--fg);font-weight:600}
+
+  .callout{
+    border-left:2px solid var(--petrol);
+    background:rgba(58,155,160,.05);
+    padding:16px 20px;border-radius:0 8px 8px 0;
+    margin-top:22px;font-size:14.5px;color:#C3CCD7;
+  }
+  .callout b{color:var(--fg)}
+
+  /* ---- footer ---- */
+  footer{padding:clamp(48px,9vh,88px) 0;border-top:1px solid var(--border)}
+  footer .mono{font-size:12px;color:var(--muted);letter-spacing:.04em}
+  footer h3{font-family:var(--font-display);font-weight:700;font-size:clamp(22px,3.4vw,34px);letter-spacing:-.02em;margin:14px 0 0}
+  footer p{color:#AEB8C4;max-width:60ch;margin:14px 0 0}
+
+  /* reveal sutil no load (desligado em reduced-motion) */
+  @media(prefers-reduced-motion:no-preference){
+    .section,.masthead .topline,.thesis{animation:rise .7s cubic-bezier(.2,.6,.2,1) both}
+    .section{animation-delay:.05s}
+    @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  }
+
+  .hr-note{font-family:var(--font-mono);font-size:11px;color:var(--muted-2);letter-spacing:.08em;text-transform:uppercase;margin-top:10px}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="wrap">
+    <div class="topline">
+      <span class="eyebrow"><span class="crop"></span>Sapienza Labs · Guia de identidade visual</span>
+      <span class="mono" style="font-size:11px;color:var(--muted);letter-spacing:.1em">v1 · 2026 · CONTEXTO: IMAGENS</span>
+    </div>
+    <h1>Imagens.<br><span class="l2">Blog, Instagram<br>e LinkedIn.</span></h1>
+    <p class="thesis">Cada imagem é um <b>artefato preciso</b>: campo de cor sólido, espaço generoso e a assinatura em <span class="acc">monospace</span>. A tese não muda do site pra cá — <b>precisão que vira confiança</b>. Aqui ela vira regra para preencher os três canais sem parecer banco de imagem nem template de IA.</p>
+  </div>
+</header>
+
+<!-- TOC -->
+<nav class="toc" aria-label="Índice">
+  <div class="wrap">
+    <ol>
+      <li><a href="#tese"><span>00</span>Tese</a></li>
+      <li><a href="#cor"><span>01</span>Cor</a></li>
+      <li><a href="#tipo"><span>02</span>Tipografia</a></li>
+      <li><a href="#grid"><span>03</span>Grid + assinatura</a></li>
+      <li><a href="#arquetipos"><span>04</span>Arquétipos</a></li>
+      <li><a href="#pilares"><span>05</span>Pilares</a></li>
+      <li><a href="#blog"><span>06</span>Blog</a></li>
+      <li><a href="#instagram"><span>07</span>Instagram</a></li>
+      <li><a href="#linkedin"><span>08</span>LinkedIn</a></li>
+      <li><a href="#dimensoes"><span>09</span>Dimensões</a></li>
+      <li><a href="#fazer"><span>10</span>Faça / Não faça</a></li>
+      <li><a href="#operacional"><span>11</span>Operacional</a></li>
+    </ol>
+  </div>
+</nav>
+
+<main>
+
+<!-- 00 TESE -->
+<section class="section" id="tese">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">00 — PRINCÍPIO</span>
+      <h2>A imagem é um artefato, não um enfeite</h2>
+      <p>Todo conteúdo visual da Sapienza comunica engenharia séria para o dono de PME da Baixada — rigor pela <b style="color:var(--fg)">estrutura e pelo detalhe</b>, nunca pelo barulho. Três regras inegociáveis sustentam isso em qualquer imagem:</p>
+    </div>
+    <div class="grid cols-3">
+      <div class="card">
+        <span class="tag">Regra 01</span>
+        <h3>Campo sólido + vazio</h3>
+        <p>Fundo <span class="mono" style="color:#CBD4DE">ink</span> ou <span class="mono" style="color:#CBD4DE">surface</span> chapado, com folga generosa. O espaço negativo é o que passa precisão e calma — não preencha por preencher.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Regra 02</span>
+        <h3>Um acento só</h3>
+        <p>O <span class="mono" style="color:var(--petrol-soft)">petróleo</span> aparece uma vez por imagem: um traço, uma palavra, um nó-chave. A ousadia mora num lugar; o resto fica quieto.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Regra 03</span>
+        <h3>Assinatura em mono</h3>
+        <p>Toda imagem carrega o trilho monospace (eyebrow + índice + metadado) e a marca de registro. É o que torna uma peça reconhecível como Sapienza mesmo sem o logo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 COR -->
+<section class="section" id="cor">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">01 — COR</span>
+      <h2>Paleta e como ela vive na imagem</h2>
+      <p>Trabalhe em <span class="mono" style="color:#CBD4DE">OKLCH</span> para consistência perceptual; os hex abaixo são as âncoras. Dois campos-base alternam o ritmo do feed — <b style="color:var(--fg)">ink</b> nos momentos de autoridade/engenharia, <b style="color:var(--fg)">surface</b> nos de clareza/aproximação. O petróleo é o único acento.</p>
+    </div>
+    <div class="grid cols-4">
+      <div class="swatch">
+        <div class="chip" style="background:#0E1116"><span class="pin">base escura</span></div>
+        <div class="meta"><div class="name">ink</div><div class="hex">#0E1116</div><div class="use">Campo de autoridade. Engenharia, IA, capas técnicas. Texto em off-white.</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#F7F8FA"><span class="pin" style="background:rgba(0,0,0,.5)">base clara</span></div>
+        <div class="meta"><div class="name">surface</div><div class="hex">#F7F8FA</div><div class="use">Campo de clareza. Conteúdo de PME, didático, acessível. Texto em ink.</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#0E6E73"><span class="pin">acento</span></div>
+        <div class="meta"><div class="name">petrol</div><div class="hex">#0E6E73</div><div class="use">O único destaque. Traço, palavra-chave, nó principal, sublinhado. Use uma vez.</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#3A9BA0"><span class="pin">acento · dark</span></div>
+        <div class="meta"><div class="name">petrol-soft</div><div class="hex">#3A9BA0</div><div class="use">Variação do acento sobre fundo ink, e para rótulos legíveis no escuro.</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#D7DCE2"><span class="pin" style="background:rgba(0,0,0,.5)">linha</span></div>
+        <div class="meta"><div class="name">line / line-dark</div><div class="hex">#D7DCE2 · #222833</div><div class="use">Grade, divisores e traços de diagrama. Estrutura visível, fina.</div></div>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:#C9683A"><span class="pin">alerta</span></div>
+        <div class="meta"><div class="name">signal</div><div class="hex">#C9683A</div><div class="use">Parcimônia extrema. Só alerta/destaque pontual real — quase nunca em post.</div></div>
+      </div>
+    </div>
+    <div class="callout"><b>Disciplina de cor:</b> petróleo + um campo-base + tinta de texto. Sem terceira cor. Gradiente, neon e arco-íris de acentos são o atalho que faz parecer IA — fuja.</div>
+  </div>
+</section>
+
+<!-- 02 TIPOGRAFIA -->
+<section class="section" id="tipo">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">02 — TIPOGRAFIA EM IMAGEM</span>
+      <h2>Três papéis, hierarquia clara</h2>
+      <p>O texto é o material principal das nossas imagens. Title em Bricolage carrega a personalidade; o corpo em Plex Sans entra curto; o <b style="color:var(--fg)">mono é a assinatura</b> e aparece em toda peça.</p>
+    </div>
+    <div class="spec-row">
+      <div class="label">Display · Bricolage Grotesque · 700/800 · tracking −2%</div>
+      <p class="spec-display">Automação que devolve tempo</p>
+      <p class="note">só títulos · grande · uma ideia por imagem · nunca em bloco de texto</p>
+    </div>
+    <div class="spec-row">
+      <div class="label">Corpo · IBM Plex Sans · 400/500</div>
+      <p class="spec-sans">Uma frase de apoio, em linguagem do cliente, sem jargão — no máximo duas linhas dentro da imagem.</p>
+      <p class="note">curto · legível em mobile · ≥ 28px no 1080 · voz ativa, sentence case</p>
+    </div>
+    <div class="spec-row">
+      <div class="label">Mono · IBM Plex Mono · 500 · uppercase · tracking +12%</div>
+      <p class="spec-mono">ENG/AI · 03 · SAPIENZALABS.COM.BR · DUQUE DE CAXIAS — RJ</p>
+      <p class="note">eyebrow · índice · metadado · rótulo de diagrama · unidade de número — a assinatura</p>
+    </div>
+    <div class="callout"><b>Legibilidade primeiro:</b> no canvas de 1080px, título ≥ 64px, apoio ≥ 28px, mono ≥ 22px. Contraste AA garantido nos dois campos. Se não lê no celular, não publica.</div>
+  </div>
+</section>
+
+<!-- 03 GRID + ASSINATURA -->
+<section class="section" id="grid">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">03 — GRID, MARGEM E A ASSINATURA</span>
+      <h2>A estrutura exposta é o detalhe</h2>
+      <p>Margem de segurança constante (~7–8% do lado), conteúdo apoiado na grade, e o <b style="color:var(--fg)">trilho monospace</b> ancorado nos cantos. O elemento de assinatura — a marca de registro <span class="crop"></span> + o trilho — é o fio que conecta blog, IG e LinkedIn.</p>
+    </div>
+    <div class="frames cols-2 grid">
+      <div class="frame-item">
+        <div class="frame ink ar-16-9">
+          <div class="f-top">
+            <span class="f-eye">ENG/AI · 03</span>
+            <span class="f-crop"></span>
+          </div>
+          <div>
+            <h3 class="f-title">Anatomia da peça</h3>
+            <div class="f-underline"></div>
+          </div>
+          <div class="f-rail"><span>SAPIENZA LABS</span><span>SAPIENZALABS.COM.BR</span></div>
+        </div>
+        <div class="cap"><span class="crop"></span><b>Campo ink</b> · eyebrow + crop no topo · título + acento no centro · trilho no rodapé</div>
+      </div>
+      <div class="frame-item">
+        <div class="frame surface ar-16-9">
+          <div class="f-top">
+            <span class="f-eye">NEGÓCIO · 12</span>
+            <span class="f-crop"></span>
+          </div>
+          <div>
+            <h3 class="f-title">Mesma grade, campo claro</h3>
+            <div class="f-underline"></div>
+          </div>
+          <div class="f-rail"><span>SAPIENZA LABS</span><span>BAIXADA FLUMINENSE</span></div>
+        </div>
+        <div class="cap"><span class="crop"></span><b>Campo surface</b> · idêntica estrutura, tinta invertida · o sistema é o mesmo nos dois</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 ARQUÉTIPOS -->
+<section class="section" id="arquetipos">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">04 — ARQUÉTIPOS DE IMAGEM</span>
+      <h2>Cinco tipos de peça que cobrem tudo</h2>
+      <p>Variedade dentro do sistema. Cada arquétipo resolve um trabalho — não invente um sexto formato sem necessidade.</p>
+    </div>
+    <div class="grid cols-2">
+      <div class="frame-item">
+        <div class="frame ink ar-4-5">
+          <div class="f-top"><span class="f-eye">CAPA</span><span class="f-crop"></span></div>
+          <div><h3 class="f-title">Título grande, ideia única</h3><div class="f-underline"></div></div>
+          <div class="f-rail"><span>EDITORIAL</span><span>01</span></div>
+        </div>
+        <div class="cap"><b>Capa editorial</b> · título Bricolage · abre post, feed e artigo</div>
+      </div>
+      <div class="frame-item">
+        <div class="frame surface ar-4-5">
+          <div class="f-top"><span class="f-eye">CONCEITO</span><span class="f-crop"></span></div>
+          <div><h3 class="f-title" style="font-size:clamp(16px,7cqw,38px)">“Refazer trabalho manual é custo invisível.”</h3></div>
+          <div class="f-rail"><span>INSIGHT</span><span>02</span></div>
+        </div>
+        <div class="cap"><b>Card de conceito</b> · uma frase/dado · muito vazio · alto contraste</div>
+      </div>
+      <div class="frame-item">
+        <div class="frame ink ar-4-5">
+          <div class="f-top"><span class="f-eye">ESQUEMA</span><span class="f-crop"></span></div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-family:var(--font-mono);font-size:clamp(9px,2.8cqw,13px);color:#CBD4DE">
+            <div style="display:flex;align-items:center;gap:8px"><span style="width:46px;height:24px;border:1px solid var(--line-dark);border-radius:4px;display:grid;place-items:center;font-size:9px">CLIENTE</span><span style="color:var(--petrol-soft)">→</span><span style="width:46px;height:24px;border:1px solid var(--petrol-soft);border-radius:4px;display:grid;place-items:center;font-size:9px;color:var(--petrol-soft)">API</span><span style="color:var(--muted)">→</span><span style="width:46px;height:24px;border:1px solid var(--line-dark);border-radius:4px;display:grid;place-items:center;font-size:9px">DB</span></div>
+          </div>
+          <div class="f-rail"><span>ARQUITETURA</span><span>03</span></div>
+        </div>
+        <div class="cap"><b>Diagrama / esquema</b> · traços line · nó-chave em petróleo · rótulos em mono</div>
+      </div>
+      <div class="frame-item">
+        <div class="frame ink ar-4-5" style="background:linear-gradient(160deg,#10151c,#0b0e13)">
+          <div class="f-top"><span class="f-eye">BASTIDORES</span><span class="f-crop"></span></div>
+          <div style="opacity:.5;font-family:var(--font-mono);font-size:10px;color:var(--muted);align-self:center;text-align:center;margin:auto 0">[ foto real · dessaturada · fria ]<br>terminal · quadro · hardware</div>
+          <div class="f-rail"><span>NO ESTÚDIO</span><span>04</span></div>
+        </div>
+        <div class="cap"><b>Bastidores</b> · foto real e honesta · sempre com trilho + legenda mono</div>
+      </div>
+    </div>
+    <div style="margin-top:26px">
+      <div class="hr-note">— Arquétipo 05 · Série / carrossel (sequência real → numeração 01..N é legítima)</div>
+      <div class="carousel" style="margin-top:14px">
+        <div class="frame ink ar-4-5"><div class="f-top"><span class="f-eye">SÉRIE</span><span class="f-crop"></span></div><div><h3 class="f-title" style="font-size:clamp(16px,7cqw,30px)">Capa da série</h3><div class="f-underline"></div></div><div class="f-rail"><span>01 / 06</span><span>SWIPE →</span></div></div>
+        <div class="frame surface ar-4-5"><div class="f-top"><span class="f-eye">SÉRIE</span><span class="f-crop"></span></div><div style="font-family:var(--font-sans);font-size:clamp(11px,3.4cqw,15px)">Passo um, em uma frase clara.</div><div class="f-rail"><span>02 / 06</span><span></span></div></div>
+        <div class="frame surface ar-4-5"><div class="f-top"><span class="f-eye">SÉRIE</span><span class="f-crop"></span></div><div style="font-family:var(--font-sans);font-size:clamp(11px,3.4cqw,15px)">Passo dois, idem.</div><div class="f-rail"><span>03 / 06</span><span></span></div></div>
+        <div class="frame ink ar-4-5"><div class="f-top"><span class="f-eye">SÉRIE</span><span class="f-crop"></span></div><div><h3 class="f-title" style="font-size:clamp(15px,6cqw,26px)">Fale com a gente</h3><div class="f-underline"></div></div><div class="f-rail"><span>06 / 06</span><span>CTA</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 PILARES -->
+<section class="section" id="pilares">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">05 — PILARES → TRATAMENTO</span>
+      <h2>Cada pilar tem um sotaque visual</h2>
+      <p>Os três pilares editoriais ganham tratamento próprio dentro do mesmo sistema — coerência sem monotonia. A proporção segue o plano de conteúdo.</p>
+    </div>
+    <div class="grid cols-3">
+      <div class="pillar">
+        <div class="swatchbar" style="background:#0E1116"></div>
+        <div class="body">
+          <span class="pct">15%</span>
+          <span class="tag" style="color:var(--petrol-soft)">ENG/AI</span>
+          <h3>Engenharia + IA</h3>
+          <p>O lado mais técnico. Onde diagramas e esquemas brilham — e onde a concorrência só posta foto de banco.</p>
+          <ul>
+            <li>Campo · <b>ink</b> predominante</li>
+            <li>Peça · <b>diagrama / esquema</b></li>
+            <li>Mono · <b>denso</b>, nó-chave petróleo</li>
+            <li>Tag · <b>ENG/AI</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="swatchbar" style="background:#F7F8FA"></div>
+        <div class="body">
+          <span class="pct">60%</span>
+          <span class="tag" style="color:var(--petrol)">NEGÓCIO</span>
+          <h3>Negócio / PME</h3>
+          <p>O núcleo. Linguagem do dono de PME, benefício claro. Caloroso e preciso — nunca frio nem intimidante.</p>
+          <ul>
+            <li>Campo · <b>surface</b> com frequência</li>
+            <li>Peça · <b>card de conceito / benefício</b></li>
+            <li>Apoio · <b>frase Plex Sans</b> curta</li>
+            <li>Tag · <b>NEGÓCIO</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="swatchbar" style="background:linear-gradient(90deg,#0E1116,#3A9BA0)"></div>
+        <div class="body">
+          <span class="pct">25%</span>
+          <span class="tag" style="color:var(--petrol-soft)">BASTIDORES</span>
+          <h3>Bastidores</h3>
+          <p>A pessoa por trás do estúdio. Real, restrito, honesto — o oposto de pose de banco de imagem.</p>
+          <ul>
+            <li>Campo · <b>foto real</b> dessaturada fria</li>
+            <li>Peça · <b>bastidores</b> + legenda</li>
+            <li>Marca · <b>trilho mono</b> sempre presente</li>
+            <li>Tag · <b>BASTIDORES</b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 BLOG -->
+<section class="section" id="blog">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">06 — CANAL · BLOG</span>
+      <h2>Capa, OG e figuras</h2>
+      <p>O post abre com a capa branded integrada à tipografia editorial do site. A imagem de compartilhamento (OG) é uma variação da capa no recorte do link.</p>
+    </div>
+    <div class="frames grid cols-2">
+      <div class="frame-item">
+        <div class="frame ink ar-16-9">
+          <div class="f-top"><span class="f-eye">NEGÓCIO · 12</span><span class="f-crop"></span></div>
+          <div><h3 class="f-title">Quanto custa retrabalho manual</h3><div class="f-underline"></div></div>
+          <div class="f-rail"><span>SAPIENZA LABS · BLOG</span><span>LEITURA 6 MIN</span></div>
+        </div>
+        <div class="cap"><b>Capa / hero</b> · <span class="mono">16:9</span> · <span class="mono">1600×900</span> · topo do post</div>
+      </div>
+      <div class="frame-item">
+        <div class="frame surface ar-191-1">
+          <div class="f-top"><span class="f-eye">SAPIENZA LABS</span><span class="f-crop"></span></div>
+          <div><h3 class="f-title" style="font-size:clamp(18px,7cqw,40px)">Quanto custa retrabalho manual</h3></div>
+          <div class="f-rail"><span>SAPIENZALABS.COM.BR</span><span>DUQUE DE CAXIAS</span></div>
+        </div>
+        <div class="cap"><b>OG / compartilhamento</b> · <span class="mono">1.91:1</span> · <span class="mono">1200×630</span> · preview de link</div>
+      </div>
+    </div>
+    <div class="callout"><b>Figuras inline:</b> diagramas e esquemas na largura do conteúdo, traços <span class="mono">line/line-dark</span> nos dois temas, rótulos em mono. A capa deve ler bem como miniatura no índice do blog.</div>
+  </div>
+</section>
+
+<!-- 07 INSTAGRAM -->
+<section class="section" id="instagram">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">07 — CANAL · INSTAGRAM</span>
+      <h2>Feed, carrossel e stories</h2>
+      <p>Retrato <span class="mono">4:5</span> é o formato principal — ocupa mais tela. Alterne campos ink/surface no grid para ritmo. Stories respeitam as zonas seguras de topo e base.</p>
+    </div>
+    <div class="frames grid cols-3">
+      <div class="frame-item">
+        <div class="frame ink ar-4-5">
+          <div class="f-top"><span class="f-eye">ENG/AI · 03</span><span class="f-crop"></span></div>
+          <div><h3 class="f-title">O que é uma fila de mensagens</h3><div class="f-underline"></div></div>
+          <div class="f-rail"><span>SAPIENZA</span><span>01</span></div>
+        </div>
+        <div class="cap"><b>Feed retrato</b> · <span class="mono">4:5</span> · <span class="mono">1080×1350</span> · principal</div>
+      </div>
+      <div class="frame-item">
+        <div class="frame surface ar-1-1">
+          <div class="f-top"><span class="f-eye">NEGÓCIO · 09</span><span class="f-crop"></span></div>
+          <div><h3 class="f-title" style="font-size:clamp(16px,8cqw,34px)">3 sinais de processo manual</h3><div class="f-underline"></div></div>
+          <div class="f-rail"><span>SAPIENZA</span><span>SALVE ↓</span></div>
+        </div>
+        <div class="cap"><b>Feed quadrado</b> · <span class="mono">1:1</span> · <span class="mono">1080×1080</span> · alternativa</div>
+      </div>
+      <div class="frame-item">
+        <div class="frame ink ar-9-16">
+          <div class="safe top"><span>ZONA SEGURA</span></div>
+          <div class="safe bot"><span>ZONA SEGURA</span></div>
+          <div class="f-top" style="margin-top:14%"><span class="f-eye">BASTIDORES</span><span class="f-crop"></span></div>
+          <div><h3 class="f-title" style="font-size:clamp(15px,8cqw,30px)">Sexta no estúdio</h3><div class="f-underline"></div></div>
+          <div class="f-rail" style="margin-bottom:14%"><span>SAPIENZA</span><span>↑</span></div>
+        </div>
+        <div class="cap"><b>Stories / Reels</b> · <span class="mono">9:16</span> · <span class="mono">1080×1920</span> · ~13% topo/base reservados</div>
+      </div>
+    </div>
+    <div style="margin-top:26px">
+      <div class="hr-note">— Carrossel · 4:5 · sequência 01..N · cabeçalho e trilho consistentes</div>
+      <div class="carousel" style="margin-top:14px">
+        <div class="frame ink ar-4-5"><div class="f-top"><span class="f-eye">SÉRIE</span><span class="f-crop"></span></div><div><h3 class="f-title" style="font-size:clamp(15px,6.5cqw,28px)">Automatize sua agenda</h3><div class="f-underline"></div></div><div class="f-rail"><span>01 / 05</span><span>SWIPE →</span></div></div>
+        <div class="frame surface ar-4-5"><div class="f-top"><span class="f-eye">SÉRIE</span><span class="f-crop"></span></div><div style="font-family:var(--font-sans);font-size:clamp(11px,3.6cqw,15px)">O problema: lembrete manual falha.</div><div class="f-rail"><span>02 / 05</span><span></span></div></div>
+        <div class="frame surface ar-4-5"><div class="f-top"><span class="f-eye">SÉRIE</span><span class="f-crop"></span></div><div style="font-family:var(--font-sans);font-size:clamp(11px,3.6cqw,15px)">A solução, em uma linha.</div><div class="f-rail"><span>03 / 05</span><span></span></div></div>
+        <div class="frame ink ar-4-5"><div class="f-top"><span class="f-eye">SÉRIE</span><span class="f-crop"></span></div><div><h3 class="f-title" style="font-size:clamp(14px,5.5cqw,24px)">Diagnóstico grátis</h3><div class="f-underline"></div></div><div class="f-rail"><span>05 / 05</span><span>CTA</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 LINKEDIN -->
+<section class="section" id="linkedin">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">08 — CANAL · LINKEDIN</span>
+      <h2>Imagem no feed, documento e artigo</h2>
+      <p>Registro um pouco mais sóbrio que o IG: mais campo <b style="color:var(--fg)">surface</b>, mais esquema e insight, menos bastidores. O <b style="color:var(--fg)">documento (carrossel PDF)</b> é o formato de maior alcance — priorize-o nos pilares Eng/AI e Negócio.</p>
+    </div>
+    <div class="frames grid cols-3">
+      <div class="frame-item">
+        <div class="frame surface ar-1-1">
+          <div class="f-top"><span class="f-eye">NEGÓCIO · 12</span><span class="f-crop"></span></div>
+          <div><h3 class="f-title" style="font-size:clamp(16px,8cqw,34px)">Sistema sob medida × planilha</h3><div class="f-underline"></div></div>
+          <div class="f-rail"><span>SAPIENZA LABS</span><span></span></div>
+        </div>
+        <div class="cap"><b>Imagem no feed</b> · <span class="mono">1:1</span> · <span class="mono">1200×1200</span> · destaque</div>
+      </div>
+      <div class="frame-item">
+        <div class="frame ink ar-191-1">
+          <div class="f-top"><span class="f-eye">ARTIGO</span><span class="f-crop"></span></div>
+          <div><h3 class="f-title" style="font-size:clamp(17px,7cqw,38px)">Soberania de dados na PME</h3><div class="f-underline"></div></div>
+          <div class="f-rail"><span>SAPIENZA LABS</span><span>ARTIGO</span></div>
+        </div>
+        <div class="cap"><b>Link / capa de artigo</b> · <span class="mono">1.91:1</span> · <span class="mono">1200×627</span></div>
+      </div>
+      <div class="frame-item">
+        <div class="frame surface ar-1-1">
+          <div class="f-top"><span class="f-eye">DOCUMENTO · 01/08</span><span class="f-crop"></span></div>
+          <div><h3 class="f-title" style="font-size:clamp(16px,7.5cqw,32px)">Checklist: pronto para automatizar?</h3><div class="f-underline"></div></div>
+          <div class="f-rail"><span>SAPIENZA LABS</span><span>ARRASTE →</span></div>
+        </div>
+        <div class="cap"><b>Documento (carrossel)</b> · <span class="mono">4:5 / 1:1</span> · <span class="mono">1080×1350</span> · maior alcance</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 DIMENSÕES -->
+<section class="section" id="dimensoes">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">09 — REFERÊNCIA DE DIMENSÕES</span>
+      <h2>Tabela mestre de exportação</h2>
+      <p>Exporte em PNG (ou JPG p/ foto). O dobro da resolução-base mantém nitidez em telas densas.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Canal</th><th>Formato</th><th>Proporção</th><th>Pixels (base)</th><th>Uso</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="ch">Blog</td><td>Capa / hero</td><td class="ar">16:9</td><td class="px">1600×900</td><td class="us">Topo do post</td></tr>
+          <tr><td class="ch">Blog</td><td>OG / compartilhamento</td><td class="ar">1.91:1</td><td class="px">1200×630</td><td class="us">Preview de link</td></tr>
+          <tr><td class="ch">Blog</td><td>Figura / diagrama</td><td class="ar">livre (16:9)</td><td class="px">larg. do conteúdo</td><td class="us">Inline</td></tr>
+          <tr><td class="ch">Instagram</td><td>Feed (retrato)</td><td class="ar">4:5</td><td class="px">1080×1350</td><td class="us">Principal</td></tr>
+          <tr><td class="ch">Instagram</td><td>Feed (quadrado)</td><td class="ar">1:1</td><td class="px">1080×1080</td><td class="us">Grid / alternativa</td></tr>
+          <tr><td class="ch">Instagram</td><td>Carrossel</td><td class="ar">4:5</td><td class="px">1080×1350</td><td class="us">Séries 01..N</td></tr>
+          <tr><td class="ch">Instagram</td><td>Stories / Reels</td><td class="ar">9:16</td><td class="px">1080×1920</td><td class="us">Efêmero · zonas seguras</td></tr>
+          <tr><td class="ch">LinkedIn</td><td>Imagem no feed</td><td class="ar">1:1</td><td class="px">1200×1200</td><td class="us">Destaque</td></tr>
+          <tr><td class="ch">LinkedIn</td><td>Link / capa de artigo</td><td class="ar">1.91:1</td><td class="px">1200×627</td><td class="us">Preview / cover</td></tr>
+          <tr><td class="ch">LinkedIn</td><td>Documento (carrossel)</td><td class="ar">4:5 · 1:1</td><td class="px">1080×1350</td><td class="us">Maior alcance</td></tr>
+          <tr><td class="ch">LinkedIn</td><td>Capa de artigo (nativo)</td><td class="ar">16:9</td><td class="px">1920×1080</td><td class="us">Header do artigo</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 10 FAÇA / NÃO FAÇA -->
+<section class="section" id="fazer">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">10 — FAÇA / NÃO FAÇA</span>
+      <h2>O atalho que parece IA, e a alternativa</h2>
+      <p>Design gerado por IA hoje cai sempre nos mesmos clichês. Aterre cada peça no assunto real — engenharia para PME da Baixada — em vez de decorar.</p>
+    </div>
+    <div class="dd">
+      <div class="dd-card">
+        <div class="dd-head no"><span class="dd-mark">✕</span>Não faça</div>
+        <div class="dd-demo demo-bad">
+          <div>
+            <div class="t">Soluções Inovadoras 🚀</div>
+            <div class="s">tecnologia • futuro • transformação</div>
+          </div>
+        </div>
+        <div class="dd-list no">
+          <ul>
+            <li>Gradiente roxo→azul glossy e brilho radial</li>
+            <li>Clichê de “tech”: cérebro brilhando, placa de circuito, robô, aperto de mão</li>
+            <li>Foto de banco com gente de terno posando</li>
+            <li>Creme + serifa + terracota (o outro default de IA)</li>
+            <li>Vários acentos, emoji, tudo centralizado sem grade</li>
+          </ul>
+        </div>
+      </div>
+      <div class="dd-card">
+        <div class="dd-head yes"><span class="dd-mark">✓</span>Faça</div>
+        <div class="dd-demo demo-good">
+          <span class="f-eye">NEGÓCIO · 07</span>
+          <div class="gt">Menos planilha,<br>mais sistema</div>
+          <div class="gline"></div>
+          <div class="grail"><span>SAPIENZA LABS</span><span>BAIXADA</span></div>
+        </div>
+        <div class="dd-list yes">
+          <ul>
+            <li>Campo ink/surface chapado e muito vazio</li>
+            <li>Um acento petróleo — um traço, uma palavra</li>
+            <li>Grade exposta + trilho mono + marca de registro</li>
+            <li>Artefato real no lugar de foto de banco</li>
+            <li>Registro consistente no canto · contraste AA</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 OPERACIONAL -->
+<section class="section" id="operacional" style="border-bottom:none">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="lead-num">11 — OPERACIONAL · PIPELINE</span>
+      <h2>Nomenclatura e geração</h2>
+      <p>Para o pipeline editorial (n8n → Claude API → GitHub → canais), padronize nomes e amarre a geração às regras acima. Capas tipográficas saem de template; fotos/ilustrações seguem o scaffold de prompt.</p>
+    </div>
+
+    <div class="hr-note" style="margin-bottom:12px">— Convenção de nomes de arquivo</div>
+    <div class="code">
+<span class="c"># padrão</span>
+sapienza_<span class="k">{pilar}</span>_<span class="k">{slug}</span>_<span class="k">{canal}</span>_<span class="k">{aspecto}</span>.<span class="k">{ext}</span>
+
+<span class="c"># vocabulário</span>
+pilar   = <span class="v">engai</span> | <span class="v">pme</span> | <span class="v">bastidores</span>
+canal   = <span class="v">blog</span> | <span class="v">ig</span> | <span class="v">li</span>
+aspecto = <span class="v">16x9</span> | <span class="v">191x1</span> | <span class="v">1x1</span> | <span class="v">4x5</span> | <span class="v">9x16</span>
+
+<span class="c"># exemplos</span>
+sapienza_engai_fila-de-mensagens_ig_4x5.png
+sapienza_pme_retrabalho-manual_li_1x1.png
+sapienza_pme_retrabalho-manual_blog_191x1.png   <span class="c"># OG</span>
+sapienza_bastidores_sexta-estudio_ig_9x16.jpg
+    </div>
+
+    <div class="hr-note" style="margin:26px 0 12px">— Scaffold de prompt (foto/ilustração — quando não for capa tipográfica)</div>
+    <div class="code">
+<span class="b">Assunto:</span> artefato real de engenharia — terminal, quadro branco,
+        hardware, mãos no teclado. Honesto, não posado.
+<span class="b">Estilo:</span> dessaturado, frio, alta clareza, luz natural.
+        Sem render 3D, sem aparência de stock.
+<span class="b">Cor:</span> base <span class="v">ink #0E1116</span> ou <span class="v">surface #F7F8FA</span>;
+        um único acento <span class="v">petróleo #0E6E73</span>.
+<span class="b">Composição:</span> muito espaço negativo, off-center,
+        estrutura exposta. Espaço p/ trilho mono no canto.
+<span class="b">Clima:</span> preciso, calmo, credível para dono de PME.
+
+<span class="k">negative:</span> <span class="v">gradiente glossy, neon, roxo/azul saas, cérebro brilhando,</span>
+          <span class="v">placa de circuito, robô, aperto de mão, foto de banco,</span>
+          <span class="v">creme+serifa+terracota, múltiplos acentos, fundo poluído</span>
+    </div>
+
+    <div class="callout"><b>Regra de ouro do pipeline:</b> capas e cards são <b>tipográficos</b> (HTML/SVG renderizado, texto sempre nítido) — geração de imagem fica para foto e ilustração de bastidores. Texto crítico nunca é “alucinado” por modelo de imagem.</div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="eyebrow"><span class="crop"></span>Documento vivo</span>
+    <h3>Os tokens são o eixo trocável.</h3>
+    <p>Se o petróleo, o Bricolage ou o equilíbrio ink/surface precisarem mudar, ajuste no topo — o resto deriva daqui. Este guia espelha o sistema do site e do admin; mantenha-os em sincronia.</p>
+    <p class="mono" style="margin-top:24px;color:var(--muted-2)">SAPIENZA LABS · GUIA DE IDENTIDADE VISUAL · IMAGENS · v1 · DUQUE DE CAXIAS — RJ</p>
+  </div>
+</footer>
+
+</body>
+</html>
