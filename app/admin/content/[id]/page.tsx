@@ -10,6 +10,7 @@ import {
   type Seo,
 } from "@/lib/content/queries"
 import { allowedTransitions } from "@/lib/content/transition"
+import { pilarFromDb } from "@/lib/blog"
 import { ANALYZER_LIST } from "@/lib/ai/analyzers"
 import { SOCIAL_PLATFORMS } from "@/lib/ai/social"
 import { ContentForm, type ContentFormValues } from "../content-form"
@@ -100,6 +101,8 @@ export default async function EditContentPage({
             revisionId={item.currentRevisionId}
             platforms={SOCIAL_PLATFORMS}
             drafts={socialDrafts}
+            pilar={pilarFromDb(item.pilar)}
+            title={revision?.title ?? item.slug}
           />
         </div>
       ) : null}
