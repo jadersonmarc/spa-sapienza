@@ -10,6 +10,8 @@ export function Frame({
   field,
   eyebrow,
   footer,
+  footerRight = "sapienzalabs.com.br",
+  backdrop,
   children,
 }: {
   format: Format
@@ -18,6 +20,10 @@ export function Frame({
   eyebrow: string
   /** rodapé-esquerda: metadado (marca/local) */
   footer: string
+  /** rodapé-direita (default: domínio). Ex.: `01 / 06`, `SWIPE →`. */
+  footerRight?: string
+  /** camada full-bleed atrás do conteúdo (ex.: foto de bastidores). */
+  backdrop?: ReactNode
   children: ReactNode
 }) {
   const c = fieldStyle[field]
@@ -41,6 +47,8 @@ export function Frame({
         paddingRight: margin,
       }}
     >
+      {backdrop}
+
       {/* marca de registro — canto superior direito, 1.5px */}
       <div
         style={{
@@ -88,7 +96,7 @@ export function Frame({
         }}
       >
         <div style={{ display: "flex" }}>{footer}</div>
-        <div style={{ display: "flex" }}>sapienzalabs.com.br</div>
+        <div style={{ display: "flex" }}>{footerRight}</div>
       </div>
     </div>
   )
