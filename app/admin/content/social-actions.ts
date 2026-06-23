@@ -18,7 +18,7 @@ import { getSocialGenerator } from "@/lib/ai/social"
 import { canSocialTransition } from "@/lib/content/social-status"
 import { callStructured, isAiConfigured } from "@/lib/ai/client"
 import { pilarFromDb } from "@/lib/blog"
-import { getSocialImageUrl } from "@/lib/social/image"
+import { getSocialImageUrl, renderSocialImage } from "@/lib/social/image"
 import { postToInstagram } from "@/lib/social/instagram"
 import { postToLinkedin } from "@/lib/social/linkedin"
 
@@ -100,22 +100,26 @@ export async function postSocialAction(
   const tags = Array.isArray(draft.hashtags) ? (draft.hashtags as string[]) : []
   const articleUrl = `${SITE_URL}/blog/${draft.slug}`
 
+  const imageInput = {
+    platform: draft.platform as Platform,
+    pilar: pilarFromDb(draft.pilar),
+    slug: draft.slug,
+    title: draft.title ?? draft.slug,
+  }
+  const tagLine = tags.length ? `\n\n${tags.map((t) => `#${t}`).join(" ")}` : ""
+
   try {
-    const imageUrl = await getSocialImageUrl({
-      platform: draft.platform as Platform,
-      pilar: pilarFromDb(draft.pilar),
-      slug: draft.slug,
-      title: draft.title ?? draft.slug,
-    })
+    const imageUrl = await getSocialImageUrl(imageInput)
     let postUrl: string | null = null
 
     if (draft.platform === "instagram") {
-      const caption = tags.length ? `${draft.body}\n\n${tags.map((t) => `#${t}`).join(" ")}` : draft.body
-      const r = await postToInstagram({ caption, imageUrl })
+      const r = await postToInstagram({ caption: `${draft.body}${tagLine}`, imageUrl })
       postUrl = r.permalink ?? null
     } else {
-      const text = tags.length ? `${draft.body}\n\n${tags.map((t) => `#${t}`).join(" ")}` : draft.body
-      const r = await postToLinkedin({ text, articleUrl, title: draft.title ?? draft.slug })
+      // IMAGE share: sobe o binário do card e referencia o artigo no texto.
+      const imageBuffer = await renderSocialImage(imageInput)
+      const text = `${draft.body}${tagLine}\n\n${articleUrl}`
+      const r = await postToLinkedin({ text, title: draft.title ?? draft.slug, imageBuffer })
       postUrl = r.permalink ?? null
     }
 
