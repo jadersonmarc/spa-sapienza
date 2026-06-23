@@ -36,6 +36,11 @@ const PILAR_FROM_DB: Record<string, Pilar> = {
   p3: "bastidores",
 }
 
+/** Resolve o enum do banco (p1/p2/p3) para o vocabulário do site. */
+export function pilarFromDb(value: string | null): Pilar {
+  return PILAR_FROM_DB[value ?? "p2"] ?? "pme"
+}
+
 // ~200 palavras/minuto.
 function readingTimeFromContent(content: string): string {
   const words = content.trim().split(/\s+/).filter(Boolean).length

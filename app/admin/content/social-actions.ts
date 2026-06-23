@@ -17,6 +17,7 @@ import {
 import { getSocialGenerator } from "@/lib/ai/social"
 import { canSocialTransition } from "@/lib/content/social-status"
 import { callStructured, isAiConfigured } from "@/lib/ai/client"
+import { pilarFromDb } from "@/lib/blog"
 import { getSocialImageUrl } from "@/lib/social/image"
 import { postToInstagram } from "@/lib/social/instagram"
 import { postToLinkedin } from "@/lib/social/linkedin"
@@ -100,7 +101,12 @@ export async function postSocialAction(
   const articleUrl = `${SITE_URL}/blog/${draft.slug}`
 
   try {
-    const imageUrl = await getSocialImageUrl(draft.slug)
+    const imageUrl = await getSocialImageUrl({
+      platform: draft.platform as Platform,
+      pilar: pilarFromDb(draft.pilar),
+      slug: draft.slug,
+      title: draft.title ?? draft.slug,
+    })
     let postUrl: string | null = null
 
     if (draft.platform === "instagram") {
