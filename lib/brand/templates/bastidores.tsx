@@ -1,5 +1,5 @@
 import type { Format } from "../formats"
-import { fieldStyle, fonts, minType } from "../tokens"
+import { fieldStyle, fonts, minType, scrim } from "../tokens"
 import { Frame } from "./signature"
 
 export interface BastidoresProps {
@@ -28,7 +28,7 @@ export function Bastidores({ format, imageUrl, caption, eyebrow = "BASTIDORES", 
         style={{ objectFit: "cover", filter: "grayscale(1) contrast(1.05) brightness(0.85)" }}
       />
       {/* overlay sólido ink p/ esfriar a foto e garantir legibilidade (sem gradiente) */}
-      <div style={{ position: "absolute", top: 0, left: 0, width: format.w, height: format.h, display: "flex", backgroundColor: "rgba(14,17,22,0.5)" }} />
+      <div style={{ position: "absolute", top: 0, left: 0, width: format.w, height: format.h, display: "flex", backgroundColor: scrim.ink }} />
     </div>
   )
 

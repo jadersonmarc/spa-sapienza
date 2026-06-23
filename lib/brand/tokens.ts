@@ -39,6 +39,9 @@ export type ColorName = keyof typeof colors
 /** Os dois únicos campos-base de uma peça (sem terceira opção, sem gradiente). */
 export type Field = "ink" | "surface"
 
+/** Overlay sólido (sem gradiente) — ink @ 50% p/ esfriar foto e dar legibilidade. */
+export const scrim = { ink: "rgba(14, 17, 22, 0.5)" } as const
+
 /** Texto/grade/acento de cada campo — derivado dos tokens, nunca hardcoded. */
 export const fieldStyle = {
   ink: { bg: colors.ink.hex, fg: colors.surface.hex, line: colors.lineDark.hex, accent: colors.petrolSoft.hex },
