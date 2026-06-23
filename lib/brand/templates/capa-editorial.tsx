@@ -16,11 +16,12 @@ export interface CapaEditorialProps {
 // um único sublinhado petróleo. Título degrada (nunca abaixo do mínimo).
 export function CapaEditorial({ format, field, eyebrow, title, footer }: CapaEditorialProps) {
   const c = fieldStyle[field]
-  const big = Math.round(format.w * 0.075)
-  const titlePx = Math.max(
-    minType.title,
-    title.length > 60 ? Math.round(big * 0.7) : title.length > 38 ? Math.round(big * 0.85) : big,
-  )
+  // Título prominente: base ampla na largura, degradê suave por comprimento e
+  // teto pela altura (evita estouro em formatos baixos como a OG 1.91:1).
+  const big = Math.round(format.w * 0.095)
+  const byLength = title.length > 64 ? big * 0.72 : title.length > 42 ? big * 0.84 : big
+  const heightCap = Math.round(format.h * 0.24)
+  const titlePx = Math.max(minType.title, Math.min(Math.round(byLength), heightCap))
   const ruleH = Math.max(4, Math.round(format.w * 0.006))
 
   return (
