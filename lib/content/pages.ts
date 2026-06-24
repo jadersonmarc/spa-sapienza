@@ -1,86 +1,20 @@
 import { and, eq } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
+import { mergeHome, type HomeBlocks } from "./home-blocks"
 
 const { contentItems, contentRevisions } = schema
 
-export type SectionHeader = { eyebrow?: string; title: string; subtitle: string }
-export type HeroBlock = {
-  badge: string
-  titleLead: string
-  titleHighlight: string
-  subtitle: string
-  ctaLabel: string
-}
-export type DiffBlock = {
-  eyebrow: string
-  titleLead: string
-  titleHighlight: string
-  subtitle: string
-}
-
-export type HomeBlocks = {
-  hero: HeroBlock
-  services: SectionHeader
-  howItWorks: SectionHeader
-  portfolio: SectionHeader
-  trust: SectionHeader
-  differentials: DiffBlock
-}
-
-// Fonte de verdade dos textos da home. Fallback enquanto a page não é publicada
-// no admin — garante que o site nunca quebra.
-export const DEFAULT_HOME: HomeBlocks = {
-  hero: {
-    badge: "Software sob medida · Baixada Fluminense",
-    titleLead: "Seu negócio merece sistema feito para ele —",
-    titleHighlight: "não template comprado de fora.",
-    subtitle:
-      "Desenvolvemos software sob medida para escritórios de advocacia, contabilidade e clínicas da Baixada Fluminense. Levantamento de requisitos conduzido por engenheiro, entrega com qualidade de produção.",
-    ctaLabel: "Diagnóstico gratuito — 30 minutos",
-  },
-  services: {
-    eyebrow: "O que fazemos",
-    title: "Nossos Serviços",
-    subtitle: "Soluções tecnológicas sob medida para impulsionar seu negócio",
-  },
-  howItWorks: {
-    eyebrow: "Como funciona",
-    title: "Da conversa inicial ao sistema em produção.",
-    subtitle:
-      "Um processo simples para transformar necessidade de negócio em software com escopo claro.",
-  },
-  portfolio: {
-    eyebrow: "Produtos próprios",
-    title: "Portfólio",
-    subtitle: "Produtos que estamos construindo — e a engenharia por trás deles",
-  },
-  trust: {
-    eyebrow: "Confiança",
-    title: "Engenharia com rosto, processo e responsabilidade.",
-    subtitle:
-      "A Sapienza Labs combina execução técnica com combinados claros para reduzir risco na contratação.",
-  },
-  differentials: {
-    eyebrow: "Por que Sapienza Labs?",
-    titleLead: "Porque não entregamos apenas código; entregamos",
-    titleHighlight: "inteligência",
-    subtitle:
-      "Nossa abordagem vai além do desenvolvimento tradicional. Combinamos expertise técnica com visão estratégica de negócio.",
-  },
-}
-
-// Mescla blocos salvos sobre os defaults (por seção) — campos ausentes caem no default.
-function mergeHome(saved: unknown): HomeBlocks {
-  const s = (saved ?? {}) as Partial<HomeBlocks>
-  return {
-    hero: { ...DEFAULT_HOME.hero, ...(s.hero ?? {}) },
-    services: { ...DEFAULT_HOME.services, ...(s.services ?? {}) },
-    howItWorks: { ...DEFAULT_HOME.howItWorks, ...(s.howItWorks ?? {}) },
-    portfolio: { ...DEFAULT_HOME.portfolio, ...(s.portfolio ?? {}) },
-    trust: { ...DEFAULT_HOME.trust, ...(s.trust ?? {}) },
-    differentials: { ...DEFAULT_HOME.differentials, ...(s.differentials ?? {}) },
-  }
-}
+// Re-exporta tipos e defaults (dados puros vivem em ./home-blocks, sem dep. de DB).
+export {
+  DEFAULT_HOME,
+  mergeHome,
+  type SectionHeader,
+  type HeroBlock,
+  type DiffBlock,
+  type PlanCard,
+  type PlansBlock,
+  type HomeBlocks,
+} from "./home-blocks"
 
 // Blocos da home para o site (revisão atual da page publicada; senão, defaults).
 export async function getHomeBlocks(): Promise<HomeBlocks> {

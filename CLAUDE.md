@@ -63,9 +63,11 @@ pnpm db:import-mdx # importa os .mdx para o Postgres (idempotente)
 
 - `app/` — rotas: `/`, `/sobre`, `/blog`, `/blog/[slug]`. Tema real em
   `app/globals.css`.
-- `components/` — seções da home (`hero.tsx`, `services.tsx`,
-  `differentials.tsx`, `header.tsx`, `footer.tsx`, `whatsapp-button.tsx`) e
-  `components/ui/` (shadcn).
+- `components/` — seções da home (`hero.tsx`, `services.tsx`, `plans.tsx` (planos de
+  serviço da seção "Portfólio"), `differentials.tsx`, `header.tsx`, `footer.tsx`,
+  `whatsapp-button.tsx`) e `components/ui/` (shadcn).
+- `lib/contact.ts` — número do WhatsApp (`WHATSAPP_PHONE`) e `whatsappUrl(text)` (canal
+  único de conversão; ver Restrições).
 - `app/blog/posts/` — posts originais em `.mdx`. **Não são mais lidos pelo site**
   (origem do import para o DB; ver `pnpm db:import-mdx`). Remoção definitiva pendente.
 - `lib/blog.ts` — **lê do Postgres** (`getAllPosts` / `getPostBySlug`, interface
@@ -76,7 +78,8 @@ pnpm db:import-mdx # importa os .mdx para o Postgres (idempotente)
   `app/api/publish-scheduled` (acionados por GitHub Actions), `app/api/admin/upload` (R2);
   `middleware.ts` protege `/admin`. `auth.ts`/`auth.config.ts` + `lib/auth/*`
   (sessão, permissões, senha, webhook), `lib/db/*` (Drizzle), `lib/content/*` (queries,
-  transição, máquina de estados, diff, slug, pages), `lib/ai/*` (client, analyzers, social,
+  transição, máquina de estados, diff, slug, `pages` [queries DB] e `home-blocks` [tipos +
+  defaults puros da home, incl. planos]), `lib/ai/*` (client, analyzers, social,
   draft), `lib/social/*` (instagram, linkedin, image), `lib/storage/s3.ts`. Migrations em `drizzle/`.
 - **Sistema de imagens**: `lib/brand/*` — renderer tipográfico (`next/og`/Satori) que gera
   OG do blog e cards sociais on-brand. Rota on-demand `app/api/og` (preview do composer);
