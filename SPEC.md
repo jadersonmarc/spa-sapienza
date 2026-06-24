@@ -204,6 +204,26 @@ Ordem: **R4 → R3 → R1 → R2**. Migration `0002` adiciona as colunas abaixo.
   - **Imagem**: OG PNG do artigo → R2 → `social_drafts.image_url`.
   - Remover `notifySocialWebhook`, workflows/scripts/docs/env do n8n.
 
+## Planos de serviço (home — substitui projetos do "Portfólio") ✅
+A seção "Portfólio" da home deixou de expor **projetos próprios** (hardcoded) e passou a
+apresentar os **planos de serviço** da Sapienza, DB-driven e editáveis no admin.
+
+- **Regra dura:** **nenhum preço** renderizado no site — valores só em conversa privada.
+  Não existe campo de preço nem no admin (testes travam qualquer token de preço na saída).
+- **CTA:** cada card aponta para o **WhatsApp** (`lib/contact.ts` → `whatsappUrl`), com
+  mensagem pré-preenchida citando o plano. Label padrão: "Consultar valores".
+- **Modelo:** reaproveita a chave `blocks.portfolio` do `content_revisions` (sem migration).
+  Tipo virou `PlansBlock = SectionHeader & { items: PlanCard[] }` em `lib/content/home-blocks.ts`
+  (dados puros, sem dep. de DB; `pages.ts` re-exporta e mantém as queries). `PlanCard`:
+  `{ name, audience, features[], ctaLabel, addon? }`.
+- **Conteúdo (4 cards):** Essencial, Profissional, Premium e **add-on WhatsApp/CRM** (destaque petrol).
+- **Render:** `components/plans.tsx` (Server Component; substitui `portfolio.tsx`, removido).
+  `mergeHome` garante fallback aos defaults; dados antigos sem `items` caem nos defaults.
+- **Admin:** `app/admin/pages/home` ganhou um **repeater** (criar/editar/reordenar/remover),
+  serializado em `portfolio.items` (JSON) e normalizado no `savePageAction` (parse seguro).
+- **Navegação:** anchor da seção `#portfolio` → `#planos`; label do menu "Portfólio" → "Planos"
+  (título h2 da seção mantido como "Portfólio", editável no admin).
+
 ## Sistema de design (Lote Design — UX/UI)
 Tese: **precisão que vira confiança**. Assinatura = **monospace** em números, eyebrows e
 metadados (encoda "engenharia" sem dizer). Site e admin usam o **mesmo** sistema de tokens.
