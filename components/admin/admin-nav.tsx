@@ -4,14 +4,16 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 
-const items = [
+export type NavItem = { href: string; label: string; exact?: boolean }
+
+const defaultItems: NavItem[] = [
   { href: "/admin", label: "Painel", exact: true },
   { href: "/admin/content", label: "Conteúdo" },
   { href: "/admin/pages", label: "Páginas" },
   { href: "/admin/conta", label: "Conta" },
 ]
 
-export function AdminNav({ className }: { className?: string }) {
+export function AdminNav({ items = defaultItems, className }: { items?: NavItem[]; className?: string }) {
   const pathname = usePathname()
 
   const isActive = (href: string, exact?: boolean) =>
