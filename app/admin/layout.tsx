@@ -32,6 +32,7 @@ export default async function AdminLayout({
     { href: "/admin/atendimento", label: "Atendimento" },
     { href: "/admin/crm", label: "Contatos" },
     { href: "/admin/funil", label: "Funil" },
+    { href: "/admin/agente", label: "Agente" },
     { href: "/admin/content", label: "Conteúdo" },
     { href: "/admin/pages", label: "Páginas" },
     ...(isSuperadmin ? [{ href: "/admin/tenants", label: "Tenants" }] : []),
