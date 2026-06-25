@@ -29,6 +29,7 @@ export default async function AdminLayout({
   // Console do agente (atendimento/CRM) — itens adicionados conforme as fases.
   const navItems: NavItem[] = [
     { href: "/admin", label: "Painel", exact: true },
+    { href: "/admin/atendimento", label: "Atendimento" },
     { href: "/admin/content", label: "Conteúdo" },
     { href: "/admin/pages", label: "Páginas" },
     ...(isSuperadmin ? [{ href: "/admin/tenants", label: "Tenants" }] : []),
