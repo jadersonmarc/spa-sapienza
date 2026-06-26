@@ -18,6 +18,9 @@ pnpm db:generate | db:push | db:seed | db:import-mdx
 ## Convenções
 - **pt-BR** em toda copy (acentuação correta).
 - Conteúdo é dado em Postgres, lido em runtime; **publicar não dispara deploy**.
+- **WhatsApp é o único canal de conversão**: CTAs usam `lib/contact.ts`
+  (`whatsappUrl`). A seção "Portfólio" da home são **planos de serviço** (DB-driven,
+  `blocks.portfolio.items`, editáveis no admin) — **nunca renderizar preço** no site.
 - Toda transição de status passa por `lib/content/transition.ts` (audita + revalida).
 - `role`: publicar/agendar/arquivar e excluir exigem **admin**.
 - Segredos só em env/Coolify; nunca colar no chat (rotacionar se vazar).

@@ -18,12 +18,14 @@ export const authConfig = {
       if (user) {
         token.id = user.id as string
         token.role = user.role
+        token.isSuperadmin = user.isSuperadmin
       }
       return token
     },
     session({ session, token }) {
       session.user.id = token.id as string
       session.user.role = token.role as "admin" | "editor"
+      session.user.isSuperadmin = token.isSuperadmin as boolean
       return session
     },
   },

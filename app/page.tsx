@@ -3,7 +3,7 @@ import { Hero } from "@/components/hero"
 import { Services } from "@/components/services"
 import { HowItWorks } from "@/components/how-it-works"
 import { Differentials } from "@/components/differentials"
-import { Portfolio } from "@/components/portfolio"
+import { Plans } from "@/components/plans"
 import { Trust } from "@/components/trust"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
@@ -24,8 +24,8 @@ export default async function HomePage() {
       <section id="como-funciona">
         <HowItWorks header={home.howItWorks} />
       </section>
-      <section id="portfolio">
-        <Portfolio header={home.portfolio} />
+      <section id="planos">
+        <Plans block={home.portfolio} />
       </section>
       <section id="confianca">
         <Trust header={home.trust} />

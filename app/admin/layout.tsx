@@ -1,9 +1,12 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { cookies } from "next/headers"
 import { auth } from "@/auth"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { AdminNav } from "@/components/admin/admin-nav"
+import { AdminNav, type NavItem } from "@/components/admin/admin-nav"
+import { TenantSwitcher } from "@/components/admin/tenant-switcher"
+import { accessibleTenants, ACTIVE_TENANT_COOKIE } from "@/lib/agent/tenant"
 import { signOutAction } from "./actions"
 
 export const metadata: Metadata = {
@@ -18,7 +21,24 @@ export default async function AdminLayout({
   // Sem sessão (ex.: /admin/login) → sem chrome; a própria página se centraliza.
   if (!session?.user) return <>{children}</>
 
-  const { email, role } = session.user
+  const { email, role, isSuperadmin } = session.user
+
+  const tenants = await accessibleTenants()
+  const activeTenantId = (await cookies()).get(ACTIVE_TENANT_COOKIE)?.value ?? tenants[0]?.id
+
+  // Console do agente (atendimento/CRM) — itens adicionados conforme as fases.
+  const navItems: NavItem[] = [
+    { href: "/admin", label: "Painel", exact: true },
+    { href: "/admin/atendimento", label: "Atendimento" },
+    { href: "/admin/crm", label: "Contatos" },
+    { href: "/admin/funil", label: "Funil" },
+    { href: "/admin/agente", label: "Agente" },
+    { href: "/admin/automacoes", label: "Automações" },
+    { href: "/admin/content", label: "Conteúdo" },
+    { href: "/admin/pages", label: "Páginas" },
+    ...(isSuperadmin ? [{ href: "/admin/tenants", label: "Tenants" }] : []),
+    { href: "/admin/conta", label: "Conta" },
+  ]
 
   return (
     <div className="flex min-h-dvh flex-col lg:flex-row">
@@ -41,7 +61,9 @@ export default async function AdminLayout({
           </div>
         </div>
 
-        <AdminNav className="overflow-x-auto lg:flex-col" />
+        {tenants.length > 0 && <TenantSwitcher tenants={tenants} activeId={activeTenantId} />}
+
+        <AdminNav items={navItems} className="overflow-x-auto lg:flex-col" />
 
         <div className="mt-auto hidden flex-col gap-3 lg:flex">
           <p className="truncate font-mono text-[11px] text-muted-foreground">
