@@ -29,10 +29,14 @@ pnpm db:generate | db:push | db:seed | db:import-mdx
 - **GitHub Actions** acionam `/api/generate-draft` (cron seg/qua/sex) e
   `/api/publish-scheduled` (~15 min) com `x-webhook-secret`.
 - **Postagem social** (Instagram via Facebook Graph EAA; LinkedIn) é **por botão**
-  no admin, após aprovar o post — `lib/social/*`. As imagens (OG do blog, cards
-  IG/LinkedIn) são **renderizadas pelo app** via `lib/brand/*` — ver "Sistema de
-  imagens" no `CLAUDE.md`. Templates só consomem `lib/brand/tokens.ts` (testes
-  travam contraste AA, cor literal e divergência com `globals.css`).
+  no admin, após aprovar o post — `lib/social/*`. Na revisão, **legenda, hashtags e
+  imagem são editáveis** em rascunho: imagem padrão = card da IA (persistido em
+  `social/<plataforma>/`), trocável por upload ou seleção (picker `GET /api/admin/images`);
+  a publicação usa o `image_url` salvo. As imagens são **renderizadas pelo app** via
+  `lib/brand/*` — ver "Sistema de imagens" no `CLAUDE.md`. Templates só consomem
+  `lib/brand/tokens.ts` (testes travam contraste AA, cor literal e divergência com `globals.css`).
+- **Chaves do R2**: sempre por `lib/storage/keys.ts` (file-system por finalidade:
+  `articles/`, `social/<plataforma>/`, `editor/`, `pages/`) — nunca montar caminho à mão.
 
 ## Antes de mexer
 - Não quebrar rotas do site (`/`, `/sobre`, `/blog`, `/blog/[slug]`) — slugs têm SEO.

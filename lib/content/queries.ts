@@ -352,6 +352,7 @@ export async function insertSocialDraft(input: {
   platform: Platform
   body: string
   hashtags: string[]
+  imageUrl?: string | null
 }) {
   const [row] = await db
     .insert(socialDrafts)
@@ -368,12 +369,29 @@ export async function listSocialDraftsByRevision(revisionId: string) {
       body: socialDrafts.body,
       hashtags: socialDrafts.hashtags,
       status: socialDrafts.status,
+      imageUrl: socialDrafts.imageUrl,
       postUrl: socialDrafts.postUrl,
       createdAt: socialDrafts.createdAt,
     })
     .from(socialDrafts)
     .where(eq(socialDrafts.revisionId, revisionId))
     .orderBy(desc(socialDrafts.createdAt))
+}
+
+// Edita o conteúdo textual do draft (legenda + hashtags). Só faz sentido em `draft`.
+export async function updateSocialDraftContent(
+  id: string,
+  content: { body: string; hashtags: string[] },
+) {
+  await db
+    .update(socialDrafts)
+    .set({ body: content.body, hashtags: content.hashtags })
+    .where(eq(socialDrafts.id, id))
+}
+
+// Troca a imagem do draft (upload ou seleção da pasta da plataforma).
+export async function setSocialDraftImage(id: string, imageUrl: string) {
+  await db.update(socialDrafts).set({ imageUrl }).where(eq(socialDrafts.id, id))
 }
 
 export async function getSocialDraft(id: string) {

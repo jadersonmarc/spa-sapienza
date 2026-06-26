@@ -10,15 +10,18 @@ import {
   getSocialDraftForPost,
   insertSocialDraft,
   markSocialSent,
+  setSocialDraftImage,
+  updateSocialDraftContent,
   updateSocialStatus,
   type Platform,
   type SocialStatus,
 } from "@/lib/content/queries"
 import { getSocialGenerator } from "@/lib/ai/social"
+import { parseHashtags } from "@/lib/content/social-text"
 import { canSocialTransition } from "@/lib/content/social-status"
 import { callStructured, isAiConfigured } from "@/lib/ai/client"
 import { pilarFromDb } from "@/lib/blog"
-import { getSocialImageUrl, renderSocialImage } from "@/lib/social/image"
+import { fetchImageBuffer, getSocialImageUrl } from "@/lib/social/image"
 import { postToInstagram } from "@/lib/social/instagram"
 import { postToLinkedin } from "@/lib/social/linkedin"
 
@@ -58,18 +61,66 @@ export async function generateSocialAction(
         url: `${SITE_URL}/blog/${data.item.slug}`,
       }),
     })
+    // Imagem padrão = card on-brand da IA, já hospedado na pasta da plataforma.
+    const imageUrl = await getSocialImageUrl({
+      platform,
+      pilar: pilarFromDb(data.item.pilar),
+      slug: data.item.slug,
+      title: revision.title,
+    })
     await insertSocialDraft({
       contentItemId: itemId,
       revisionId,
       platform,
       body: out.body,
       hashtags: Array.isArray(out.hashtags) ? out.hashtags : [],
+      imageUrl,
     })
     revalidatePath(`/admin/content/${itemId}`)
     return { ok: true }
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Falha ao gerar post." }
   }
+}
+
+// Salva legenda + hashtags editadas. Permitido apenas enquanto em rascunho.
+export async function saveSocialDraftAction(
+  _prev: SocialFormState,
+  formData: FormData,
+): Promise<SocialFormState> {
+  await requireUser()
+  const id = String(formData.get("id") ?? "")
+  const body = String(formData.get("body") ?? "").trim()
+  const hashtags = parseHashtags(String(formData.get("hashtags") ?? ""))
+
+  if (!body) return { error: "A legenda não pode ficar vazia." }
+
+  const draft = await getSocialDraft(id)
+  if (!draft) return { error: "Post não encontrado." }
+  if (draft.status !== "draft") return { error: "Só é possível editar em rascunho." }
+
+  await updateSocialDraftContent(id, { body, hashtags })
+  revalidatePath(`/admin/content/${draft.contentItemId}`)
+  return { ok: true }
+}
+
+// Troca a imagem do draft por uma URL já hospedada (upload ou seleção). Só em rascunho.
+export async function setSocialImageAction(
+  _prev: SocialFormState,
+  formData: FormData,
+): Promise<SocialFormState> {
+  await requireUser()
+  const id = String(formData.get("id") ?? "")
+  const imageUrl = String(formData.get("imageUrl") ?? "").trim()
+  if (!imageUrl) return { error: "Imagem inválida." }
+
+  const draft = await getSocialDraft(id)
+  if (!draft) return { error: "Post não encontrado." }
+  if (draft.status !== "draft") return { error: "Só é possível editar em rascunho." }
+
+  await setSocialDraftImage(id, imageUrl)
+  revalidatePath(`/admin/content/${draft.contentItemId}`)
+  return { ok: true }
 }
 
 export async function setSocialStatusAction(formData: FormData) {
@@ -109,15 +160,16 @@ export async function postSocialAction(
   const tagLine = tags.length ? `\n\n${tags.map((t) => `#${t}`).join(" ")}` : ""
 
   try {
-    const imageUrl = await getSocialImageUrl(imageInput)
+    // Honra a imagem salva no draft (IA, upload ou seleção); só renderiza se faltar.
+    const imageUrl = draft.imageUrl ?? (await getSocialImageUrl(imageInput))
     let postUrl: string | null = null
 
     if (draft.platform === "instagram") {
       const r = await postToInstagram({ caption: `${draft.body}${tagLine}`, imageUrl })
       postUrl = r.permalink ?? null
     } else {
-      // IMAGE share: sobe o binário do card e referencia o artigo no texto.
-      const imageBuffer = await renderSocialImage(imageInput)
+      // IMAGE share: sobe os bytes da imagem escolhida e referencia o artigo no texto.
+      const imageBuffer = await fetchImageBuffer(imageUrl)
       const text = `${draft.body}${tagLine}\n\n${articleUrl}`
       const r = await postToLinkedin({ text, title: draft.title ?? draft.slug, imageBuffer })
       postUrl = r.permalink ?? null

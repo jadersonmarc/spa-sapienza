@@ -306,6 +306,95 @@ gradiente, assinatura mono obrigatória). **Fora do lote:** geração de imagem 
 4. Integração: capa+OG no publish do blog; composer com preview + nomes R2 §6.
 5. Floor: contraste AA, guarda anti-cor-solta, fontes embutidas, snapshots por arquétipo.
 
+## Lote — Edição de posts sociais + File system de imagens no R2 (**plano, não iniciado**)
+
+Objetivo duplo e acoplado: (1) tornar a proposta de post social **editável em texto e imagem**
+(imagem da IA é o padrão, trocável por upload ou seleção); (2) **organizar o R2 em pastas por
+finalidade**, com dimensões certas por contexto, de modo que a edição de imagem liste/suba na
+pasta correta da plataforma. A organização por pastas é o que viabiliza o picker da edição.
+
+### Estado atual (o que existe hoje)
+- **Texto do draft NÃO é editável.** `app/admin/content/social-panel.tsx` mostra `body` +
+  `hashtags` **só-leitura**; não há action de edição. `listSocialDraftsByRevision`
+  (`lib/content/queries.ts`) **nem seleciona `image_url`**.
+- **Imagem do draft.** O preview do painel sempre chama `/api/og` on-demand e **ignora**
+  `image_url`. A coluna `social_drafts.image_url` **já existe** (nullable), mas só é escrita
+  **no envio** (`markSocialSent` ← `getSocialImageUrl`, que renderiza o card da IA e sobe no R2).
+  Na publicação (`postSocialAction`) a imagem é **sempre recomputada** — qualquer escolha
+  custom seria descartada.
+- **R2 sem taxonomia de pastas (duas convenções planas e separadas):**
+  - Marca/social: `r2KeyFor` (`lib/brand/compose.ts`) → `sapienza_{pilar}_{slug}_{canal}_{aspecto}.png`.
+  - Upload genérico do editor: `app/api/admin/upload/route.ts` → `uploads/{aaaa}/{mm}/{uuid}.{ext}`.
+- **`lib/storage/s3.ts`** expõe só `uploadObject(key, body, contentType) → URL pública` e
+  `isStorageConfigured()`. **Sem list-by-prefix, sem delete.**
+- **Registry de dimensões já existe:** `lib/brand/formats.ts` (`Format` com `w/h/aspect/channel`):
+  `blog-og` 1200×630, `ig-feed` 1080×1350, `ig-square` 1080×1080, `li-link` 1200×627,
+  `li-feed` 1200×1200. **Reusar como fonte única do D-dim.**
+- **Sem lib de redimensionamento** (`sharp`/`image-size` não instalados).
+
+### Decisões adotadas (D-fs, D-dim, D-img, D-mig) e a confirmar
+- **D-fs (taxonomia):** `articles/<slug>/` · `social/instagram/` · `social/linkedin/` ·
+  `editor/` (substitui `uploads/aaaa/mm/`) · `pages/`. Convenção forward.
+- **D-dim:** fonte única = `lib/brand/formats.ts`. **Resolvido:** LinkedIn default = `li-feed`
+  (1:1, 1200×1200) — mantém o comportamento atual do código (sobrepõe o 1200×627 do prompt).
+- **D-img:** padrão = imagem da IA (card on-brand). Ao **gerar**, passa a **renderizar e gravar**
+  o card no R2 em `social/<plataforma>/` e a **persistir** em `image_url` (default concreto,
+  não só on-demand). Trocável por upload/seleção.
+- **D-mig:** chaves antigas (`sapienza_*`, `uploads/*`) **continuam válidas**; URLs salvas não
+  mudam. Migração é opcional e idempotente (script posterior).
+- **Resolvido — resize no upload:** **validar + avisar** a dimensão (ler dims com `image-size`,
+  **sem transformar** e **sem `sharp`**). Se não bater com o alvo do formato, avisar no painel
+  (não bloquear). Auto-resize fica fora deste lote.
+
+### Impacto em schema/código
+- **Schema:** `social_drafts.image_url` já existe → **sem migração** para edição de texto/imagem.
+  (Opcional, fora do mínimo: `image_source` `ai|upload|picked` para rotular a origem.)
+- **Storage (novo/estendido):**
+  - `lib/storage/keys.ts` — **helper central de chaves por finalidade**
+    (`r2Key({ purpose, slug?, formatId?, ext })`). `r2KeyFor` (compose) e a rota de upload
+    passam a **delegar** a ele. Nada de montar caminho de R2 à mão.
+  - `lib/storage/s3.ts` — adicionar `listObjectsByPrefix(prefix)` (alimenta o picker) e,
+    se preciso, `deleteObject(key)`.
+  - `lib/storage/dimensions.ts` (ou função em `formats.ts`) — mapa finalidade→formato(s) +
+    `assertOrWarnDimensions(buffer, formatId)`.
+- **Queries (`lib/content/queries.ts`):** `listSocialDraftsByRevision` passa a selecionar
+  `image_url`; novo `updateSocialDraftContent(id, { body, hashtags })`; novo
+  `setSocialDraftImage(id, imageUrl)`.
+- **Actions (`app/admin/content/social-actions.ts`):** `saveSocialDraftAction` (texto),
+  `setSocialImageAction` (seleção/upload), `regenerateSocialImageAction` (opcional).
+  `generateSocialAction` passa a renderizar+gravar o card da IA e setar `image_url`.
+  `postSocialAction` passa a **usar o `image_url` salvo** (fallback p/ render da IA se null).
+- **UI (`social-panel.tsx`):** campos de `body`/`hashtags` editáveis + salvar (só em `draft`);
+  bloco de imagem com **preview do `image_url`**, botão **Upload**, botão **Selecionar** (picker)
+  e (opcional) **Regerar**; estados de loading/erro; design system.
+- **Rotas BFF:** `GET /api/admin/images?prefix=social/instagram` (lista do R2 p/ o picker);
+  `POST /api/admin/upload` ganha `purpose`/`platform` para cair na pasta certa + validação D-dim.
+
+### Reaproveitar vs. criar
+- **Reusar:** `uploadObject` e `isStorageConfigured` (`s3.ts`); `formats.ts` (dimensões);
+  `composeBrandImage`/`renderSocialImage` (card da IA); fluxo `draft→approved→sent` e
+  `social-status`; `SubmitButton`/padrões do admin; vitest p/ os testes.
+- **Criar:** `lib/storage/keys.ts`, `listObjectsByPrefix`, picker de imagens, actions de edição.
+
+### Plano de execução (commits curtos, nesta ordem)
+1. `lib/storage/keys.ts` (builder por finalidade) + `listObjectsByPrefix` em `s3.ts`; `r2KeyFor`
+   e a rota de upload delegam ao helper. **Testes** do builder e do list-by-prefix.
+2. Edição de **texto**: `image_url` no select; `updateSocialDraftContent`; `saveSocialDraftAction`;
+   campos editáveis + salvar no painel (só em `draft`). **Teste** de salvamento.
+3. Imagem **default da IA**: `generateSocialAction` renderiza+grava em `social/<plat>/` e seta
+   `image_url`; preview do painel passa a usar `image_url`. `postSocialAction` honra o salvo.
+4. **Upload** pra pasta certa + validação/aviso de dimensão (D-dim); `setSocialImageAction`.
+5. **Picker** (BFF `/api/admin/images` + componente) listando `social/<plat>/`; selecionar seta
+   `image_url`. **Teste** da troca de imagem.
+6. (Opcional) Regerar imagem da IA; (opcional) `image_source`; (opcional) `sharp` p/ auto-resize.
+
+### Aceite
+- Post social **editável (texto + imagem)**, imagem da IA como padrão, troca por **upload** ou
+  **seleção** da pasta certa; publicação usa texto + imagem editados.
+- R2 **por pastas**; helper de chaves + list-by-prefix; uploads na pasta certa com dimensão certa.
+- **Testes:** builder de chave por finalidade, list-by-prefix, salvar draft, troca de imagem.
+  Gate de CI verde; `CLAUDE.md`/`AGENTS.md` atualizados.
+
 ## Itens a confirmar
 1. (resolvido) Banco = Postgres standalone na VPS; Auth = Auth.js (Credentials);
    Storage = S3-compatível (Cloudflare R2). Supabase descontinuado.
