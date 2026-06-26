@@ -80,7 +80,13 @@ pnpm db:import-mdx # importa os .mdx para o Postgres (idempotente)
   (sessão, permissões, senha, webhook), `lib/db/*` (Drizzle), `lib/content/*` (queries,
   transição, máquina de estados, diff, slug, `pages` [queries DB] e `home-blocks` [tipos +
   defaults puros da home, incl. planos]), `lib/ai/*` (client, analyzers, social,
-  draft), `lib/social/*` (instagram, linkedin, image), `lib/storage/s3.ts`. Migrations em `drizzle/`.
+  draft), `lib/social/*` (instagram, linkedin, image), `lib/storage/*` (`s3.ts` upload +
+  `listObjectsByPrefix`; `keys.ts` chaves do R2 por finalidade; `dimensions.ts` aviso de
+  dimensão via `image-size`). Migrations em `drizzle/`.
+- **Posts sociais editáveis**: na revisão social (`app/admin/content/social-panel.tsx`), legenda +
+  hashtags e **imagem** são editáveis em rascunho. Imagem padrão = card da IA (persistido em
+  `social/<plataforma>/`); trocável por **upload** (vai pra pasta da plataforma, com aviso de
+  dimensão) ou **seleção** (picker via `GET /api/admin/images`). Publicação honra o `image_url` salvo.
 - **Sistema de imagens**: `lib/brand/*` — renderer tipográfico (`next/og`/Satori) que gera
   OG do blog e cards sociais on-brand. Rota on-demand `app/api/og` (preview do composer);
   OG do blog (`app/blog/[slug]/opengraph-image.tsx`) é estática no build. Ver "Sistema de imagens".
@@ -143,7 +149,9 @@ obrigatória (trilho + crop mark). Referência de aparência: `docs/guia-identid
   falha se divergir do `globals.css`). Presets em `lib/brand/formats.ts` (canal × aspecto).
 - **Renderer/arquétipos**: `lib/brand/render.tsx` + `lib/brand/templates/*` (capa-editorial,
   card-conceito, diagrama, carrossel-slide, bastidores; assinatura em `signature.tsx`).
-  `compose.ts` mapeia entrada→arquétipo e monta a chave R2 (`sapienza_{pilar}_{slug}_{canal}_{aspecto}`).
+  `compose.ts` mapeia entrada→arquétipo. As **chaves do R2 ficam em `lib/storage/keys.ts`**
+  (file-system por finalidade: `articles/<slug>/`, `social/<plataforma>/`, `editor/`, `pages/`);
+  `r2KeyFor` delega a ele. Convenção forward — chaves antigas (`sapienza_*`) seguem válidas.
 - **Fontes**: TTFs em `assets/fonts/` (Bricolage Grotesque + IBM Plex Sans/Mono) — Satori
   não aceita woff2/CSS; embutidas no PNG sem FOUT.
 - **Floor (testes)**: contraste AA, guarda anti-cor-solta (templates só usam `tokens.ts`),
