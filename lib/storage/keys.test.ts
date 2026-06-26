@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { brandImageKey, editorUploadKey, prefixFor, socialUploadKey } from "./keys"
+import { brandImageKey, editorUploadKey, listPrefixFor, prefixFor, socialUploadKey } from "./keys"
 
 describe("prefixFor", () => {
   it("mapeia finalidade -> pasta", () => {
@@ -8,6 +8,11 @@ describe("prefixFor", () => {
     expect(prefixFor("linkedin")).toBe("social/linkedin")
     expect(prefixFor("editor")).toBe("editor")
     expect(prefixFor("page")).toBe("pages")
+  })
+
+  it("listPrefixFor adiciona a barra final (picker)", () => {
+    expect(listPrefixFor("instagram")).toBe("social/instagram/")
+    expect(listPrefixFor("linkedin")).toBe("social/linkedin/")
   })
 })
 

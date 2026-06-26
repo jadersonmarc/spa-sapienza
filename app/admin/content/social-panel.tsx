@@ -61,6 +61,11 @@ function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string;
   const [warning, setWarning] = useState<string | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
 
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const [pickerImages, setPickerImages] = useState<{ key: string; url: string }[]>([])
+  const [pickerLoading, setPickerLoading] = useState(false)
+  const [pickerError, setPickerError] = useState<string | null>(null)
+
   const tags = Array.isArray(draft.hashtags) ? (draft.hashtags as string[]) : []
   const label = PLATFORM_LABEL[draft.platform] ?? draft.platform
   const editable = draft.status === "draft"
@@ -92,6 +97,36 @@ function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string;
       setUploading(false)
       if (fileRef.current) fileRef.current.value = ""
     }
+  }
+
+  async function togglePicker() {
+    const next = !pickerOpen
+    setPickerOpen(next)
+    if (next && pickerImages.length === 0) {
+      setPickerLoading(true)
+      setPickerError(null)
+      try {
+        const res = await fetch(`/api/admin/images?platform=${draft.platform}`)
+        const data = (await res.json()) as { images?: { key: string; url: string }[]; error?: string }
+        if (!res.ok) {
+          setPickerError(data.error ?? "Falha ao listar imagens.")
+          return
+        }
+        setPickerImages(data.images ?? [])
+      } catch {
+        setPickerError("Falha ao listar imagens.")
+      } finally {
+        setPickerLoading(false)
+      }
+    }
+  }
+
+  function pickImage(url: string) {
+    const fd = new FormData()
+    fd.set("id", draft.id)
+    fd.set("imageUrl", url)
+    setImageAction(fd)
+    setPickerOpen(false)
   }
 
   return (
@@ -162,8 +197,8 @@ function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string;
           className="w-full max-w-[280px] rounded-md border border-border"
         />
         {editable ? (
-          <div className="mt-2 flex flex-col gap-1">
-            <div>
+          <div className="mt-2 flex flex-col gap-2">
+            <div className="flex flex-wrap gap-2">
               <Button
                 type="button"
                 variant="outline"
@@ -173,6 +208,15 @@ function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string;
               >
                 {uploading ? "Enviando..." : "Trocar imagem (upload)"}
               </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={uploading}
+                onClick={togglePicker}
+              >
+                {pickerOpen ? "Fechar seleção" : "Selecionar da pasta"}
+              </Button>
               <input
                 ref={fileRef}
                 type="file"
@@ -181,6 +225,36 @@ function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string;
                 onChange={onFile}
               />
             </div>
+
+            {pickerOpen ? (
+              pickerLoading ? (
+                <span className="text-xs text-muted-foreground">Carregando imagens…</span>
+              ) : pickerError ? (
+                <span className="text-xs text-destructive" role="alert">{pickerError}</span>
+              ) : pickerImages.length === 0 ? (
+                <span className="text-xs text-muted-foreground">Nenhuma imagem nesta pasta ainda.</span>
+              ) : (
+                <div className="grid max-w-[280px] grid-cols-3 gap-2">
+                  {pickerImages.map((img) => (
+                    <button
+                      key={img.key}
+                      type="button"
+                      onClick={() => pickImage(img.url)}
+                      className="overflow-hidden rounded-md border border-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={img.url}
+                        alt="Imagem da pasta"
+                        loading="lazy"
+                        className="aspect-square w-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )
+            ) : null}
+
             {warning ? (
               <span className="text-xs text-amber-700 dark:text-amber-300">{warning}</span>
             ) : null}

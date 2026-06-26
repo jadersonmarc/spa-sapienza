@@ -19,6 +19,11 @@ export function prefixFor(purpose: R2Purpose): string {
   return PREFIX[purpose]
 }
 
+/** Prefixo com barra final, para listar uma pasta inteira (picker). */
+export function listPrefixFor(purpose: R2Purpose): string {
+  return `${PREFIX[purpose]}/`
+}
+
 export type BrandImagePurpose = Extract<R2Purpose, "article" | "instagram" | "linkedin">
 
 /**
