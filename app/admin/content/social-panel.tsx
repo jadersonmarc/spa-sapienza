@@ -152,8 +152,8 @@ function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string;
           <textarea
             name="body"
             defaultValue={draft.body}
-            rows={5}
-            className="w-full rounded-md border border-border bg-background p-2 text-sm"
+            rows={10}
+            className="min-h-[220px] w-full resize-y rounded-md border border-border bg-background p-2 text-sm leading-relaxed"
           />
           <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
             Hashtags
