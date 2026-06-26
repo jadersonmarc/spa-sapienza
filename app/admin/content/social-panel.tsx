@@ -8,6 +8,7 @@ import {
   deleteSocialAction,
   generateSocialAction,
   postSocialAction,
+  saveSocialDraftAction,
   setSocialStatusAction,
   type SocialFormState,
 } from "./social-actions"
@@ -30,6 +31,7 @@ type Draft = {
   body: string
   hashtags: unknown
   status: SocialStatus
+  imageUrl: string | null
   postUrl: string | null
   createdAt: Date
 }
@@ -45,6 +47,126 @@ function previewUrl(platform: string, pilar: string, title: string): string {
     text: title,
   })
   return `/api/og?${qs.toString()}`
+}
+
+function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string; title: string }) {
+  const [saveState, saveAction] = useActionState<SocialFormState, FormData>(saveSocialDraftAction, {})
+  const [postState, postAction] = useActionState<SocialFormState, FormData>(postSocialAction, {})
+
+  const tags = Array.isArray(draft.hashtags) ? (draft.hashtags as string[]) : []
+  const label = PLATFORM_LABEL[draft.platform] ?? draft.platform
+  const editable = draft.status === "draft"
+
+  return (
+    <div className="rounded-md border border-border p-3">
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <span className="text-sm font-medium">
+          {label}
+          <span className="ml-2 rounded-full bg-foreground/[0.08] px-2 py-0.5 text-xs uppercase">
+            {STATUS_LABEL[draft.status]}
+          </span>
+        </span>
+        <span className="text-xs text-muted-foreground">
+          {new Date(draft.createdAt).toLocaleString("pt-BR")}
+        </span>
+      </div>
+
+      {editable ? (
+        <form action={saveAction} className="flex flex-col gap-2">
+          <input type="hidden" name="id" value={draft.id} />
+          <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+            Legenda
+          </label>
+          <textarea
+            name="body"
+            defaultValue={draft.body}
+            rows={5}
+            className="w-full rounded-md border border-border bg-background p-2 text-sm"
+          />
+          <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+            Hashtags
+          </label>
+          <input
+            name="hashtags"
+            defaultValue={tags.join(" ")}
+            placeholder="separadas por espaço (sem #)"
+            className="w-full rounded-md border border-border bg-background p-2 font-mono text-xs"
+          />
+          <div className="flex items-center gap-2">
+            <SubmitButton variant="outline" size="sm" pendingLabel="Salvando...">
+              Salvar
+            </SubmitButton>
+            {saveState.ok ? (
+              <span className="text-xs text-muted-foreground">Salvo.</span>
+            ) : null}
+            {saveState.error ? (
+              <span className="text-xs text-destructive" role="alert">{saveState.error}</span>
+            ) : null}
+          </div>
+        </form>
+      ) : (
+        <>
+          <p className="whitespace-pre-wrap text-sm">{draft.body}</p>
+          {tags.length ? (
+            <p className="mt-2 text-xs text-primary">{tags.map((t) => `#${t}`).join(" ")}</p>
+          ) : null}
+        </>
+      )}
+
+      <div className="mt-3">
+        <p className="mb-1 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+          Card · {FORMAT_BY_PLATFORM[draft.platform] === "li-feed" ? "1:1" : "4:5"}
+        </p>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={previewUrl(draft.platform, pilar, title)}
+          alt={`Preview do card para ${label}`}
+          loading="lazy"
+          className="w-full max-w-[280px] rounded-md border border-border"
+        />
+      </div>
+
+      {draft.status === "sent" && draft.postUrl ? (
+        <p className="mt-2 text-xs">
+          <a href={draft.postUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+            Ver post publicado ↗
+          </a>
+        </p>
+      ) : null}
+
+      {postState.error ? (
+        <p className="mt-2 text-sm text-destructive" role="alert">{postState.error}</p>
+      ) : null}
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        {allowedSocialTransitions(draft.status)
+          .filter((to) => to !== "sent")
+          .map((to) => (
+            <form key={to} action={setSocialStatusAction}>
+              <input type="hidden" name="id" value={draft.id} />
+              <input type="hidden" name="to" value={to} />
+              <SubmitButton variant="outline" size="sm">
+                {ACTION_LABEL[to]}
+              </SubmitButton>
+            </form>
+          ))}
+        {draft.status === "approved" ? (
+          <form action={postAction}>
+            <input type="hidden" name="id" value={draft.id} />
+            <SubmitButton size="sm" pendingLabel="Publicando...">
+              {`Publicar no ${label}`}
+            </SubmitButton>
+          </form>
+        ) : null}
+        <form action={deleteSocialAction}>
+          <input type="hidden" name="id" value={draft.id} />
+          <SubmitButton variant="destructive" size="sm">
+            Excluir
+          </SubmitButton>
+        </form>
+      </div>
+    </div>
+  )
 }
 
 export function SocialPanel({
@@ -64,10 +186,6 @@ export function SocialPanel({
 }) {
   const [state, formAction] = useActionState<SocialFormState, FormData>(
     generateSocialAction,
-    {},
-  )
-  const [postState, postAction] = useActionState<SocialFormState, FormData>(
-    postSocialAction,
     {},
   )
 
@@ -96,89 +214,14 @@ export function SocialPanel({
       {state.error ? (
         <p className="text-sm text-destructive" role="alert">{state.error}</p>
       ) : null}
-      {postState.error ? (
-        <p className="text-sm text-destructive" role="alert">{postState.error}</p>
-      ) : null}
 
       {drafts.length === 0 ? (
         <p className="text-sm text-muted-foreground">Nenhum post gerado nesta revisão ainda.</p>
       ) : (
         <div className="flex flex-col gap-3">
-          {drafts.map((d) => {
-            const tags = Array.isArray(d.hashtags) ? (d.hashtags as string[]) : []
-            return (
-              <div key={d.id} className="rounded-md border border-border p-3">
-                <div className="mb-2 flex items-center justify-between gap-2">
-                  <span className="text-sm font-medium">
-                    {PLATFORM_LABEL[d.platform] ?? d.platform}
-                    <span className="ml-2 rounded-full bg-foreground/[0.08] px-2 py-0.5 text-xs uppercase">
-                      {STATUS_LABEL[d.status]}
-                    </span>
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(d.createdAt).toLocaleString("pt-BR")}
-                  </span>
-                </div>
-
-                <p className="whitespace-pre-wrap text-sm">{d.body}</p>
-
-                <div className="mt-3">
-                  <p className="mb-1 font-mono text-xs uppercase tracking-wider text-muted-foreground">
-                    Card · {FORMAT_BY_PLATFORM[d.platform] === "li-feed" ? "1:1" : "4:5"}
-                  </p>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={previewUrl(d.platform, pilar, title)}
-                    alt={`Preview do card para ${PLATFORM_LABEL[d.platform] ?? d.platform}`}
-                    loading="lazy"
-                    className="w-full max-w-[280px] rounded-md border border-border"
-                  />
-                </div>
-
-                {tags.length ? (
-                  <p className="mt-2 text-xs text-primary">
-                    {tags.map((t) => `#${t}`).join(" ")}
-                  </p>
-                ) : null}
-
-                {d.status === "sent" && d.postUrl ? (
-                  <p className="mt-2 text-xs">
-                    <a href={d.postUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline">
-                      Ver post publicado ↗
-                    </a>
-                  </p>
-                ) : null}
-
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {allowedSocialTransitions(d.status)
-                    .filter((to) => to !== "sent")
-                    .map((to) => (
-                      <form key={to} action={setSocialStatusAction}>
-                        <input type="hidden" name="id" value={d.id} />
-                        <input type="hidden" name="to" value={to} />
-                        <SubmitButton variant="outline" size="sm">
-                          {ACTION_LABEL[to]}
-                        </SubmitButton>
-                      </form>
-                    ))}
-                  {d.status === "approved" ? (
-                    <form action={postAction}>
-                      <input type="hidden" name="id" value={d.id} />
-                      <SubmitButton size="sm" pendingLabel="Publicando...">
-                        {`Publicar no ${PLATFORM_LABEL[d.platform] ?? d.platform}`}
-                      </SubmitButton>
-                    </form>
-                  ) : null}
-                  <form action={deleteSocialAction}>
-                    <input type="hidden" name="id" value={d.id} />
-                    <SubmitButton variant="destructive" size="sm">
-                      Excluir
-                    </SubmitButton>
-                  </form>
-                </div>
-              </div>
-            )
-          })}
+          {drafts.map((d) => (
+            <SocialDraftCard key={d.id} draft={d} pilar={pilar} title={title} />
+          ))}
         </div>
       )}
     </div>

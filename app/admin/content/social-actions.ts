@@ -10,11 +10,13 @@ import {
   getSocialDraftForPost,
   insertSocialDraft,
   markSocialSent,
+  updateSocialDraftContent,
   updateSocialStatus,
   type Platform,
   type SocialStatus,
 } from "@/lib/content/queries"
 import { getSocialGenerator } from "@/lib/ai/social"
+import { parseHashtags } from "@/lib/content/social-text"
 import { canSocialTransition } from "@/lib/content/social-status"
 import { callStructured, isAiConfigured } from "@/lib/ai/client"
 import { pilarFromDb } from "@/lib/blog"
@@ -70,6 +72,27 @@ export async function generateSocialAction(
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Falha ao gerar post." }
   }
+}
+
+// Salva legenda + hashtags editadas. Permitido apenas enquanto em rascunho.
+export async function saveSocialDraftAction(
+  _prev: SocialFormState,
+  formData: FormData,
+): Promise<SocialFormState> {
+  await requireUser()
+  const id = String(formData.get("id") ?? "")
+  const body = String(formData.get("body") ?? "").trim()
+  const hashtags = parseHashtags(String(formData.get("hashtags") ?? ""))
+
+  if (!body) return { error: "A legenda não pode ficar vazia." }
+
+  const draft = await getSocialDraft(id)
+  if (!draft) return { error: "Post não encontrado." }
+  if (draft.status !== "draft") return { error: "Só é possível editar em rascunho." }
+
+  await updateSocialDraftContent(id, { body, hashtags })
+  revalidatePath(`/admin/content/${draft.contentItemId}`)
+  return { ok: true }
 }
 
 export async function setSocialStatusAction(formData: FormData) {
