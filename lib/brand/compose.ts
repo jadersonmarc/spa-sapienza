@@ -1,6 +1,7 @@
 import type { ReactElement } from "react"
 import type { Pilar } from "@/lib/blog"
 import { getFormat, type Format, type FormatId } from "./formats"
+import { brandImageKey } from "@/lib/storage/keys"
 import { pillarStyle } from "./pillar"
 import type { Field } from "./tokens"
 import { CapaEditorial } from "./templates/capa-editorial"
@@ -65,12 +66,14 @@ export function composeBrandImage(input: ComposeInput): { format: Format; node: 
   }
 }
 
-// Vocabulário de pilar para a chave R2 (§6 do guia usa `engai`); o resto do
-// código mantém `engenharia`.
-const PILAR_FILE: Record<Pilar, string> = { engenharia: "engai", pme: "pme", bastidores: "bastidores" }
-
-/** Chave R2 seguindo a convenção do guia: `sapienza_{pilar}_{slug}_{canal}_{aspecto}.{ext}`. */
+/**
+ * Chave R2 da imagem de marca, agora delegando ao file-system por finalidade
+ * (`lib/storage/keys.ts`). O canal do formato define a pasta:
+ * `blog` → artigo, `ig` → instagram, `li` → linkedin.
+ * (O `pilar` segue na entrada por compat.; já está embutido no conteúdo da imagem.)
+ */
 export function r2KeyFor(opts: { pilar: Pilar; slug: string; formatId: FormatId; ext?: string }): string {
-  const f = getFormat(opts.formatId)
-  return `sapienza_${PILAR_FILE[opts.pilar]}_${opts.slug}_${f.channel}_${f.aspect}.${opts.ext ?? "png"}`
+  const { channel } = getFormat(opts.formatId)
+  const purpose = channel === "ig" ? "instagram" : channel === "li" ? "linkedin" : "article"
+  return brandImageKey({ purpose, slug: opts.slug, formatId: opts.formatId, ext: opts.ext })
 }

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { randomUUID } from "node:crypto"
 import { auth } from "@/auth"
 import { isStorageConfigured, uploadObject } from "@/lib/storage/s3"
+import { editorUploadKey } from "@/lib/storage/keys"
 
 const MAX_BYTES = 5 * 1024 * 1024 // 5 MB
 // SVG fora da allowlist (pode conter <script> → XSS quando servido inline).
@@ -37,8 +38,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Imagem maior que 5 MB." }, { status: 400 })
   }
 
-  const now = new Date()
-  const key = `uploads/${now.getUTCFullYear()}/${String(now.getUTCMonth() + 1).padStart(2, "0")}/${randomUUID()}.${EXT[file.type]}`
+  const key = editorUploadKey({ uuid: randomUUID(), ext: EXT[file.type] })
   const buffer = Buffer.from(await file.arrayBuffer())
 
   try {
