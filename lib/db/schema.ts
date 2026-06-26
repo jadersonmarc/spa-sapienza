@@ -30,6 +30,7 @@ export const analysisType = pgEnum("analysis_type", [
 export const platform = pgEnum("platform", ["instagram", "linkedin"])
 export const socialStatus = pgEnum("social_status", ["draft", "approved", "sent"])
 export const userRole = pgEnum("user_role", ["admin", "editor"])
+export const membershipRole = pgEnum("membership_role", ["owner", "member"])
 
 // ── users (identidade do admin; auth via Auth.js) ────────────────────────────
 export const users = pgTable("users", {
@@ -37,11 +38,46 @@ export const users = pgTable("users", {
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
   role: userRole("role").notNull().default("editor"),
+  // Equipe Sapienza: opera todos os tenants e cadastra tokens do motor.
+  isSuperadmin: boolean("is_superadmin").notNull().default(false),
   // R4: bump invalida sessões JWT antigas (após troca de senha).
   sessionVersion: integer("session_version").notNull().default(0),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 })
+
+// ── agent_tenants (cliente operável pelo console; consome o motor via API) ────
+export const agentTenants = pgTable("agent_tenants", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  agentApiUrl: text("agent_api_url").notNull(),
+  // Token do motor (Bearer por-tenant), criptografado em repouso (AES-256-GCM).
+  agentTokenEnc: text("agent_token_enc").notNull(),
+  // Id do tenant no motor — usado nas rotas /tenants/{id}/config|automations.
+  motorTenantId: uuid("motor_tenant_id").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+// ── memberships (usuário ↔ tenant) ───────────────────────────────────────────
+export const memberships = pgTable(
+  "memberships",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => agentTenants.id, { onDelete: "cascade" }),
+    role: membershipRole("role").notNull().default("member"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("memberships_user_tenant_idx").on(t.userId, t.tenantId),
+    index("memberships_user_idx").on(t.userId),
+  ],
+)
 
 // ── content_items ────────────────────────────────────────────────────────────
 export const contentItems = pgTable(
