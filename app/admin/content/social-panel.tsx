@@ -119,7 +119,7 @@ function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string;
         </p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={previewUrl(draft.platform, pilar, title)}
+          src={draft.imageUrl ?? previewUrl(draft.platform, pilar, title)}
           alt={`Preview do card para ${label}`}
           loading="lazy"
           className="w-full max-w-[280px] rounded-md border border-border"

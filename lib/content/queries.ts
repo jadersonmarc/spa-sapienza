@@ -352,6 +352,7 @@ export async function insertSocialDraft(input: {
   platform: Platform
   body: string
   hashtags: string[]
+  imageUrl?: string | null
 }) {
   const [row] = await db
     .insert(socialDrafts)

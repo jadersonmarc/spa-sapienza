@@ -20,7 +20,7 @@ import { parseHashtags } from "@/lib/content/social-text"
 import { canSocialTransition } from "@/lib/content/social-status"
 import { callStructured, isAiConfigured } from "@/lib/ai/client"
 import { pilarFromDb } from "@/lib/blog"
-import { getSocialImageUrl, renderSocialImage } from "@/lib/social/image"
+import { fetchImageBuffer, getSocialImageUrl } from "@/lib/social/image"
 import { postToInstagram } from "@/lib/social/instagram"
 import { postToLinkedin } from "@/lib/social/linkedin"
 
@@ -60,12 +60,20 @@ export async function generateSocialAction(
         url: `${SITE_URL}/blog/${data.item.slug}`,
       }),
     })
+    // Imagem padrão = card on-brand da IA, já hospedado na pasta da plataforma.
+    const imageUrl = await getSocialImageUrl({
+      platform,
+      pilar: pilarFromDb(data.item.pilar),
+      slug: data.item.slug,
+      title: revision.title,
+    })
     await insertSocialDraft({
       contentItemId: itemId,
       revisionId,
       platform,
       body: out.body,
       hashtags: Array.isArray(out.hashtags) ? out.hashtags : [],
+      imageUrl,
     })
     revalidatePath(`/admin/content/${itemId}`)
     return { ok: true }
@@ -132,15 +140,16 @@ export async function postSocialAction(
   const tagLine = tags.length ? `\n\n${tags.map((t) => `#${t}`).join(" ")}` : ""
 
   try {
-    const imageUrl = await getSocialImageUrl(imageInput)
+    // Honra a imagem salva no draft (IA, upload ou seleção); só renderiza se faltar.
+    const imageUrl = draft.imageUrl ?? (await getSocialImageUrl(imageInput))
     let postUrl: string | null = null
 
     if (draft.platform === "instagram") {
       const r = await postToInstagram({ caption: `${draft.body}${tagLine}`, imageUrl })
       postUrl = r.permalink ?? null
     } else {
-      // IMAGE share: sobe o binário do card e referencia o artigo no texto.
-      const imageBuffer = await renderSocialImage(imageInput)
+      // IMAGE share: sobe os bytes da imagem escolhida e referencia o artigo no texto.
+      const imageBuffer = await fetchImageBuffer(imageUrl)
       const text = `${draft.body}${tagLine}\n\n${articleUrl}`
       const r = await postToLinkedin({ text, title: draft.title ?? draft.slug, imageBuffer })
       postUrl = r.permalink ?? null

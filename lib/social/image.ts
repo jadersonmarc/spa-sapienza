@@ -20,6 +20,13 @@ export interface SocialImageInput {
   title: string
 }
 
+/** Baixa os bytes de uma imagem por URL (card da IA no R2, /api/og ou upload custom). */
+export async function fetchImageBuffer(url: string): Promise<Buffer> {
+  const res = await fetch(url, { cache: "no-store" })
+  if (!res.ok) throw new Error(`Falha ao baixar a imagem (${res.status}).`)
+  return Buffer.from(await res.arrayBuffer())
+}
+
 /** Renderiza o card social on-brand (capa-editorial) no PNG da plataforma. */
 export function renderSocialImage(input: SocialImageInput): Promise<Buffer> {
   const formatId = FORMAT_BY_PLATFORM[input.platform]
