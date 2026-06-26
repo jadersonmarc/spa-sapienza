@@ -389,6 +389,11 @@ export async function updateSocialDraftContent(
     .where(eq(socialDrafts.id, id))
 }
 
+// Troca a imagem do draft (upload ou seleção da pasta da plataforma).
+export async function setSocialDraftImage(id: string, imageUrl: string) {
+  await db.update(socialDrafts).set({ imageUrl }).where(eq(socialDrafts.id, id))
+}
+
 export async function getSocialDraft(id: string) {
   const [row] = await db
     .select({ id: socialDrafts.id, status: socialDrafts.status, contentItemId: socialDrafts.contentItemId })

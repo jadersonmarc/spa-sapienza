@@ -39,6 +39,15 @@ export function brandImageKey(opts: {
   return `${PREFIX[opts.purpose]}/${opts.slug}__${opts.formatId}.${ext}`
 }
 
+/** Chave de imagem social enviada/trocada pelo operador: `social/<plataforma>/<uuid>.<ext>`. */
+export function socialUploadKey(opts: {
+  platform: Extract<R2Purpose, "instagram" | "linkedin">
+  uuid: string
+  ext: string
+}): string {
+  return `${PREFIX[opts.platform]}/${opts.uuid}.${opts.ext}`
+}
+
 /** Chave de upload do editor de markdown: `editor/<aaaa>/<mm>/<uuid>.<ext>`. */
 export function editorUploadKey(opts: { uuid: string; ext: string; date?: Date }): string {
   const d = opts.date ?? new Date()

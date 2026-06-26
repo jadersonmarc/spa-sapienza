@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { brandImageKey, editorUploadKey, prefixFor } from "./keys"
+import { brandImageKey, editorUploadKey, prefixFor, socialUploadKey } from "./keys"
 
 describe("prefixFor", () => {
   it("mapeia finalidade -> pasta", () => {
@@ -27,6 +27,17 @@ describe("brandImageKey", () => {
   it("linkedin: respeita a pasta e o ext custom", () => {
     expect(brandImageKey({ purpose: "linkedin", slug: "post-x", formatId: "li-feed", ext: "jpg" })).toBe(
       "social/linkedin/post-x__li-feed.jpg",
+    )
+  })
+})
+
+describe("socialUploadKey", () => {
+  it("cai na pasta da plataforma: social/<plataforma>/<uuid>.<ext>", () => {
+    expect(socialUploadKey({ platform: "instagram", uuid: "u1", ext: "jpg" })).toBe(
+      "social/instagram/u1.jpg",
+    )
+    expect(socialUploadKey({ platform: "linkedin", uuid: "u2", ext: "png" })).toBe(
+      "social/linkedin/u2.png",
     )
   })
 })

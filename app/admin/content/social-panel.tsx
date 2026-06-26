@@ -1,7 +1,8 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useRef, useState } from "react"
 import { SubmitButton } from "@/components/admin/submit-button"
+import { Button } from "@/components/ui/button"
 import { allowedSocialTransitions } from "@/lib/content/social-status"
 import type { SocialStatus } from "@/lib/content/queries"
 import {
@@ -9,6 +10,7 @@ import {
   generateSocialAction,
   postSocialAction,
   saveSocialDraftAction,
+  setSocialImageAction,
   setSocialStatusAction,
   type SocialFormState,
 } from "./social-actions"
@@ -52,10 +54,45 @@ function previewUrl(platform: string, pilar: string, title: string): string {
 function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string; title: string }) {
   const [saveState, saveAction] = useActionState<SocialFormState, FormData>(saveSocialDraftAction, {})
   const [postState, postAction] = useActionState<SocialFormState, FormData>(postSocialAction, {})
+  const [imageState, setImageAction] = useActionState<SocialFormState, FormData>(setSocialImageAction, {})
+
+  const fileRef = useRef<HTMLInputElement>(null)
+  const [uploading, setUploading] = useState(false)
+  const [warning, setWarning] = useState<string | null>(null)
+  const [uploadError, setUploadError] = useState<string | null>(null)
 
   const tags = Array.isArray(draft.hashtags) ? (draft.hashtags as string[]) : []
   const label = PLATFORM_LABEL[draft.platform] ?? draft.platform
   const editable = draft.status === "draft"
+
+  async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    setWarning(null)
+    setUploadError(null)
+    try {
+      const fd = new FormData()
+      fd.set("file", file)
+      fd.set("platform", draft.platform)
+      const res = await fetch("/api/admin/upload", { method: "POST", body: fd })
+      const data = (await res.json()) as { url?: string; warning?: string | null; error?: string }
+      if (!res.ok || !data.url) {
+        setUploadError(data.error ?? "Falha no upload.")
+        return
+      }
+      if (data.warning) setWarning(data.warning)
+      const setFd = new FormData()
+      setFd.set("id", draft.id)
+      setFd.set("imageUrl", data.url)
+      setImageAction(setFd)
+    } catch {
+      setUploadError("Falha no upload.")
+    } finally {
+      setUploading(false)
+      if (fileRef.current) fileRef.current.value = ""
+    }
+  }
 
   return (
     <div className="rounded-md border border-border p-3">
@@ -124,6 +161,37 @@ function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string;
           loading="lazy"
           className="w-full max-w-[280px] rounded-md border border-border"
         />
+        {editable ? (
+          <div className="mt-2 flex flex-col gap-1">
+            <div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={uploading}
+                onClick={() => fileRef.current?.click()}
+              >
+                {uploading ? "Enviando..." : "Trocar imagem (upload)"}
+              </Button>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/png,image/jpeg,image/webp,image/gif"
+                className="hidden"
+                onChange={onFile}
+              />
+            </div>
+            {warning ? (
+              <span className="text-xs text-amber-700 dark:text-amber-300">{warning}</span>
+            ) : null}
+            {uploadError ? (
+              <span className="text-xs text-destructive" role="alert">{uploadError}</span>
+            ) : null}
+            {imageState.error ? (
+              <span className="text-xs text-destructive" role="alert">{imageState.error}</span>
+            ) : null}
+          </div>
+        ) : null}
       </div>
 
       {draft.status === "sent" && draft.postUrl ? (

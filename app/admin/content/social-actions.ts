@@ -10,6 +10,7 @@ import {
   getSocialDraftForPost,
   insertSocialDraft,
   markSocialSent,
+  setSocialDraftImage,
   updateSocialDraftContent,
   updateSocialStatus,
   type Platform,
@@ -99,6 +100,25 @@ export async function saveSocialDraftAction(
   if (draft.status !== "draft") return { error: "Só é possível editar em rascunho." }
 
   await updateSocialDraftContent(id, { body, hashtags })
+  revalidatePath(`/admin/content/${draft.contentItemId}`)
+  return { ok: true }
+}
+
+// Troca a imagem do draft por uma URL já hospedada (upload ou seleção). Só em rascunho.
+export async function setSocialImageAction(
+  _prev: SocialFormState,
+  formData: FormData,
+): Promise<SocialFormState> {
+  await requireUser()
+  const id = String(formData.get("id") ?? "")
+  const imageUrl = String(formData.get("imageUrl") ?? "").trim()
+  if (!imageUrl) return { error: "Imagem inválida." }
+
+  const draft = await getSocialDraft(id)
+  if (!draft) return { error: "Post não encontrado." }
+  if (draft.status !== "draft") return { error: "Só é possível editar em rascunho." }
+
+  await setSocialDraftImage(id, imageUrl)
   revalidatePath(`/admin/content/${draft.contentItemId}`)
   return { ok: true }
 }
