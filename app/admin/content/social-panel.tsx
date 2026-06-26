@@ -1,7 +1,7 @@
 "use client"
 
 import { useActionState } from "react"
-import { Button } from "@/components/ui/button"
+import { SubmitButton } from "@/components/admin/submit-button"
 import { allowedSocialTransitions } from "@/lib/content/social-status"
 import type { SocialStatus } from "@/lib/content/queries"
 import {
@@ -62,11 +62,11 @@ export function SocialPanel({
   pilar: string
   title: string
 }) {
-  const [state, formAction, pending] = useActionState<SocialFormState, FormData>(
+  const [state, formAction] = useActionState<SocialFormState, FormData>(
     generateSocialAction,
     {},
   )
-  const [postState, postAction, posting] = useActionState<SocialFormState, FormData>(
+  const [postState, postAction] = useActionState<SocialFormState, FormData>(
     postSocialAction,
     {},
   )
@@ -86,9 +86,9 @@ export function SocialPanel({
             <input type="hidden" name="itemId" value={itemId} />
             <input type="hidden" name="revisionId" value={revisionId} />
             <input type="hidden" name="platform" value={p.platform} />
-            <Button type="submit" variant="outline" size="sm" disabled={pending}>
-              {pending ? "Gerando..." : `Gerar ${p.label}`}
-            </Button>
+            <SubmitButton variant="outline" size="sm" pendingLabel="Gerando...">
+              {`Gerar ${p.label}`}
+            </SubmitButton>
           </form>
         ))}
       </div>
@@ -156,24 +156,24 @@ export function SocialPanel({
                       <form key={to} action={setSocialStatusAction}>
                         <input type="hidden" name="id" value={d.id} />
                         <input type="hidden" name="to" value={to} />
-                        <Button type="submit" variant="outline" size="sm">
+                        <SubmitButton variant="outline" size="sm">
                           {ACTION_LABEL[to]}
-                        </Button>
+                        </SubmitButton>
                       </form>
                     ))}
                   {d.status === "approved" ? (
                     <form action={postAction}>
                       <input type="hidden" name="id" value={d.id} />
-                      <Button type="submit" size="sm" disabled={posting}>
-                        {posting ? "Publicando..." : `Publicar no ${PLATFORM_LABEL[d.platform] ?? d.platform}`}
-                      </Button>
+                      <SubmitButton size="sm" pendingLabel="Publicando...">
+                        {`Publicar no ${PLATFORM_LABEL[d.platform] ?? d.platform}`}
+                      </SubmitButton>
                     </form>
                   ) : null}
                   <form action={deleteSocialAction}>
                     <input type="hidden" name="id" value={d.id} />
-                    <Button type="submit" variant="destructive" size="sm">
+                    <SubmitButton variant="destructive" size="sm">
                       Excluir
-                    </Button>
+                    </SubmitButton>
                   </form>
                 </div>
               </div>
