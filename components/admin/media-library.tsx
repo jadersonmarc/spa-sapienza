@@ -18,8 +18,8 @@ const FOLDER_LABEL: Record<R2Purpose, string> = {
 
 type Confirm = { key: string; action: "delete" | "move"; destKey?: string; msg: string }
 
-function usageMsg(inUse: { total: number; social: number; markdown: number }): string {
-  return `Em uso (${inUse.social} post(s), ${inUse.markdown} no conteúdo). Confirmar mesmo assim?`
+function usageMsg(inUse: { total: number; social: number; markdown: number; cover: number }): string {
+  return `Em uso (${inUse.social} post(s), ${inUse.markdown} no conteúdo, ${inUse.cover} capa(s)). Confirmar mesmo assim?`
 }
 
 export function MediaLibrary() {
@@ -124,7 +124,7 @@ export function MediaLibrary() {
         `/api/admin/media?key=${encodeURIComponent(key)}${confirmed ? "&confirm=1" : ""}`,
         { method: "DELETE" },
       )
-      const data = (await res.json()) as { ok?: boolean; inUse?: { total: number; social: number; markdown: number }; error?: string }
+      const data = (await res.json()) as { ok?: boolean; inUse?: { total: number; social: number; markdown: number; cover: number }; error?: string }
       if (res.status === 409 && data.inUse) {
         setConfirm({ key, action: "delete", msg: usageMsg(data.inUse) })
         return
@@ -151,7 +151,7 @@ export function MediaLibrary() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ srcKey, destKey, confirm: confirmed }),
       })
-      const data = (await res.json()) as { url?: string; key?: string; inUse?: { total: number; social: number; markdown: number }; error?: string }
+      const data = (await res.json()) as { url?: string; key?: string; inUse?: { total: number; social: number; markdown: number; cover: number }; error?: string }
       if (res.status === 409 && data.inUse) {
         setConfirm({ key: srcKey, action: "move", destKey, msg: usageMsg(data.inUse) })
         return

@@ -8,6 +8,7 @@ import {
   deleteContentItem,
   getContentItem,
   saveContentItem,
+  setContentCover,
   slugExists,
   type ContentStatus,
   type ContentType,
@@ -99,6 +100,21 @@ export async function saveContentAction(
   revalidatePath("/admin/content")
   revalidatePath(`/admin/content/${id}`)
   redirect("/admin/content")
+}
+
+// Define/remove a capa editorial do artigo (URL pública do R2 vinda da biblioteca).
+export async function setContentCoverAction(
+  itemId: string,
+  url: string | null,
+): Promise<FormState> {
+  await requireUserId()
+  const data = await getContentItem(itemId)
+  if (!data) return { error: "Conteúdo não encontrado." }
+
+  await setContentCover(itemId, url)
+  revalidatePath(`/admin/content/${itemId}`)
+  revalidatePath(`/blog/${data.item.slug}`)
+  return {}
 }
 
 export async function transitionAction(

@@ -18,6 +18,7 @@ import { StatusControls } from "../status-controls"
 import { AnalysisPanel } from "../analysis-panel"
 import { ProposalsPanel } from "../proposals-panel"
 import { SocialPanel } from "../social-panel"
+import { CoverSelector } from "@/components/admin/cover-selector"
 import { saveContentAction } from "../actions"
 
 export const metadata: Metadata = {
@@ -83,6 +84,12 @@ export default async function EditContentPage({
         initial={initial}
         submitLabel="Salvar revisão"
       />
+
+      {item.type === "post" ? (
+        <div className="mt-6">
+          <CoverSelector itemId={item.id} initialUrl={item.coverImageUrl} />
+        </div>
+      ) : null}
 
       <div className="mt-8">
         <ProposalsPanel itemId={item.id} proposals={proposals} />

@@ -87,6 +87,7 @@ export const contentItems = pgTable(
     type: contentType("type").notNull(),
     slug: text("slug").notNull(),
     pilar: pilar("pilar"), // null para páginas
+    coverImageUrl: text("cover_image_url"), // capa editorial do artigo (R2)
     status: contentStatus("status").notNull().default("draft"),
     // FK definida via migration/relations para evitar ciclo com content_revisions
     currentRevisionId: uuid("current_revision_id"),

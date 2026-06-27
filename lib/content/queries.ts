@@ -396,7 +396,7 @@ export async function setSocialDraftImage(id: string, imageUrl: string) {
 
 // Onde uma URL de imagem está referenciada (best-effort) — usado antes de
 // mover/excluir pela biblioteca. v1 não reescreve, só conta/avisa.
-export type ImageReferences = { social: number; markdown: number; total: number }
+export type ImageReferences = { social: number; markdown: number; cover: number; total: number }
 
 export async function findImageReferences(url: string): Promise<ImageReferences> {
   const [social] = await db
@@ -407,9 +407,22 @@ export async function findImageReferences(url: string): Promise<ImageReferences>
     .select({ n: count() })
     .from(contentRevisions)
     .where(like(contentRevisions.bodyMarkdown, `%${url}%`))
+  const [cover] = await db
+    .select({ n: count() })
+    .from(contentItems)
+    .where(eq(contentItems.coverImageUrl, url))
   const socialN = Number(social?.n ?? 0)
   const markdownN = Number(md?.n ?? 0)
-  return { social: socialN, markdown: markdownN, total: socialN + markdownN }
+  const coverN = Number(cover?.n ?? 0)
+  return { social: socialN, markdown: markdownN, cover: coverN, total: socialN + markdownN + coverN }
+}
+
+// Define/remove a capa editorial de um artigo (URL pública do R2 ou null).
+export async function setContentCover(itemId: string, url: string | null) {
+  await db
+    .update(contentItems)
+    .set({ coverImageUrl: url, updatedAt: new Date() })
+    .where(eq(contentItems.id, itemId))
 }
 
 export async function getSocialDraft(id: string) {
