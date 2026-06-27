@@ -3,15 +3,31 @@
 // mão; tudo passa por aqui. Convenção forward: chaves antigas continuam válidas.
 import type { FormatId } from "@/lib/brand/formats"
 
-export type R2Purpose = "article" | "instagram" | "linkedin" | "editor" | "page"
+export type R2Purpose = "article" | "instagram" | "linkedin" | "editor" | "page" | "geral"
 
-// Prefixo (pasta) por finalidade. `social/<plataforma>` agrupa as imagens sociais.
+// Prefixo (pasta) por finalidade. `social/<plataforma>` agrupa as imagens sociais;
+// `geral` é a pasta-curinga da biblioteca para o que não se encaixa nas demais.
 const PREFIX: Record<R2Purpose, string> = {
   article: "articles",
   instagram: "social/instagram",
   linkedin: "social/linkedin",
   editor: "editor",
   page: "pages",
+  geral: "geral",
+}
+
+/** Todas as finalidades navegáveis na biblioteca de mídia (ordem de exibição). */
+export const R2_PURPOSES: readonly R2Purpose[] = [
+  "instagram",
+  "linkedin",
+  "article",
+  "page",
+  "editor",
+  "geral",
+]
+
+export function isR2Purpose(v: string): v is R2Purpose {
+  return (R2_PURPOSES as readonly string[]).includes(v)
 }
 
 /** Prefixo da pasta de uma finalidade (sem barra final). Alimenta o list-by-prefix. */
@@ -44,13 +60,18 @@ export function brandImageKey(opts: {
   return `${PREFIX[opts.purpose]}/${opts.slug}__${opts.formatId}.${ext}`
 }
 
+/** Chave de upload genérico da biblioteca para uma finalidade: `<pasta>/<uuid>.<ext>`. */
+export function mediaUploadKey(opts: { purpose: R2Purpose; uuid: string; ext: string }): string {
+  return `${PREFIX[opts.purpose]}/${opts.uuid}.${opts.ext}`
+}
+
 /** Chave de imagem social enviada/trocada pelo operador: `social/<plataforma>/<uuid>.<ext>`. */
 export function socialUploadKey(opts: {
   platform: Extract<R2Purpose, "instagram" | "linkedin">
   uuid: string
   ext: string
 }): string {
-  return `${PREFIX[opts.platform]}/${opts.uuid}.${opts.ext}`
+  return mediaUploadKey({ purpose: opts.platform, uuid: opts.uuid, ext: opts.ext })
 }
 
 /** Chave de upload do editor de markdown: `editor/<aaaa>/<mm>/<uuid>.<ext>`. */

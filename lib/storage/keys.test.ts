@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest"
-import { brandImageKey, editorUploadKey, listPrefixFor, prefixFor, socialUploadKey } from "./keys"
+import {
+  brandImageKey,
+  editorUploadKey,
+  isR2Purpose,
+  listPrefixFor,
+  mediaUploadKey,
+  prefixFor,
+  R2_PURPOSES,
+  socialUploadKey,
+} from "./keys"
 
 describe("prefixFor", () => {
   it("mapeia finalidade -> pasta", () => {
@@ -8,6 +17,7 @@ describe("prefixFor", () => {
     expect(prefixFor("linkedin")).toBe("social/linkedin")
     expect(prefixFor("editor")).toBe("editor")
     expect(prefixFor("page")).toBe("pages")
+    expect(prefixFor("geral")).toBe("geral")
   })
 
   it("listPrefixFor adiciona a barra final (picker)", () => {
@@ -44,6 +54,24 @@ describe("socialUploadKey", () => {
     expect(socialUploadKey({ platform: "linkedin", uuid: "u2", ext: "png" })).toBe(
       "social/linkedin/u2.png",
     )
+  })
+})
+
+describe("mediaUploadKey", () => {
+  it("cai na pasta da finalidade: <pasta>/<uuid>.<ext>", () => {
+    expect(mediaUploadKey({ purpose: "geral", uuid: "g1", ext: "webp" })).toBe("geral/g1.webp")
+    expect(mediaUploadKey({ purpose: "page", uuid: "p1", ext: "png" })).toBe("pages/p1.png")
+    expect(mediaUploadKey({ purpose: "instagram", uuid: "i1", ext: "jpg" })).toBe(
+      "social/instagram/i1.jpg",
+    )
+  })
+})
+
+describe("isR2Purpose / R2_PURPOSES", () => {
+  it("valida finalidades conhecidas e rejeita o resto", () => {
+    for (const p of R2_PURPOSES) expect(isR2Purpose(p)).toBe(true)
+    expect(isR2Purpose("../etc")).toBe(false)
+    expect(isR2Purpose("uploads")).toBe(false)
   })
 })
 

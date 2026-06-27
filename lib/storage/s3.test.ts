@@ -26,4 +26,19 @@ describe("mapListedObjects", () => {
   it("retorna vazio quando não há Contents", () => {
     expect(mapListedObjects(undefined, "https://cdn.exemplo.com")).toEqual([])
   })
+
+  it("inclui size e lastModified (ISO) quando presentes", () => {
+    const out = mapListedObjects(
+      [{ Key: "geral/x.png", Size: 1234, LastModified: new Date(Date.UTC(2026, 5, 27, 12, 0, 0)) }],
+      "https://cdn.exemplo.com",
+    )
+    expect(out).toEqual([
+      {
+        key: "geral/x.png",
+        url: "https://cdn.exemplo.com/geral/x.png",
+        size: 1234,
+        lastModified: "2026-06-27T12:00:00.000Z",
+      },
+    ])
+  })
 })
