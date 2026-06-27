@@ -57,6 +57,7 @@ function toPost(row: {
   excerpt: string
   bodyMarkdown: string
   seo: unknown
+  coverImage: string | null
 }): Post {
   const seo = (row.seo ?? {}) as Seo
   return {
@@ -67,6 +68,7 @@ function toPost(row: {
     date: (row.publishedAt ?? new Date()).toISOString(),
     readingTime: readingTimeFromContent(row.bodyMarkdown),
     pilar: PILAR_FROM_DB[row.pilar ?? "p2"] ?? "pme",
+    coverImage: row.coverImage ?? undefined,
     author: { ...DEFAULT_AUTHOR },
     keywords: Array.isArray(seo.keywords) ? seo.keywords : [],
   }
@@ -79,6 +81,7 @@ function baseSelect() {
     .select({
       slug: contentItems.slug,
       pilar: contentItems.pilar,
+      coverImage: contentItems.coverImageUrl,
       publishedAt: contentItems.publishedAt,
       title: contentRevisions.title,
       excerpt: contentRevisions.excerpt,

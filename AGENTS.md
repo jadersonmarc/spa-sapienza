@@ -31,12 +31,19 @@ pnpm db:generate | db:push | db:seed | db:import-mdx
 - **Postagem social** (Instagram via Facebook Graph EAA; LinkedIn) é **por botão**
   no admin, após aprovar o post — `lib/social/*`. Na revisão, **legenda, hashtags e
   imagem são editáveis** em rascunho: imagem padrão = card da IA (persistido em
-  `social/<plataforma>/`), trocável por upload ou seleção (picker `GET /api/admin/images`);
-  a publicação usa o `image_url` salvo. As imagens são **renderizadas pelo app** via
-  `lib/brand/*` — ver "Sistema de imagens" no `CLAUDE.md`. Templates só consomem
-  `lib/brand/tokens.ts` (testes travam contraste AA, cor literal e divergência com `globals.css`).
-- **Chaves do R2**: sempre por `lib/storage/keys.ts` (file-system por finalidade:
-  `articles/`, `social/<plataforma>/`, `editor/`, `pages/`) — nunca montar caminho à mão.
+  `social/<plataforma>/`), trocável pelo `MediaPicker` (upload ou seleção via
+  `GET /api/admin/media?folder=`); a publicação usa o `image_url` salvo. As imagens são
+  **renderizadas pelo app** via `lib/brand/*` — ver "Sistema de imagens" no `CLAUDE.md`.
+  Templates só consomem `lib/brand/tokens.ts` (testes travam contraste AA, cor literal e
+  divergência com `globals.css`).
+- **Biblioteca de Mídia** (`/admin/midia`): gerencia o R2 por **pasta/finalidade** (copiar URL,
+  renomear, mover, excluir, upload). Os seletores (post social, capa de artigo, editor) leem dela
+  via `MediaPicker`. Mover/renomear/excluir de imagem **em uso** (`findImageReferences`) avisa e
+  exige confirmação — v1 **não reescreve** referências.
+- **Capa de artigo**: `content_items.cover_image_url` definida pela biblioteca (`articles/`); o
+  blog mostra no topo e a OG usa **full-bleed** quando há capa, senão o layout da marca.
+- **Chaves do R2**: sempre por `lib/storage/keys.ts` (`R2_PURPOSES`/`mediaUploadKey`; finalidades
+  `articles/`, `social/<plataforma>/`, `editor/`, `pages/`, `geral/`) — nunca montar caminho à mão.
 
 ## Antes de mexer
 - Não quebrar rotas do site (`/`, `/sobre`, `/blog`, `/blog/[slug]`) — slugs têm SEO.

@@ -19,6 +19,24 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const { slug } = await params
   const post = await getPostBySlug(slug)
 
+  // Capa definida na biblioteca → full-bleed. Sem capa → layout tipográfico da marca.
+  if (post?.coverImage) {
+    return renderBrandImage(
+      format,
+      (
+        <div style={{ display: "flex", width: format.w, height: format.h }}>
+          <img
+            src={post.coverImage}
+            alt=""
+            width={format.w}
+            height={format.h}
+            style={{ width: format.w, height: format.h, objectFit: "cover" }}
+          />
+        </div>
+      ),
+    )
+  }
+
   const { tag, field } = pillarStyle(post?.pilar ?? "pme")
   return renderBrandImage(
     format,

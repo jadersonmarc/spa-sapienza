@@ -13,6 +13,7 @@ import {
   Bold,
   Code,
   Eye,
+  FolderOpen,
   Heading,
   Image as ImageIcon,
   Italic,
@@ -20,6 +21,7 @@ import {
   List,
   Pencil,
 } from "lucide-react"
+import { MediaPicker } from "@/components/admin/media-picker"
 
 type Props = {
   value: string
@@ -35,6 +37,7 @@ export function MarkdownEditor({ value, onChange }: Props) {
   const [preview, setPreview] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState<string | null>(null)
+  const [library, setLibrary] = useState(false)
 
   function view(): EditorView | undefined {
     return ref.current?.view
@@ -80,6 +83,7 @@ export function MarkdownEditor({ value, onChange }: Props) {
     try {
       const fd = new FormData()
       fd.append("file", file)
+      fd.append("folder", "editor")
       const res = await fetch("/api/admin/upload", { method: "POST", body: fd })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? "Falha no upload.")
@@ -120,11 +124,19 @@ export function MarkdownEditor({ value, onChange }: Props) {
         <button
           type="button"
           className={tbBtn}
-          title="Imagem"
+          title="Enviar imagem da máquina"
           disabled={uploading}
           onClick={() => fileRef.current?.click()}
         >
           <ImageIcon className="size-4" />
+        </button>
+        <button
+          type="button"
+          className={tbBtn}
+          title="Inserir da biblioteca"
+          onClick={() => setLibrary((l) => !l)}
+        >
+          <FolderOpen className="size-4" />
         </button>
 
         <div className="ml-auto">
@@ -156,6 +168,17 @@ export function MarkdownEditor({ value, onChange }: Props) {
         <p className="border-b border-border px-3 py-1.5 text-xs text-muted-foreground">
           Enviando imagem…
         </p>
+      ) : null}
+      {library ? (
+        <div className="border-b border-border p-2">
+          <MediaPicker
+            folder="editor"
+            onSelect={(url) => {
+              insert(`![](${url})`)
+              setLibrary(false)
+            }}
+          />
+        </div>
       ) : null}
 
       {preview ? (

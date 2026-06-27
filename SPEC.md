@@ -306,7 +306,7 @@ gradiente, assinatura mono obrigatória). **Fora do lote:** geração de imagem 
 4. Integração: capa+OG no publish do blog; composer com preview + nomes R2 §6.
 5. Floor: contraste AA, guarda anti-cor-solta, fontes embutidas, snapshots por arquétipo.
 
-## Lote — Edição de posts sociais + File system de imagens no R2 (**plano, não iniciado**)
+## Lote — Edição de posts sociais + File system de imagens no R2 ✅ (concluído — PR #15)
 
 Objetivo duplo e acoplado: (1) tornar a proposta de post social **editável em texto e imagem**
 (imagem da IA é o padrão, trocável por upload ou seleção); (2) **organizar o R2 em pastas por
@@ -394,6 +394,46 @@ pasta correta da plataforma. A organização por pastas é o que viabiliza o pic
 - R2 **por pastas**; helper de chaves + list-by-prefix; uploads na pasta certa com dimensão certa.
 - **Testes:** builder de chave por finalidade, list-by-prefix, salvar draft, troca de imagem.
   Gate de CI verde; `CLAUDE.md`/`AGENTS.md` atualizados.
+
+## Lote — Biblioteca de Mídia (admin) + seletor lendo do R2 + capa de artigo (**concluído**)
+
+Biblioteca de mídia própria (`/admin/midia`) que gerencia o R2 por **pastas/finalidade**, e
+seletores (post social, **capa de artigo**, inserção no editor) passam a **ler dela** — upload da
+máquina vira opção *dentro* da biblioteca. Decisões: **capa de artigo incluída** (campo novo +
+migration + OG); **mover/renomear de imagem em uso = avisar + confirmar**, sem reescrever
+referências (v1).
+
+### Pastas (finalidades R2)
+`social/instagram/` · `social/linkedin/` · `articles/` · `pages/` · `editor/` · `geral/` (curinga).
+Fonte única em `lib/storage/keys.ts` (`R2_PURPOSES`, `prefixFor`, `mediaUploadKey`).
+
+### Infra (`lib/storage`)
+- `keys.ts`: finalidade `geral`, `mediaUploadKey({purpose,uuid,ext})`, `R2_PURPOSES`/`isR2Purpose`.
+- `s3.ts`: `listObjects(prefix,{token})` (size/lastModified + paginação), `deleteObject`, `copyObject`
+  (mover/renomear = copy+delete). Dimensões no grid via `naturalWidth` (client, custo zero).
+- `lib/content/media-usage.ts` + `findImageReferences(url)` (social `image_url`, corpos markdown,
+  `content_items.cover_image_url`) → checagem de uso antes de mover/excluir.
+
+### Endpoints (server-only, auth)
+- `GET /api/admin/media?folder=<finalidade>&token=` — lista a pasta (valida `folder`; sem prefixo
+  cru do cliente). Substitui `/api/admin/images`.
+- `POST /api/admin/upload` — aceita `folder`/`purpose` (cai na pasta via `mediaUploadKey`).
+- `POST /api/admin/media/move` `{srcKey,destKey,confirm?}` — 409 `{inUse}` se referenciada sem confirm.
+- `DELETE /api/admin/media?key=` — idem.
+
+### UI
+- `app/admin/midia/page.tsx` + `components/admin/media-grid.tsx` + `media-picker.tsx` (modal/painel
+  compartilhado). Nav: item "Mídia". Seletor do `social-panel` passa a usar o `MediaPicker`;
+  `markdown-editor` ganha "Da biblioteca"; `content-form` ganha seletor de capa (`articles/`).
+
+### Capa de artigo
+`content_items.cover_image_url` (migration) + queries + seletor no `content-form` + render no
+`app/blog/[slug]/page.tsx` e na OG (`opengraph-image.tsx`), com fallback no layout tipográfico.
+
+### Execução (commits) e aceite
+keys/s3 → `/api/admin/media`+upload → MediaGrid/Picker (+refatora social) → página `/admin/midia`+nav
+→ media-usage+move/delete → capa de artigo → "da biblioteca" no editor. Testes: chave por finalidade,
+list (size/token), `media-usage`, seleção aplica imagem. Gate de CI; docs (`CLAUDE.md`/`AGENTS.md`).
 
 ## Itens a confirmar
 1. (resolvido) Banco = Postgres standalone na VPS; Auth = Auth.js (Credentials);

@@ -1,4 +1,10 @@
-import { S3Client, PutObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3"
+import {
+  S3Client,
+  PutObjectCommand,
+  ListObjectsV2Command,
+  DeleteObjectCommand,
+  CopyObjectCommand,
+} from "@aws-sdk/client-s3"
 
 const {
   S3_ENDPOINT,
@@ -36,6 +42,11 @@ function getClient(): S3Client {
   return client
 }
 
+// URL pública (CDN) de uma key. Requer storage configurado.
+export function publicUrlForKey(key: string): string {
+  return `${S3_PUBLIC_URL!.replace(/\/$/, "")}/${key}`
+}
+
 // Sobe um objeto e retorna a URL pública (S3_PUBLIC_URL/key).
 export async function uploadObject(
   key: string,
@@ -56,25 +67,73 @@ export async function uploadObject(
 export interface StoredObject {
   key: string
   url: string
+  size?: number
+  lastModified?: string // ISO-8601
 }
 
-// Mapeia o retorno do ListObjectsV2 para {key, url público}. Puro (testável):
-// descarta chaves vazias e "pseudo-pastas" (terminadas em "/").
+export interface ListResult {
+  objects: StoredObject[]
+  nextToken?: string
+}
+
+type ListedItem = { Key?: string; Size?: number; LastModified?: Date }
+
+// Mapeia o retorno do ListObjectsV2 para {key, url, size?, lastModified?}. Puro
+// (testável): descarta chaves vazias e "pseudo-pastas" (terminadas em "/").
 export function mapListedObjects(
-  contents: { Key?: string }[] | undefined,
+  contents: ListedItem[] | undefined,
   publicUrl: string,
 ): StoredObject[] {
   const base = publicUrl.replace(/\/$/, "")
   return (contents ?? [])
-    .map((o) => o.Key)
-    .filter((k): k is string => typeof k === "string" && k.length > 0 && !k.endsWith("/"))
-    .map((key) => ({ key, url: `${base}/${key}` }))
+    .filter((o): o is ListedItem & { Key: string } =>
+      typeof o.Key === "string" && o.Key.length > 0 && !o.Key.endsWith("/"),
+    )
+    .map((o) => {
+      const obj: StoredObject = { key: o.Key, url: `${base}/${o.Key}` }
+      if (typeof o.Size === "number") obj.size = o.Size
+      if (o.LastModified) obj.lastModified = o.LastModified.toISOString()
+      return obj
+    })
 }
 
-// Lista objetos de uma pasta (prefixo) e devolve {key, url}. Alimenta o picker.
-export async function listObjectsByPrefix(prefix: string, max = 100): Promise<StoredObject[]> {
+// Lista objetos de uma pasta (prefixo), com paginação por continuation token.
+export async function listObjects(
+  prefix: string,
+  opts: { token?: string; max?: number } = {},
+): Promise<ListResult> {
   const res = await getClient().send(
-    new ListObjectsV2Command({ Bucket: S3_BUCKET, Prefix: prefix, MaxKeys: max }),
+    new ListObjectsV2Command({
+      Bucket: S3_BUCKET,
+      Prefix: prefix,
+      MaxKeys: opts.max ?? 100,
+      ContinuationToken: opts.token,
+    }),
   )
-  return mapListedObjects(res.Contents, S3_PUBLIC_URL!)
+  return {
+    objects: mapListedObjects(res.Contents, S3_PUBLIC_URL!),
+    nextToken: res.NextContinuationToken,
+  }
+}
+
+// Versão simples (sem paginação) — alimenta o picker. Mantida por compat.
+export async function listObjectsByPrefix(prefix: string, max = 100): Promise<StoredObject[]> {
+  return (await listObjects(prefix, { max })).objects
+}
+
+// Remove um objeto do bucket.
+export async function deleteObject(key: string): Promise<void> {
+  await getClient().send(new DeleteObjectCommand({ Bucket: S3_BUCKET, Key: key }))
+}
+
+// Copia um objeto para uma nova key e devolve a URL pública do destino.
+export async function copyObject(srcKey: string, destKey: string): Promise<string> {
+  await getClient().send(
+    new CopyObjectCommand({
+      Bucket: S3_BUCKET,
+      CopySource: encodeURI(`${S3_BUCKET}/${srcKey}`),
+      Key: destKey,
+    }),
+  )
+  return `${S3_PUBLIC_URL!.replace(/\/$/, "")}/${destKey}`
 }

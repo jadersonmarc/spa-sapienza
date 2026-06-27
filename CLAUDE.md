@@ -74,19 +74,32 @@ pnpm db:import-mdx # importa os .mdx para o Postgres (idempotente)
   `Post`, só `published`); mapeia o pilar do enum (`p1`→engenharia, `p2`→pme,
   `p3`→bastidores). Corpo renderizado com `react-markdown`+`rehype-sanitize`.
 - **Admin/CMS**: `app/admin/*` (login, CRUD, editor, histórico/diff, propostas de IA,
-  páginas, conta), `app/api/auth/*` (Auth.js), `app/api/generate-draft` e
-  `app/api/publish-scheduled` (acionados por GitHub Actions), `app/api/admin/upload` (R2);
-  `middleware.ts` protege `/admin`. `auth.ts`/`auth.config.ts` + `lib/auth/*`
+  páginas, **mídia**, conta), `app/api/auth/*` (Auth.js), `app/api/generate-draft` e
+  `app/api/publish-scheduled` (acionados por GitHub Actions), `app/api/admin/upload` (R2),
+  `app/api/admin/media` (lista/exclui + `media/move`); `middleware.ts` protege `/admin`.
+  `auth.ts`/`auth.config.ts` + `lib/auth/*`
   (sessão, permissões, senha, webhook), `lib/db/*` (Drizzle), `lib/content/*` (queries,
-  transição, máquina de estados, diff, slug, `pages` [queries DB] e `home-blocks` [tipos +
+  transição, máquina de estados, diff, slug, `media-usage` [helpers puros mover/renomear],
+  `pages` [queries DB] e `home-blocks` [tipos +
   defaults puros da home, incl. planos]), `lib/ai/*` (client, analyzers, social,
   draft), `lib/social/*` (instagram, linkedin, image), `lib/storage/*` (`s3.ts` upload +
-  `listObjectsByPrefix`; `keys.ts` chaves do R2 por finalidade; `dimensions.ts` aviso de
+  `listObjects`/`deleteObject`/`copyObject`/`publicUrlForKey`; `keys.ts` chaves do R2 por
+  finalidade `R2_PURPOSES`+`mediaUploadKey`; `dimensions.ts` aviso de
   dimensão via `image-size`). Migrations em `drizzle/`.
+- **Biblioteca de Mídia**: `/admin/midia` (`components/admin/media-library.tsx`) gerencia o R2 por
+  **pastas/finalidade** (`social/instagram`, `social/linkedin`, `articles`, `pages`, `editor`,
+  `geral`): copiar URL, renomear, mover, excluir, upload pra pasta. Os seletores leem dela via
+  `components/admin/media-picker.tsx` (+`media-grid.tsx`). Mover/renomear/excluir de imagem **em
+  uso** (`findImageReferences`: `social_drafts.image_url`, corpos markdown, `content_items.cover_image_url`)
+  **avisa e exige confirmação** — v1 **não reescreve** referências.
 - **Posts sociais editáveis**: na revisão social (`app/admin/content/social-panel.tsx`), legenda +
   hashtags e **imagem** são editáveis em rascunho. Imagem padrão = card da IA (persistido em
-  `social/<plataforma>/`); trocável por **upload** (vai pra pasta da plataforma, com aviso de
-  dimensão) ou **seleção** (picker via `GET /api/admin/images`). Publicação honra o `image_url` salvo.
+  `social/<plataforma>/`); trocável pelo **MediaPicker** (upload pra pasta da plataforma, com aviso de
+  dimensão, ou seleção via `GET /api/admin/media?folder=`). Publicação honra o `image_url` salvo.
+- **Capa de artigo**: `content_items.cover_image_url` definida pela biblioteca (pasta `articles/`) no
+  `CoverSelector` da tela de edição. O blog (`/blog/[slug]`) mostra a capa no topo e a OG
+  (`opengraph-image.tsx`) usa a capa **full-bleed** quando presente, com fallback no layout
+  tipográfico da marca. Editor de markdown insere imagens "da biblioteca" (pasta `editor/`).
 - **Sistema de imagens**: `lib/brand/*` — renderer tipográfico (`next/og`/Satori) que gera
   OG do blog e cards sociais on-brand. Rota on-demand `app/api/og` (preview do composer);
   OG do blog (`app/blog/[slug]/opengraph-image.tsx`) é estática no build. Ver "Sistema de imagens".
