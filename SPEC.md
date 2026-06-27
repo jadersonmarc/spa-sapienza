@@ -395,7 +395,7 @@ pasta correta da plataforma. A organização por pastas é o que viabiliza o pic
 - **Testes:** builder de chave por finalidade, list-by-prefix, salvar draft, troca de imagem.
   Gate de CI verde; `CLAUDE.md`/`AGENTS.md` atualizados.
 
-## Lote — Biblioteca de Mídia (admin) + seletor lendo do R2 + capa de artigo (**em andamento**)
+## Lote — Biblioteca de Mídia (admin) + seletor lendo do R2 + capa de artigo (**concluído**)
 
 Biblioteca de mídia própria (`/admin/midia`) que gerencia o R2 por **pastas/finalidade**, e
 seletores (post social, **capa de artigo**, inserção no editor) passam a **ler dela** — upload da
