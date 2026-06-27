@@ -36,6 +36,7 @@ export default async function AdminLayout({
     { href: "/admin/automacoes", label: "Automações" },
     { href: "/admin/content", label: "Conteúdo" },
     { href: "/admin/pages", label: "Páginas" },
+    { href: "/admin/midia", label: "Mídia" },
     ...(isSuperadmin ? [{ href: "/admin/tenants", label: "Tenants" }] : []),
     { href: "/admin/conta", label: "Conta" },
   ]
