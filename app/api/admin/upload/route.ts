@@ -72,7 +72,7 @@ export async function POST(req: Request) {
 
   try {
     const url = await uploadObject(key, buffer, file.type)
-    return NextResponse.json({ url, warning })
+    return NextResponse.json({ url, key, warning })
   } catch (err) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Falha no upload." },

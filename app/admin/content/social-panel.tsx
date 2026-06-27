@@ -1,9 +1,11 @@
 "use client"
 
-import { useActionState, useRef, useState } from "react"
+import { useActionState, useState } from "react"
 import { SubmitButton } from "@/components/admin/submit-button"
 import { Button } from "@/components/ui/button"
+import { MediaPicker } from "@/components/admin/media-picker"
 import { allowedSocialTransitions } from "@/lib/content/social-status"
+import type { R2Purpose } from "@/lib/storage/keys"
 import type { SocialStatus } from "@/lib/content/queries"
 import {
   deleteSocialAction,
@@ -56,72 +58,14 @@ function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string;
   const [postState, postAction] = useActionState<SocialFormState, FormData>(postSocialAction, {})
   const [imageState, setImageAction] = useActionState<SocialFormState, FormData>(setSocialImageAction, {})
 
-  const fileRef = useRef<HTMLInputElement>(null)
-  const [uploading, setUploading] = useState(false)
-  const [warning, setWarning] = useState<string | null>(null)
-  const [uploadError, setUploadError] = useState<string | null>(null)
-
   const [pickerOpen, setPickerOpen] = useState(false)
-  const [pickerImages, setPickerImages] = useState<{ key: string; url: string }[]>([])
-  const [pickerLoading, setPickerLoading] = useState(false)
-  const [pickerError, setPickerError] = useState<string | null>(null)
 
   const tags = Array.isArray(draft.hashtags) ? (draft.hashtags as string[]) : []
   const label = PLATFORM_LABEL[draft.platform] ?? draft.platform
   const editable = draft.status === "draft"
 
-  async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploading(true)
-    setWarning(null)
-    setUploadError(null)
-    try {
-      const fd = new FormData()
-      fd.set("file", file)
-      fd.set("platform", draft.platform)
-      const res = await fetch("/api/admin/upload", { method: "POST", body: fd })
-      const data = (await res.json()) as { url?: string; warning?: string | null; error?: string }
-      if (!res.ok || !data.url) {
-        setUploadError(data.error ?? "Falha no upload.")
-        return
-      }
-      if (data.warning) setWarning(data.warning)
-      const setFd = new FormData()
-      setFd.set("id", draft.id)
-      setFd.set("imageUrl", data.url)
-      setImageAction(setFd)
-    } catch {
-      setUploadError("Falha no upload.")
-    } finally {
-      setUploading(false)
-      if (fileRef.current) fileRef.current.value = ""
-    }
-  }
-
-  async function togglePicker() {
-    const next = !pickerOpen
-    setPickerOpen(next)
-    if (next && pickerImages.length === 0) {
-      setPickerLoading(true)
-      setPickerError(null)
-      try {
-        const res = await fetch(`/api/admin/images?platform=${draft.platform}`)
-        const data = (await res.json()) as { images?: { key: string; url: string }[]; error?: string }
-        if (!res.ok) {
-          setPickerError(data.error ?? "Falha ao listar imagens.")
-          return
-        }
-        setPickerImages(data.images ?? [])
-      } catch {
-        setPickerError("Falha ao listar imagens.")
-      } finally {
-        setPickerLoading(false)
-      }
-    }
-  }
-
-  function pickImage(url: string) {
+  // Aplica a imagem escolhida na biblioteca (upload ou seleção) ao draft.
+  function applyImage(url: string) {
     const fd = new FormData()
     fd.set("id", draft.id)
     fd.set("imageUrl", url)
@@ -197,69 +141,21 @@ function SocialDraftCard({ draft, pilar, title }: { draft: Draft; pilar: string;
           className="w-full max-w-[280px] rounded-md border border-border"
         />
         {editable ? (
-          <div className="mt-2 flex flex-col gap-2">
-            <div className="flex flex-wrap gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={uploading}
-                onClick={() => fileRef.current?.click()}
-              >
-                {uploading ? "Enviando..." : "Trocar imagem (upload)"}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={uploading}
-                onClick={togglePicker}
-              >
-                {pickerOpen ? "Fechar seleção" : "Selecionar da pasta"}
-              </Button>
-              <input
-                ref={fileRef}
-                type="file"
-                accept="image/png,image/jpeg,image/webp,image/gif"
-                className="hidden"
-                onChange={onFile}
-              />
-            </div>
-
+          <div className="mt-2 flex max-w-[280px] flex-col gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setPickerOpen((o) => !o)}
+            >
+              {pickerOpen ? "Fechar" : "Trocar imagem"}
+            </Button>
             {pickerOpen ? (
-              pickerLoading ? (
-                <span className="text-xs text-muted-foreground">Carregando imagens…</span>
-              ) : pickerError ? (
-                <span className="text-xs text-destructive" role="alert">{pickerError}</span>
-              ) : pickerImages.length === 0 ? (
-                <span className="text-xs text-muted-foreground">Nenhuma imagem nesta pasta ainda.</span>
-              ) : (
-                <div className="grid max-w-[280px] grid-cols-3 gap-2">
-                  {pickerImages.map((img) => (
-                    <button
-                      key={img.key}
-                      type="button"
-                      onClick={() => pickImage(img.url)}
-                      className="overflow-hidden rounded-md border border-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={img.url}
-                        alt="Imagem da pasta"
-                        loading="lazy"
-                        className="aspect-square w-full object-cover"
-                      />
-                    </button>
-                  ))}
-                </div>
-              )
-            ) : null}
-
-            {warning ? (
-              <span className="text-xs text-amber-700 dark:text-amber-300">{warning}</span>
-            ) : null}
-            {uploadError ? (
-              <span className="text-xs text-destructive" role="alert">{uploadError}</span>
+              <MediaPicker
+                folder={draft.platform as R2Purpose}
+                selectedUrl={draft.imageUrl ?? undefined}
+                onSelect={applyImage}
+              />
             ) : null}
             {imageState.error ? (
               <span className="text-xs text-destructive" role="alert">{imageState.error}</span>
