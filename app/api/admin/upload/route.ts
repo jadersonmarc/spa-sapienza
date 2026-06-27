@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto"
 import { imageSize } from "image-size"
 import { auth } from "@/auth"
 import { isStorageConfigured, uploadObject } from "@/lib/storage/s3"
-import { editorUploadKey, socialUploadKey } from "@/lib/storage/keys"
+import { editorUploadKey, isR2Purpose, mediaUploadKey, type R2Purpose } from "@/lib/storage/keys"
 import { dimensionWarning, FORMAT_BY_PLATFORM, type SocialPlatform } from "@/lib/storage/dimensions"
 
 const MAX_BYTES = 5 * 1024 * 1024 // 5 MB
@@ -18,6 +18,10 @@ const EXT: Record<string, string> = {
 
 function asSocialPlatform(v: FormDataEntryValue | null): SocialPlatform | null {
   return v === "instagram" || v === "linkedin" ? v : null
+}
+
+function asPurpose(v: FormDataEntryValue | null): R2Purpose | null {
+  return typeof v === "string" && isR2Purpose(v) ? v : null
 }
 
 export async function POST(req: Request) {
@@ -44,20 +48,23 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Imagem maior que 5 MB." }, { status: 400 })
   }
 
-  // `platform` define a pasta (social/<plataforma>/) e o alvo de dimensão.
+  // Destino: `folder` (qualquer finalidade) tem precedência; `platform` segue por
+  // compat e também define o alvo de dimensão. Sem nenhum → editor/ (default).
   const platform = asSocialPlatform(form.get("platform"))
+  const folder = asPurpose(form.get("folder")) ?? (platform as R2Purpose | null)
   const ext = EXT[file.type]
-  const key = platform
-    ? socialUploadKey({ platform, uuid: randomUUID(), ext })
+  const key = folder
+    ? mediaUploadKey({ purpose: folder, uuid: randomUUID(), ext })
     : editorUploadKey({ uuid: randomUUID(), ext })
   const buffer = Buffer.from(await file.arrayBuffer())
 
   // Aviso de dimensão (não bloqueia) só faz sentido quando há alvo de plataforma.
+  const target = platform ?? (folder === "instagram" || folder === "linkedin" ? folder : null)
   let warning: string | null = null
-  if (platform) {
+  if (target) {
     try {
       const { width, height } = imageSize(buffer)
-      warning = dimensionWarning(width ?? 0, height ?? 0, FORMAT_BY_PLATFORM[platform])
+      warning = dimensionWarning(width ?? 0, height ?? 0, FORMAT_BY_PLATFORM[target])
     } catch {
       /* dimensão ilegível — segue sem aviso */
     }
