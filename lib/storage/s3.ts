@@ -42,6 +42,11 @@ function getClient(): S3Client {
   return client
 }
 
+// URL pública (CDN) de uma key. Requer storage configurado.
+export function publicUrlForKey(key: string): string {
+  return `${S3_PUBLIC_URL!.replace(/\/$/, "")}/${key}`
+}
+
 // Sobe um objeto e retorna a URL pública (S3_PUBLIC_URL/key).
 export async function uploadObject(
   key: string,

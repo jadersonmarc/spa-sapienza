@@ -1,4 +1,4 @@
-import { and, desc, eq, lt, lte, ne, sql } from "drizzle-orm"
+import { and, count, desc, eq, like, lt, lte, ne, sql } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
 
 const { contentItems, contentRevisions, users, aiAnalyses, socialDrafts } = schema
@@ -392,6 +392,24 @@ export async function updateSocialDraftContent(
 // Troca a imagem do draft (upload ou seleção da pasta da plataforma).
 export async function setSocialDraftImage(id: string, imageUrl: string) {
   await db.update(socialDrafts).set({ imageUrl }).where(eq(socialDrafts.id, id))
+}
+
+// Onde uma URL de imagem está referenciada (best-effort) — usado antes de
+// mover/excluir pela biblioteca. v1 não reescreve, só conta/avisa.
+export type ImageReferences = { social: number; markdown: number; total: number }
+
+export async function findImageReferences(url: string): Promise<ImageReferences> {
+  const [social] = await db
+    .select({ n: count() })
+    .from(socialDrafts)
+    .where(eq(socialDrafts.imageUrl, url))
+  const [md] = await db
+    .select({ n: count() })
+    .from(contentRevisions)
+    .where(like(contentRevisions.bodyMarkdown, `%${url}%`))
+  const socialN = Number(social?.n ?? 0)
+  const markdownN = Number(md?.n ?? 0)
+  return { social: socialN, markdown: markdownN, total: socialN + markdownN }
 }
 
 export async function getSocialDraft(id: string) {
