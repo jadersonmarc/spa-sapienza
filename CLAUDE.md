@@ -7,7 +7,7 @@ PMEs da Baixada Fluminense (escritórios de advocacia, contabilidade e clínicas
 O site apresenta a empresa, seus serviços e produtos, e funciona como canal de
 comunicação direta com clientes.
 
-- **Canal de conversão**: WhatsApp — `https://wa.me/5521986537054`. Não há
+- **Canal de conversão**: WhatsApp — `https://wa.me/5521984167397`. Não há
   formulário de contato; todos os CTAs apontam para o WhatsApp.
 - **Origem**: experimento gerado via v0.dev, em processo de alinhamento
   estratégico (ver roadmap abaixo).
