@@ -105,7 +105,7 @@ export function Header() {
           {/* Desktop CTA Button */}
           <Button size="sm" className="group hidden rounded-full sm:inline-flex" asChild>
             <a
-              href="https://wa.me/5521986537054?text=Olá! Gostaria de solicitar um orçamento."
+              href="https://wa.me/5521984167397?text=Olá! Gostaria de solicitar um orçamento."
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -161,7 +161,7 @@ export function Header() {
           {/* Mobile CTA Button */}
           <Button size="lg" className="mt-6 w-full max-w-xs" asChild>
             <a
-              href="https://wa.me/5521986537054?text=Olá! Gostaria de solicitar um orçamento."
+              href="https://wa.me/5521984167397?text=Olá! Gostaria de solicitar um orçamento."
               target="_blank"
               rel="noopener noreferrer"
               onClick={closeMenu}

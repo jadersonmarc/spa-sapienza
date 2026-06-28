@@ -15,7 +15,7 @@ Labs e produzir um levantamento priorizado de mudanças — **não implementar**
   escritórios de advocacia, contabilidade e clínicas. Perfil não técnico,
   alta proporção de acesso mobile, decisão de compra baseada em confiança.
 - **Objetivo de conversão único**: iniciar conversa no WhatsApp
-  (`wa.me/5521986537054`). Não há formulários.
+  (`wa.me/5521984167397`). Não há formulários.
 - **Restrições do projeto** (ver `CLAUDE.md` na raiz): dark mode permanente,
   stack fixa (Next.js App Router + Tailwind 4 + shadcn/ui), rotas
   preservadas, sem imagens externas/stock, glassmorphism do header mantido.

@@ -186,7 +186,7 @@ export default async function ArticlePage({ params }: PageProps) {
               </p>
               <Button asChild className="w-full sm:w-auto">
                 <a 
-                  href="https://wa.me/5521986537054?text=Olá! Vim pelo blog e gostaria de saber mais sobre os serviços."
+                  href="https://wa.me/5521984167397?text=Olá! Vim pelo blog e gostaria de saber mais sobre os serviços."
                   target="_blank"
                   rel="noopener noreferrer"
                 >

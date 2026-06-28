@@ -20,7 +20,7 @@ describe("Plans (seção de planos)", () => {
   })
 
   it("cada CTA aponta para o WhatsApp padrão", () => {
-    const ctas = html.match(/href="https:\/\/wa\.me\/5521986537054/g) ?? []
+    const ctas = html.match(/href="https:\/\/wa\.me\/5521984167397/g) ?? []
     expect(ctas.length).toBe(DEFAULT_HOME.portfolio.items.length)
   })
 
