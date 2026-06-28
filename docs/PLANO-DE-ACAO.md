@@ -111,3 +111,10 @@
   pagantes).
 - **Decisão formal de paleta/fonte de marca** (registrada na SPEC-25 como
   pendência; não bloqueia as fases).
+- **Centralizar as CTAs de WhatsApp no `whatsappUrl()`** (dívida técnica): hoje
+  várias CTAs fixam a URL `https://wa.me/<número>?text=...` à mão
+  (`components/hero.tsx`, `whatsapp-button.tsx`, `header.tsx`, `app/sobre`,
+  `app/blog/[slug]`, `app/contato`) em vez de usar `lib/contact.ts`
+  (`WHATSAPP_PHONE` + `whatsappUrl(text)`). Isso já causou número espalhado na
+  troca de 2026-06-28. Refatorar para que todas passem pelo helper (single
+  source of truth) — inclui o `telephone` E.164 do schema.org em `/contato`.
