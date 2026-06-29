@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin Sapienza — Apresentação de produto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ── Tokens da marca (espelham lib/brand/tokens.ts) ───────────────────── */
+  :root {
+    --ink: #0E1116;
+    --surface: #F7F8FA;
+    --petrol: #0E6E73;
+    --petrol-soft: #3A9BA0;
+    --line: #D7DCE2;
+    --line-dark: #222833;
+    --signal: #C9683A;
+    --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font-sans);
+    background: #05070a;
+    color: var(--surface);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Palco ─────────────────────────────────────────────────────────────── */
+  .deck { position: fixed; inset: 0; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2.5rem, 6vw, 6rem) clamp(2.5rem, 8vw, 8rem);
+    opacity: 0;
+    transition: opacity .35s ease;
+  }
+  .slide.active { display: flex; opacity: 1; }
+
+  /* Campos */
+  .field-ink { background: var(--ink); color: var(--surface); }
+  .field-surface { background: var(--surface); color: var(--ink); }
+  .field-ink .accent { color: var(--petrol-soft); }
+  .field-surface .accent { color: var(--petrol); }
+  .field-ink .rule { border-color: var(--line-dark); }
+  .field-surface .rule { border-color: var(--line); }
+  .field-ink .muted { color: #9aa3b0; }
+  .field-surface .muted { color: #5a6573; }
+  .field-ink .card { background: #141923; border-color: var(--line-dark); }
+  .field-surface .card { background: #fff; border-color: var(--line); }
+
+  /* ── Assinatura: eyebrow mono com dot petrol ───────────────────────────── */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: clamp(.7rem, 1vw, .82rem);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: .55rem;
+    margin-bottom: clamp(1.2rem, 2.5vw, 2rem);
+  }
+  .eyebrow::before {
+    content: ""; width: .5rem; height: .5rem; border-radius: 50%;
+    background: var(--petrol); display: inline-block; flex: none;
+  }
+  .field-ink .eyebrow::before { background: var(--petrol-soft); }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -.02em;
+    font-size: clamp(2.4rem, 6.5vw, 5.4rem);
+    max-width: 18ch;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -.015em;
+    font-size: clamp(1.9rem, 4.6vw, 3.4rem);
+    max-width: 20ch;
+    margin-bottom: clamp(1.4rem, 3vw, 2.2rem);
+  }
+  .lede {
+    font-size: clamp(1.05rem, 1.9vw, 1.5rem);
+    line-height: 1.5;
+    max-width: 44ch;
+    margin-top: clamp(1rem, 2vw, 1.6rem);
+  }
+
+  /* Listas de benefício */
+  .bullets { list-style: none; display: grid; gap: clamp(.7rem, 1.6vw, 1.1rem); max-width: 56ch; }
+  .bullets li {
+    position: relative; padding-left: 1.7rem;
+    font-size: clamp(1rem, 1.7vw, 1.32rem); line-height: 1.4;
+  }
+  .bullets li::before {
+    content: ""; position: absolute; left: 0; top: .52em;
+    width: .7rem; height: .12rem; background: currentColor; opacity: .55;
+  }
+  .bullets strong { font-weight: 600; }
+
+  /* Grid de cards (visão geral / módulos) */
+  .grid { display: grid; gap: clamp(1rem, 2vw, 1.6rem); margin-top: clamp(1.4rem, 3vw, 2.2rem); }
+  .grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .card {
+    border: 1px solid; border-radius: 14px;
+    padding: clamp(1.1rem, 2.2vw, 1.7rem);
+    display: flex; flex-direction: column; gap: .5rem;
+  }
+  .card .k {
+    font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--petrol-soft);
+  }
+  .field-surface .card .k { color: var(--petrol); }
+  .card .t { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.05rem, 1.8vw, 1.4rem); }
+  .card .d { font-size: clamp(.9rem, 1.4vw, 1.05rem); line-height: 1.4; }
+
+  /* Fluxo de estados (pílulas) */
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: 1.8rem; }
+  .pill {
+    font-family: var(--font-mono); font-size: clamp(.78rem, 1.2vw, .95rem);
+    border: 1px solid; border-radius: 999px; padding: .45rem .9rem; white-space: nowrap;
+  }
+  .flow .arrow { opacity: .5; font-family: var(--font-mono); }
+  .pill.hot { border-color: var(--petrol); color: var(--petrol); }
+  .field-ink .pill.hot { border-color: var(--petrol-soft); color: var(--petrol-soft); }
+
+  /* Métrica/número grande mono */
+  .stat { font-family: var(--font-mono); font-weight: 500; }
+
+  /* CTA */
+  .cta-num {
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: clamp(1.4rem, 3.2vw, 2.6rem); letter-spacing: -.01em;
+    margin-top: 1.2rem;
+  }
+  .cta-num .accent { }
+
+  /* Rodapé/capa marca */
+  .brandline {
+    font-family: var(--font-mono); font-size: .8rem; letter-spacing: .14em;
+    text-transform: uppercase; margin-top: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  /* ── HUD: progresso + dica ─────────────────────────────────────────────── */
+  .hud {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .9rem clamp(1.4rem, 4vw, 3rem);
+    font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em;
+    pointer-events: none; z-index: 20; mix-blend-mode: difference; color: #fff;
+  }
+  .dots { display: flex; gap: .4rem; }
+  .dot { width: .5rem; height: .5rem; border-radius: 50%; background: currentColor; opacity: .3; transition: opacity .2s; }
+  .dot.on { opacity: 1; }
+  .hint { opacity: .55; }
+
+  /* Zonas de clique para navegar */
+  .nav-zone { position: fixed; top: 0; bottom: 2.6rem; width: 22%; z-index: 15; cursor: pointer; }
+  .nav-zone.prev { left: 0; }
+  .nav-zone.next { right: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide { transition: none; }
+  }
+
+  /* ── Impressão / Exportar PDF ──────────────────────────────────────────── */
+  @media print {
+    @page { size: A4 landscape; margin: 0; }
+    html, body { overflow: visible; height: auto; background: #fff; }
+    .deck { position: static; }
+    .hud, .nav-zone { display: none !important; }
+    .slide {
+      position: relative; inset: auto; display: flex !important; opacity: 1 !important;
+      width: 100%; height: 100vh; page-break-after: always; break-after: page;
+    }
+    .slide:last-child { page-break-after: auto; }
+  }
+
+  /* Responsivo simples (telas estreitas) */
+  @media (max-width: 720px) {
+    .grid.cols-2, .grid.cols-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 1 — CAPA -->
+  <section class="slide field-ink active">
+    <div class="eyebrow accent">Sapienza · Produto</div>
+    <h1>Admin&nbsp;Sapienza — o painel que <span class="accent">escreve, publica e atende.</span></h1>
+    <p class="lede muted">Uma plataforma só para colocar seu negócio no digital: conteúdo com IA e atendimento no WhatsApp, do mesmo lugar.</p>
+    <div class="brandline accent">Sapienza Labs</div>
+  </section>
+
+  <!-- 2 — A DOR -->
+  <section class="slide field-surface">
+    <div class="eyebrow accent">O problema</div>
+    <h2>O dia a dia não sobra tempo pro digital.</h2>
+    <ul class="bullets">
+      <li><strong>Marketing manual:</strong> escrever post, pensar legenda, achar imagem — horas que você não tem.</li>
+      <li><strong>Lead some no WhatsApp:</strong> mensagem chega fora de hora, ninguém responde, o cliente vai pro concorrente.</li>
+      <li><strong>Presença parada:</strong> blog desatualizado e redes abandonadas passam a impressão errada.</li>
+      <li><strong>Ferramenta demais:</strong> um site aqui, uma planilha ali, o WhatsApp no celular de alguém.</li>
+    </ul>
+  </section>
+
+  <!-- 3 — A SOLUÇÃO EM UMA FRASE -->
+  <section class="slide field-ink">
+    <div class="eyebrow accent">A solução</div>
+    <h2>Um painel que faz o trabalho pesado <span class="accent">por você.</span></h2>
+    <p class="lede muted">A IA escreve o conteúdo, gera as imagens da sua marca, publica nas redes e ainda responde seus clientes no WhatsApp. Você só revisa e aprova.</p>
+  </section>
+
+  <!-- 4 — VISÃO GERAL -->
+  <section class="slide field-surface">
+    <div class="eyebrow accent">Visão geral</div>
+    <h2>Dois módulos, um login.</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <span class="k">Módulo 1</span>
+        <span class="t">Conteúdo</span>
+        <span class="d">Cria, melhora e publica artigos e posts — com IA e a sua identidade visual.</span>
+      </div>
+      <div class="card">
+        <span class="k">Módulo 2</span>
+        <span class="t">Atendimento</span>
+        <span class="d">Responde o WhatsApp com IA, organiza os contatos e nunca perde um lead.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 — CONTEÚDO: ESCREVE COM VOCÊ -->
+  <section class="slide field-ink">
+    <div class="eyebrow accent">Conteúdo · escrita</div>
+    <h2>A IA escreve o rascunho. Você dá o toque final.</h2>
+    <ul class="bullets">
+      <li><strong>Artigo do zero:</strong> escolha o tema e a IA entrega título, texto e palavras-chave prontos.</li>
+      <li><strong>Editor simples:</strong> escreve com formatação visual e vê na hora como vai ficar.</li>
+      <li><strong>Três frentes editoriais:</strong> engenharia &amp; IA, negócio para PME e bastidores da empresa.</li>
+    </ul>
+  </section>
+
+  <!-- 6 — CONTEÚDO: IA QUE MELHORA -->
+  <section class="slide field-surface">
+    <div class="eyebrow accent">Conteúdo · inteligência</div>
+    <h2>Quatro análises que melhoram cada texto.</h2>
+    <div class="grid cols-2">
+      <div class="card"><span class="k">01</span><span class="t">Qualidade</span><span class="d">Nota e pontos de melhoria do texto.</span></div>
+      <div class="card"><span class="k">02</span><span class="t">SEO</span><span class="d">Título, descrição e palavras pra aparecer no Google.</span></div>
+      <div class="card"><span class="k">03</span><span class="t">Impacto emocional</span><span class="d">O tom conversa com o seu cliente?</span></div>
+      <div class="card"><span class="k">04</span><span class="t">Tema</span><span class="d">Assuntos relacionados pro próximo conteúdo.</span></div>
+    </div>
+    <p class="lede muted">Cada sugestão vira uma <span class="accent">proposta</span> que você aceita com um clique.</p>
+  </section>
+
+  <!-- 7 — PUBLICA COM SEGURANÇA -->
+  <section class="slide field-ink">
+    <div class="eyebrow accent">Conteúdo · publicação</div>
+    <h2>Publica com controle, sem susto.</h2>
+    <div class="flow">
+      <span class="pill">Rascunho</span><span class="arrow">→</span>
+      <span class="pill">Revisão</span><span class="arrow">→</span>
+      <span class="pill">Agendado</span><span class="arrow">→</span>
+      <span class="pill hot">Publicado</span>
+    </div>
+    <ul class="bullets" style="margin-top:1.8rem">
+      <li><strong>Histórico de versões:</strong> veja o que mudou entre uma edição e outra e volte se precisar.</li>
+      <li><strong>Agendamento:</strong> deixe o conteúdo pronto e ele sai no dia e hora marcados.</li>
+    </ul>
+  </section>
+
+  <!-- 8 — REDES SOCIAIS -->
+  <section class="slide field-surface">
+    <div class="eyebrow accent">Conteúdo · redes sociais</div>
+    <h2>Do artigo ao post, sem copiar e colar.</h2>
+    <ul class="bullets">
+      <li><strong>Instagram e LinkedIn:</strong> a IA gera a legenda no tom certo de cada rede, com hashtags.</li>
+      <li><strong>Publica do painel:</strong> aprovou, postou — sem sair da ferramenta.</li>
+      <li><strong>Rastreia o link:</strong> guarda o endereço do post publicado pra você acompanhar.</li>
+    </ul>
+  </section>
+
+  <!-- 9 — IMAGENS DA MARCA -->
+  <section class="slide field-ink">
+    <div class="eyebrow accent">Conteúdo · identidade visual</div>
+    <h2>Imagens da sua marca, geradas automaticamente.</h2>
+    <ul class="bullets">
+      <li><strong>Sempre on-brand:</strong> capas e cards saem com as cores e a tipografia certas — impossível fugir da identidade.</li>
+      <li><strong>Cada formato no tamanho certo:</strong> capa de blog, feed e stories já dimensionados.</li>
+      <li><strong>Biblioteca de mídia:</strong> suas imagens organizadas por pasta, prontas pra reusar.</li>
+    </ul>
+  </section>
+
+  <!-- 10 — ATENDIMENTO: INBOX -->
+  <section class="slide field-surface">
+    <div class="eyebrow accent">Atendimento · inbox</div>
+    <h2>Todo o WhatsApp num lugar — com IA na linha de frente.</h2>
+    <ul class="bullets">
+      <li><strong>A IA responde:</strong> tira dúvidas e atende na hora, 24/7, no tom da sua empresa.</li>
+      <li><strong>Assumir a conversa:</strong> quando quiser, você entra e responde como humano — e devolve pro bot depois.</li>
+      <li><strong>Sugestão de resposta:</strong> a IA escreve pra você, você só envia.</li>
+    </ul>
+  </section>
+
+  <!-- 11 — CRM + FUNIL -->
+  <section class="slide field-ink">
+    <div class="eyebrow accent">Atendimento · CRM</div>
+    <h2>Nenhum lead se perde.</h2>
+    <div class="grid cols-3">
+      <div class="card"><span class="k">Contatos</span><span class="t">Tudo centralizado</span><span class="d">Nome, telefone e origem de cada cliente.</span></div>
+      <div class="card"><span class="k">Funil</span><span class="t">Quadro por estágio</span><span class="d">Arraste o contato conforme ele avança.</span></div>
+      <div class="card"><span class="k">LGPD</span><span class="t">Consentimento</span><span class="d">Marque a permissão e exclua quando pedirem.</span></div>
+    </div>
+  </section>
+
+  <!-- 12 — AUTOMAÇÕES -->
+  <section class="slide field-surface">
+    <div class="eyebrow accent">Atendimento · automações</div>
+    <h2>Regras que trabalham sozinhas.</h2>
+    <div class="grid cols-3">
+      <div class="card"><span class="k">Boas-vindas</span><span class="t">Primeira mensagem</span><span class="d">Recebe todo novo contato na hora.</span></div>
+      <div class="card"><span class="k">Palavra-chave</span><span class="t">"Falar com atendente"</span><span class="d">Detecta e transfere pro humano.</span></div>
+      <div class="card"><span class="k">Fora de horário</span><span class="t">Fim de semana / noite</span><span class="d">Responde mesmo quando você está fora.</span></div>
+    </div>
+    <p class="lede muted">A primeira regra que se aplica dispara — simples de configurar, sem código.</p>
+  </section>
+
+  <!-- 13 — MULTI-TENANT / SEGURO -->
+  <section class="slide field-ink">
+    <div class="eyebrow accent">Plataforma</div>
+    <h2>Um painel, vários negócios — pronto pra escalar.</h2>
+    <ul class="bullets">
+      <li><strong>Multi-cliente:</strong> opere mais de um número/empresa no mesmo lugar, com dados separados.</li>
+      <li><strong>Seguro por padrão:</strong> acessos criptografados e papéis de permissão (admin / editor).</li>
+      <li><strong>Na nossa infraestrutura:</strong> sem depender de plataformas de terceiros que mudam regra.</li>
+    </ul>
+  </section>
+
+  <!-- 14 — FECHAMENTO / CTA -->
+  <section class="slide field-surface">
+    <div class="eyebrow accent">Vamos conversar</div>
+    <h2>Quer ver isso rodando no seu negócio?</h2>
+    <p class="lede">Fale com a gente no WhatsApp e agende um diagnóstico gratuito de 30 minutos.</p>
+    <div class="cta-num">wa.me/<span class="accent">5521984167397</span></div>
+    <div class="brandline accent">Sapienza Labs</div>
+  </section>
+
+</div>
+
+<!-- Navegação por clique -->
+<div class="nav-zone prev" id="zonePrev" aria-hidden="true"></div>
+<div class="nav-zone next" id="zoneNext" aria-hidden="true"></div>
+
+<!-- HUD -->
+<div class="hud">
+  <div class="dots" id="dots"></div>
+  <div class="hint">← → navegar · F tela cheia · P imprimir/PDF</div>
+  <div class="stat" id="counter">01 / 14</div>
+</div>
+
+<script>
+  (function () {
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const total = slides.length;
+    const dotsWrap = document.getElementById("dots");
+    const counter = document.getElementById("counter");
+    let i = 0;
+
+    // monta os dots
+    slides.forEach((_, n) => {
+      const d = document.createElement("span");
+      d.className = "dot" + (n === 0 ? " on" : "");
+      d.addEventListener("click", () => go(n));
+      dotsWrap.appendChild(d);
+    });
+    const dots = Array.from(dotsWrap.children);
+    const pad = (n) => String(n).padStart(2, "0");
+
+    function go(n) {
+      i = Math.max(0, Math.min(total - 1, n));
+      slides.forEach((s, k) => s.classList.toggle("active", k === i));
+      dots.forEach((d, k) => d.classList.toggle("on", k === i));
+      counter.textContent = pad(i + 1) + " / " + pad(total);
+    }
+    const next = () => go(i + 1);
+    const prev = () => go(i - 1);
+
+    document.addEventListener("keydown", (e) => {
+      switch (e.key) {
+        case "ArrowRight": case "ArrowDown": case "PageDown": case " ":
+          e.preventDefault(); next(); break;
+        case "ArrowLeft": case "ArrowUp": case "PageUp":
+          e.preventDefault(); prev(); break;
+        case "Home": go(0); break;
+        case "End": go(total - 1); break;
+        case "f": case "F":
+          if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+          else document.exitFullscreen?.();
+          break;
+        case "p": case "P":
+          e.preventDefault(); window.print(); break;
+      }
+    });
+
+    document.getElementById("zoneNext").addEventListener("click", next);
+    document.getElementById("zonePrev").addEventListener("click", prev);
+  })();
+</script>
+</body>
+</html>
