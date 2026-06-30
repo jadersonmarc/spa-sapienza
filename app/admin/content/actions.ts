@@ -145,16 +145,27 @@ export async function transitionAction(
   return {}
 }
 
-export async function deleteContentAction(formData: FormData) {
+// Exclui um conteúdo (qualquer status). Chamado por um botão client com
+// confirmação; retorna { error } para a UI exibir em vez de falhar calado.
+export async function deleteContentAction(id: string): Promise<FormState> {
   const user = await requireUser()
-  if (!isAdmin(user.role)) return // só admin exclui
-  const id = String(formData.get("id") ?? "")
-  if (!id) return
+  if (!isAdmin(user.role)) return { error: "Apenas administradores podem excluir." }
+  if (!id) return { error: "Item inválido." }
 
   const data = await getContentItem(id)
-  if (!data) return
-  if (data.item.status === "published") return // arquive antes de excluir
+  if (!data) return { error: "Conteúdo não encontrado." }
 
-  await deleteContentItem(id)
+  try {
+    await deleteContentItem(id)
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Falha ao excluir." }
+  }
+
   revalidatePath("/admin/content")
+  // Era publicado? Tira do site também.
+  if (data.item.type === "post") {
+    revalidatePath("/blog")
+    revalidatePath(`/blog/${data.item.slug}`)
+  }
+  return {}
 }

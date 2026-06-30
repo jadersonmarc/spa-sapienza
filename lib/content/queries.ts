@@ -50,6 +50,45 @@ export async function listContentItems() {
     .orderBy(desc(contentItems.updatedAt))
 }
 
+// Títulos de posts já existentes do pilar (qualquer status) — para a geração por
+// IA evitar repetir temas. Inclui rascunhos para não regenerar algo já na fila.
+export async function listPostTitlesByPilar(pilar: Pilar, limit = 40): Promise<string[]> {
+  const rows = await db
+    .select({ title: contentRevisions.title })
+    .from(contentItems)
+    .innerJoin(contentRevisions, eq(contentRevisions.id, contentItems.currentRevisionId))
+    .where(and(eq(contentItems.type, "post"), eq(contentItems.pilar, pilar)))
+    .orderBy(desc(contentItems.updatedAt))
+    .limit(limit)
+  return rows.map((r) => r.title).filter(Boolean)
+}
+
+// Sementes de tema: as `relatedAreas` das análises temáticas recentes dos posts
+// do pilar (ideias para o calendário editorial que a IA já gerou).
+export async function listThematicSeedsByPilar(pilar: Pilar, limit = 10): Promise<string[]> {
+  const rows = await db
+    .select({ payload: aiAnalyses.payload })
+    .from(aiAnalyses)
+    .innerJoin(contentItems, eq(contentItems.id, aiAnalyses.contentItemId))
+    .where(
+      and(
+        eq(aiAnalyses.type, "thematic"),
+        eq(contentItems.type, "post"),
+        eq(contentItems.pilar, pilar),
+      ),
+    )
+    .orderBy(desc(aiAnalyses.createdAt))
+    .limit(limit)
+  const seeds = new Set<string>()
+  for (const r of rows) {
+    const related = (r.payload as { relatedAreas?: unknown } | null)?.relatedAreas
+    if (Array.isArray(related)) {
+      for (const a of related) if (typeof a === "string" && a.trim()) seeds.add(a.trim())
+    }
+  }
+  return [...seeds]
+}
+
 // Item + revisão atual (para a tela de edição).
 export async function getContentItem(id: string) {
   const [item] = await db

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Tag, type TagTone } from "@/components/tag"
 import { listContentItems } from "@/lib/content/queries"
-import { deleteContentAction } from "./actions"
+import { DeleteContentButton } from "@/components/admin/delete-content-button"
 
 export const metadata: Metadata = {
   title: "Conteúdo — Admin",
@@ -71,12 +71,7 @@ export default async function ContentListPage() {
                 <Button asChild variant="outline" size="sm">
                   <Link href={`/admin/content/${it.id}`}>Editar</Link>
                 </Button>
-                <form action={deleteContentAction}>
-                  <input type="hidden" name="id" value={it.id} />
-                  <Button type="submit" variant="destructive" size="sm">
-                    Excluir
-                  </Button>
-                </form>
+                <DeleteContentButton id={it.id} title={it.title ?? it.slug} />
               </div>
             </div>
             )

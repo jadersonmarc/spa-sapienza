@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server"
 import { eq } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
-import { createContentItem, slugExists, type Pilar } from "@/lib/content/queries"
+import {
+  createContentItem,
+  listPostTitlesByPilar,
+  listThematicSeedsByPilar,
+  slugExists,
+  type Pilar,
+} from "@/lib/content/queries"
 import { generateDraft, isAiConfigured } from "@/lib/ai/draft"
 import { secretMatches } from "@/lib/auth/webhook"
 
@@ -50,7 +56,12 @@ export async function POST(req: Request) {
   }
 
   try {
-    const draft = await generateDraft(pilar)
+    // Renovação de tema: evita repetir títulos e semeia pelas sugestões temáticas.
+    const [avoidTitles, themeSeeds] = await Promise.all([
+      listPostTitlesByPilar(pilar),
+      listThematicSeedsByPilar(pilar),
+    ])
+    const draft = await generateDraft(pilar, { avoidTitles, themeSeeds })
     const slug = await uniqueSlug(draft.slug)
     const itemId = await createContentItem(
       { type: "post", slug, pilar },
