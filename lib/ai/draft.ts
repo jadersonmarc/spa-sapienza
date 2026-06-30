@@ -31,8 +31,38 @@ export type GeneratedDraft = {
   model: string
 }
 
+// Temas já publicados (a evitar) + sementes de tema (áreas sugeridas pela IA).
+export type DraftThemeContext = {
+  avoidTitles?: string[]
+  themeSeeds?: string[]
+}
+
+// Monta o bloco de renovação de tema: evita repetir o que já existe e sugere
+// ângulos novos a partir das áreas relacionadas geradas pelo analisador temático.
+export function themeGuidance(ctx?: DraftThemeContext): string {
+  const avoid = (ctx?.avoidTitles ?? []).filter(Boolean).slice(0, 40)
+  const seeds = (ctx?.themeSeeds ?? []).filter(Boolean).slice(0, 12)
+  let block = ""
+  if (avoid.length) {
+    block +=
+      `\n\nTEMAS JÁ PUBLICADOS — NÃO repita nem reescreva variações destes:\n- ` +
+      avoid.join("\n- ")
+  }
+  if (seeds.length) {
+    block +=
+      `\n\nÁREAS SUGERIDAS para explorar (escolha UMA e aprofunde com ângulo próprio):\n- ` +
+      seeds.join("\n- ")
+  }
+  block +=
+    "\n\nEscolha um tema NOVO, específico e claramente diferente dos já publicados."
+  return block
+}
+
 // Gera um rascunho de post para o pilar via Claude (structured output).
-export async function generateDraft(pilar: Pilar): Promise<GeneratedDraft> {
+export async function generateDraft(
+  pilar: Pilar,
+  themeContext?: DraftThemeContext,
+): Promise<GeneratedDraft> {
   const system =
     "Você é redator(a) da Sapienza Labs, um estúdio de software sob medida para PMEs da " +
     "Baixada Fluminense. Escreva em pt-BR correto e natural, com acentuação adequada. " +
@@ -42,7 +72,8 @@ export async function generateDraft(pilar: Pilar): Promise<GeneratedDraft> {
     `Escreva um artigo de blog para o pilar abaixo.\n\nPILAR: ${PILAR_BRIEF[pilar]}\n\n` +
     "Requisitos: título objetivo; slug em kebab-case; excerpt curto; corpo em Markdown " +
     "(use ## para subtítulos, listas quando ajudar; 600–900 palavras); 5–8 keywords de SEO. " +
-    "Inclua um CTA leve para falar com a Sapienza Labs no WhatsApp ao final."
+    "Inclua um CTA leve para falar com a Sapienza Labs no WhatsApp ao final." +
+    themeGuidance(themeContext)
 
   const { data, model } = await callStructured<{
     title: string
