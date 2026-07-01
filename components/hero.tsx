@@ -29,7 +29,7 @@ export function Hero({ block = DEFAULT_HOME.hero }: { block?: HeroBlock }) {
           asChild
         >
           <a
-            href="https://wa.me/5521984167397?text=Olá! Quero agendar um diagnóstico gratuito de 30 minutos."
+            href="https://wa.me/5521984185606?text=Olá! Quero agendar um diagnóstico gratuito de 30 minutos."
             target="_blank"
             rel="noopener noreferrer"
           >

@@ -168,7 +168,7 @@ export default function SobrePage() {
             <p className="mt-2 text-muted-foreground">Fale com a gente.</p>
             <Button asChild className="mt-6 w-full group sm:w-auto">
               <a
-                href="https://wa.me/5521984167397?text=Olá! Vim do site e gostaria de conversar."
+                href="https://wa.me/5521984185606?text=Olá! Vim do site e gostaria de conversar."
                 target="_blank"
                 rel="noopener noreferrer"
               >

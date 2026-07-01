@@ -3,8 +3,8 @@ import { WHATSAPP_PHONE, whatsappUrl } from "./contact"
 
 describe("whatsappUrl", () => {
   it("usa o número padrão do site", () => {
-    expect(WHATSAPP_PHONE).toBe("5521984167397")
-    expect(whatsappUrl("oi")).toContain("https://wa.me/5521984167397")
+    expect(WHATSAPP_PHONE).toBe("5521984185606")
+    expect(whatsappUrl("oi")).toContain("https://wa.me/5521984185606")
   })
 
   it("faz encode da mensagem", () => {

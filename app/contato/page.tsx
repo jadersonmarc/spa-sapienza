@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 }
 
 const whatsappUrl =
-  "https://wa.me/5521984167397?text=Olá! Vim do site da Sapienza Labs e quero meu diagnóstico gratuito de 30 minutos."
+  "https://wa.me/5521984185606?text=Olá! Vim do site da Sapienza Labs e quero meu diagnóstico gratuito de 30 minutos."
 const email = "jadersonmarc@sapienzalabs.com.br"
 
 const jsonLd = {
@@ -50,7 +50,7 @@ const jsonLd = {
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "sales",
-      telephone: "+5521984167397",
+      telephone: "+5521984185606",
       email,
       availableLanguage: "Portuguese",
     },
