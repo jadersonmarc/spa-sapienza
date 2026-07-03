@@ -445,7 +445,8 @@ máquina de estados e o versionamento ficam **intactos e no mesmo formato** — 
 ### 1. Slug automático a partir do título
 Título e slug **controlados** em `content-form.tsx`; `slug = slugify(title)` (puro, já strip de acento)
 até o usuário editar o slug à mão (`slugTouched`). `parseForm` já valida `SLUG_RE`; unicidade por
-`slugExists`. Editar slug de item **publicado** → aviso (quebra URL/SEO).
+`slugExists`. **Só daqui pra frente:** auto-sync ativo apenas em artigo **novo ou rascunho**; item
+**publicado tem o slug congelado** (sem auto-sync, sem reescrever) — preserva URL/SEO.
 
 ### 2. Vertentes configuráveis (aditivo)
 - Registry `lib/content/vertentes.ts` (puro): `{ key, label, kind: "pilar"|"campaign"|"product",

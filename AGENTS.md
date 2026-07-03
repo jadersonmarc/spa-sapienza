@@ -46,7 +46,11 @@ pnpm db:generate | db:push | db:seed | db:import-mdx
   `articles/`, `social/<plataforma>/`, `editor/`, `pages/`, `geral/`) — nunca montar caminho à mão.
 
 ## Antes de mexer
-- Não quebrar rotas do site (`/`, `/sobre`, `/blog`, `/blog/[slug]`) — slugs têm SEO.
+- Não quebrar rotas do site (`/`, `/sobre`, `/blog`, `/blog/[slug]`, `/campanhas`) — slugs têm SEO.
+- **Vertentes** (`lib/content/vertentes.ts`): pilares p1/p2/p3 = editorial/rodízio do cron; campanha/produto
+  = avulsas (rota `/campanhas`, fora do rodízio). Coluna **aditiva** `content_items.vertente` (null p/ pilar).
+  **Restrição:** o cron de geração por pilar (`generate-draft` → `draft.ts`), o campo `pilar` e a máquina
+  de estados são **intocáveis**; a geração por brief (`lib/ai/brief.ts`) é produtor **separado**.
 - Dark/light com toggle (next-themes, default `system`): estilizar só com tokens
   semânticos (`bg-background`, `border-border`, `text-destructive`…); nunca `white/x`
   ou cores fixas que quebram no claro. Sem imagens de stock. Ver "Sistema de design"

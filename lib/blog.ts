@@ -1,5 +1,6 @@
-import { and, desc, eq } from "drizzle-orm"
+import { and, desc, eq, inArray, isNull } from "drizzle-orm"
 import { db, schema } from "@/lib/db"
+import { NON_EDITORIAL_KEYS } from "@/lib/content/vertentes"
 
 export type Pilar =
   | "pme"          // Negócio / PME (enum DB: p2)
@@ -97,9 +98,14 @@ function baseSelect() {
 
 export async function getAllPosts(): Promise<Post[]> {
   const { contentItems } = schema
+  // Só editorial (pilares): vertentes avulsas (campanha/produto) não entram no /blog.
   const rows = await baseSelect()
     .where(
-      and(eq(contentItems.type, "post"), eq(contentItems.status, "published")),
+      and(
+        eq(contentItems.type, "post"),
+        eq(contentItems.status, "published"),
+        isNull(contentItems.vertente),
+      ),
     )
     .orderBy(desc(contentItems.publishedAt))
   return rows.map(toPost)
@@ -112,6 +118,39 @@ export async function getPostBySlug(slug: string): Promise<Post | undefined> {
       and(
         eq(contentItems.type, "post"),
         eq(contentItems.status, "published"),
+        isNull(contentItems.vertente), // campanha/produto: 404 no /blog, vivem em /campanhas
+        eq(contentItems.slug, slug),
+      ),
+    )
+    .limit(1)
+  return row ? toPost(row) : undefined
+}
+
+// ── Vertentes avulsas (campanha/produto) — rota própria /campanhas ────────────
+const CAMPAIGN_KEYS = [...NON_EDITORIAL_KEYS]
+
+export async function getCampaignPosts(): Promise<Post[]> {
+  const { contentItems } = schema
+  const rows = await baseSelect()
+    .where(
+      and(
+        eq(contentItems.type, "post"),
+        eq(contentItems.status, "published"),
+        inArray(contentItems.vertente, CAMPAIGN_KEYS),
+      ),
+    )
+    .orderBy(desc(contentItems.publishedAt))
+  return rows.map(toPost)
+}
+
+export async function getCampaignPostBySlug(slug: string): Promise<Post | undefined> {
+  const { contentItems } = schema
+  const [row] = await baseSelect()
+    .where(
+      and(
+        eq(contentItems.type, "post"),
+        eq(contentItems.status, "published"),
+        inArray(contentItems.vertente, CAMPAIGN_KEYS),
         eq(contentItems.slug, slug),
       ),
     )

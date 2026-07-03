@@ -19,11 +19,11 @@ import {
 } from "@/lib/content/queries"
 import { contentTransition, TransitionError } from "@/lib/content/transition"
 import { requireUser, isAdmin, transitionRequiresAdmin } from "@/lib/auth/session"
+import { resolveVertente } from "@/lib/content/vertentes"
 
 export type FormState = { error?: string }
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
-const PILARES: Pilar[] = ["p1", "p2", "p3"]
 
 async function requireUserId(): Promise<string> {
   const session = await auth()
@@ -37,7 +37,7 @@ function parseForm(
 ): { item: ItemInput; rev: RevisionInput } | { error: string } {
   const type = String(formData.get("type") ?? "") as ContentType
   const slug = String(formData.get("slug") ?? "").trim().toLowerCase()
-  const pilarRaw = String(formData.get("pilar") ?? "")
+  const vertenteRaw = String(formData.get("vertente") ?? "")
   const title = String(formData.get("title") ?? "").trim()
   const bodyMarkdown = String(formData.get("bodyMarkdown") ?? "")
   const excerpt = String(formData.get("excerpt") ?? "").trim()
@@ -48,11 +48,14 @@ function parseForm(
   if (!title) return { error: "Título é obrigatório." }
   if (!bodyMarkdown.trim()) return { error: "Corpo é obrigatório." }
 
+  // Vertente (pilar OU avulsa) — só para posts; páginas não têm.
   let pilar: Pilar | null = null
+  let vertente: string | null = null
   if (type === "post") {
-    if (!PILARES.includes(pilarRaw as Pilar))
-      return { error: "Selecione o pilar do post." }
-    pilar = pilarRaw as Pilar
+    const resolved = resolveVertente(vertenteRaw)
+    if (!resolved) return { error: "Selecione a vertente do post." }
+    pilar = resolved.pilar
+    vertente = resolved.vertente
   }
 
   const keywords = String(formData.get("seoKeywords") ?? "")
@@ -65,7 +68,7 @@ function parseForm(
     keywords: keywords.length ? keywords : undefined,
   }
 
-  return { item: { type, slug, pilar }, rev: { title, bodyMarkdown, excerpt, seo } }
+  return { item: { type, slug, pilar, vertente }, rev: { title, bodyMarkdown, excerpt, seo } }
 }
 
 export async function createContentAction(
