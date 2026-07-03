@@ -435,6 +435,43 @@ keys/s3 → `/api/admin/media`+upload → MediaGrid/Picker (+refatora social) �
 → media-usage+move/delete → capa de artigo → "da biblioteca" no editor. Testes: chave por finalidade,
 list (size/token), `media-usage`, seleção aplica imagem. Gate de CI; docs (`CLAUDE.md`/`AGENTS.md`).
 
+## Lote — Editor: slug automático · vertentes configuráveis · IA por brief (**em revisão**)
+
+Três facilidades no editor de artigos. **Restrição dura:** o cron editorial
+(`app/api/generate-draft/route.ts` → `generateDraft` → `createContentItem`), o campo `pilar`, a
+máquina de estados e o versionamento ficam **intactos e no mesmo formato** — estas melhorias só
+**adicionam**. Decisão do usuário: campanha/produto em **rota própria `/campanhas`**.
+
+### 1. Slug automático a partir do título
+Título e slug **controlados** em `content-form.tsx`; `slug = slugify(title)` (puro, já strip de acento)
+até o usuário editar o slug à mão (`slugTouched`). `parseForm` já valida `SLUG_RE`; unicidade por
+`slugExists`. Editar slug de item **publicado** → aviso (quebra URL/SEO).
+
+### 2. Vertentes configuráveis (aditivo)
+- Registry `lib/content/vertentes.ts` (puro): `{ key, label, kind: "pilar"|"campaign"|"product",
+  rotation, section: "blog"|"campanhas", ai:{system,tone} }`. Pilares p1/p2/p3 = rotation true/section blog
+  (status quo); `campanha`/`produto` = rotation false/section campanhas.
+- Schema **aditivo**: `content_items.vertente text` nullable. Pilar-post: `vertente=null` + `pilar` como hoje.
+  Campanha/produto: `pilar=null` + `vertente=key`.
+- Editor: seletor único "Vertente" (5 entradas) → campo `vertente`. `parseForm` mapeia: pilar → `pilar`,
+  senão → `vertente`. `ItemInput`/`createContentItem`/`saveContentItem` ganham `vertente?` (o **cron não passa
+  vertente** → null → não-regressão).
+- Blog: `getAllPosts`/`getPostBySlug` filtram `vertente IS NULL` (só editorial). Rota nova
+  `app/campanhas/(page|[slug])` via `listPostsBySection("campanhas")`. `PILARES`/`.yml` **não mudam**.
+
+### 3. IA por brief (produtor separado do cron)
+- `lib/ai/brief.ts` `generateFromBrief({brief, vertenteKey, …})` (usa `callStructured` + config de IA da
+  vertente); **independente** de `lib/ai/draft.ts`. Action session-auth `generateBriefAction`:
+  artigo novo → preenche o form (campos controlados); artigo com conteúdo → `insertProposedRevision`
+  (revisão proposta com diff, padrão `applyRecommendationAction`). `proposedFrom` amplia p/
+  `… | { kind:"brief"; brief }` (jsonb, sem migration). UI com loading/erro, iterável.
+
+### Testes e aceite
+slug (parar de sincronizar), registry (resolve/flags), `parseForm` (pilar↔vertente), `brief` (prompt puro).
+**Não-regressão (crítico):** cron segue criando `draft` por pilar (`vertente=null`) e o route do cron **não
+importa** o módulo de brief. Gate de CI; docs (`CLAUDE.md`/`AGENTS.md`). Migration aditiva aplicada em prod
+pelo usuário.
+
 ## Itens a confirmar
 1. (resolvido) Banco = Postgres standalone na VPS; Auth = Auth.js (Credentials);
    Storage = S3-compatível (Cloudflare R2). Supabase descontinuado.
