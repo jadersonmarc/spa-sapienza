@@ -87,6 +87,8 @@ export const contentItems = pgTable(
     type: contentType("type").notNull(),
     slug: text("slug").notNull(),
     pilar: pilar("pilar"), // null para páginas
+    // Vertente avulsa (campanha/produto) — aditivo. Pilar-post: null. Ver lib/content/vertentes.ts.
+    vertente: text("vertente"),
     coverImageUrl: text("cover_image_url"), // capa editorial do artigo (R2)
     status: contentStatus("status").notNull().default("draft"),
     // FK definida via migration/relations para evitar ciclo com content_revisions

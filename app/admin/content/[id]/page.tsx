@@ -48,7 +48,8 @@ export default async function EditContentPage({
   const initial: Partial<ContentFormValues> = {
     type: item.type,
     slug: item.slug,
-    pilar: item.pilar,
+    // Vertente selecionada: avulsa (campanha/produto) se houver, senão o pilar.
+    vertente: item.vertente ?? item.pilar ?? "p1",
     title: revision?.title ?? "",
     excerpt: revision?.excerpt ?? "",
     bodyMarkdown: revision?.bodyMarkdown ?? "",
@@ -83,6 +84,8 @@ export default async function EditContentPage({
         action={saveContentAction.bind(null, id)}
         initial={initial}
         submitLabel="Salvar revisão"
+        itemId={item.id}
+        autoSlug={item.status === "draft"}
       />
 
       {item.type === "post" ? (

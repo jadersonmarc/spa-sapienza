@@ -28,6 +28,9 @@ export type ItemInput = {
   type: ContentType
   slug: string
   pilar: Pilar | null
+  // Vertente avulsa (campanha/produto). Opcional e aditivo: o cron não passa,
+  // então grava null. Pilar-post = null; ver lib/content/vertentes.ts.
+  vertente?: string | null
 }
 
 // Lista para a tabela do admin: campos do item + título da revisão atual.
@@ -258,11 +261,15 @@ export async function getRevisionForDiff(itemId: string, revId: string) {
 }
 
 // ── R1: revisões propostas pela IA ───────────────────────────────────────────
+export type ProposedFrom =
+  | { analysisType: AnalysisType; recommendation: string }
+  | { kind: "brief"; brief: string }
+
 export async function insertProposedRevision(
   itemId: string,
   rev: RevisionInput,
   authorId: string,
-  proposedFrom: { analysisType: AnalysisType; recommendation: string },
+  proposedFrom: ProposedFrom,
 ) {
   const [row] = await db
     .insert(contentRevisions)

@@ -73,6 +73,16 @@ pnpm db:import-mdx # importa os .mdx para o Postgres (idempotente)
 - `lib/blog.ts` — **lê do Postgres** (`getAllPosts` / `getPostBySlug`, interface
   `Post`, só `published`); mapeia o pilar do enum (`p1`→engenharia, `p2`→pme,
   `p3`→bastidores). Corpo renderizado com `react-markdown`+`rehype-sanitize`.
+  `getAllPosts`/`getPostBySlug` filtram **`vertente IS NULL`** (só editorial); vertentes
+  avulsas (campanha/produto) vivem em `getCampaignPosts`/`getCampaignPostBySlug` → rota `/campanhas`.
+- **Vertentes** (`lib/content/vertentes.ts`): registry que estende os pilares. Pilares p1/p2/p3 =
+  rodízio do cron + seção `blog` (como sempre); `campanha`/`produto` = avulsas, seção `/campanhas`,
+  fora do rodízio. Coluna **aditiva** `content_items.vertente` (nullable): pilar-post = null; avulsa =
+  `pilar` null + `vertente=key`. O **cron não passa vertente** (grava null) — caminho intacto.
+- **Editor** (`content-form.tsx`): **slug automático** do título (`slugify`, editável; congelado em
+  item publicado), seletor único de **Vertente**, e **"Gerar com IA a partir do brief"**
+  (`brief-panel.tsx` + `lib/ai/brief.ts`, **separado** do gerador do cron): em artigo novo preenche o
+  editor; em artigo com conteúdo cria **revisão proposta** com diff (`insertProposedRevision`).
 - **Admin/CMS**: `app/admin/*` (login, CRUD, editor, histórico/diff, propostas de IA,
   páginas, **mídia**, conta), `app/api/auth/*` (Auth.js), `app/api/generate-draft` e
   `app/api/publish-scheduled` (acionados por GitHub Actions), `app/api/admin/upload` (R2),

@@ -35,15 +35,22 @@ export function ProposalsPanel({
       </div>
 
       {proposals.map((p) => {
-        const from = (p.proposedFrom ?? {}) as { analysisType?: string; recommendation?: string }
+        const from = (p.proposedFrom ?? {}) as {
+          analysisType?: string
+          recommendation?: string
+          kind?: string
+          brief?: string
+        }
+        const origin = from.kind === "brief" ? "Brief" : from.analysisType ? TYPE_LABEL[from.analysisType] ?? from.analysisType : ""
+        const note = from.kind === "brief" ? from.brief : from.recommendation
         return (
           <div key={p.id} className="rounded-md border border-border p-3">
             <p className="text-xs text-muted-foreground">
-              {from.analysisType ? `${TYPE_LABEL[from.analysisType] ?? from.analysisType} · ` : ""}
+              {origin ? `${origin} · ` : ""}
               {new Date(p.createdAt).toLocaleString("pt-BR")}
             </p>
-            {from.recommendation ? (
-              <p className="mt-1 text-sm">“{from.recommendation}”</p>
+            {note ? (
+              <p className="mt-1 text-sm">“{note}”</p>
             ) : null}
             <div className="mt-3 flex flex-wrap gap-2">
               <Button asChild variant="outline" size="sm">
