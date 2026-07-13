@@ -3,6 +3,7 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Eyebrow } from "@/components/eyebrow"
 import { MessageCircle, Mail, MapPin, ArrowUpRight } from "lucide-react"
+import { whatsappUrl } from "@/lib/contact"
 
 export const metadata: Metadata = {
   title: "Contato | Sapienza Labs",
@@ -23,8 +24,9 @@ export const metadata: Metadata = {
   },
 }
 
-const whatsappUrl =
-  "https://wa.me/5521984185606?text=Olá! Vim do site da Sapienza Labs e quero meu diagnóstico gratuito de 30 minutos."
+const whatsappHref = whatsappUrl(
+  "Olá! Vim do site da Sapienza Labs e quero meu diagnóstico gratuito de 30 minutos.",
+)
 const email = "jadersonmarc@sapienzalabs.com.br"
 
 const jsonLd = {
@@ -95,7 +97,7 @@ export default function ContatoPage() {
                 A forma mais rápida de começar. Respondemos em horário comercial.
               </p>
               <Button asChild className="group mt-6 w-full rounded-full sm:w-auto">
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
                   Agendar diagnóstico gratuito
                   <ArrowUpRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </a>

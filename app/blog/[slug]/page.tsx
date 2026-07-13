@@ -12,6 +12,7 @@ import rehypeSanitize from "rehype-sanitize"
 import { Button } from "@/components/ui/button"
 import { BrandCover } from "@/components/brand-cover"
 import { getPostBySlug, getAllPosts } from "@/lib/blog"
+import { whatsappUrl } from "@/lib/contact"
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -186,7 +187,7 @@ export default async function ArticlePage({ params }: PageProps) {
               </p>
               <Button asChild className="w-full sm:w-auto">
                 <a 
-                  href="https://wa.me/5521984185606?text=Olá! Vim pelo blog e gostaria de saber mais sobre os serviços."
+                  href={whatsappUrl("Olá! Vim pelo blog e gostaria de saber mais sobre os serviços.")}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

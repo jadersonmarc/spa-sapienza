@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Eyebrow } from "@/components/eyebrow"
 import { ArrowRight, Leaf, HeartPulse, Building2 } from "lucide-react"
 import Image from "next/image"
+import { whatsappUrl } from "@/lib/contact"
 
 export const metadata: Metadata = {
   title: "Sobre Nós | Sapienza Labs",
@@ -168,7 +169,7 @@ export default function SobrePage() {
             <p className="mt-2 text-muted-foreground">Fale com a gente.</p>
             <Button asChild className="mt-6 w-full group sm:w-auto">
               <a
-                href="https://wa.me/5521984185606?text=Olá! Vim do site e gostaria de conversar."
+                href={whatsappUrl("Olá! Vim do site e gostaria de conversar.")}
                 target="_blank"
                 rel="noopener noreferrer"
               >

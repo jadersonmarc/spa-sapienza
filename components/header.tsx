@@ -7,6 +7,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { ArrowUpRight, MessageCircle, Menu, X } from "lucide-react"
+import { whatsappUrl } from "@/lib/contact"
 
 const navLinks = [
   { href: "/", label: "Início" },
@@ -106,7 +107,7 @@ export function Header() {
           {/* Desktop CTA Button */}
           <Button size="sm" className="group hidden rounded-full sm:inline-flex" asChild>
             <a
-              href="https://wa.me/5521984185606?text=Olá! Gostaria de solicitar um orçamento."
+              href={whatsappUrl("Olá! Gostaria de solicitar um orçamento.")}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -162,7 +163,7 @@ export function Header() {
           {/* Mobile CTA Button */}
           <Button size="lg" className="mt-6 w-full max-w-xs" asChild>
             <a
-              href="https://wa.me/5521984185606?text=Olá! Gostaria de solicitar um orçamento."
+              href={whatsappUrl("Olá! Gostaria de solicitar um orçamento.")}
               target="_blank"
               rel="noopener noreferrer"
               onClick={closeMenu}
