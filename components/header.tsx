@@ -10,7 +10,8 @@ import { ArrowUpRight, MessageCircle, Menu, X } from "lucide-react"
 
 const navLinks = [
   { href: "/", label: "Início" },
-  { href: "/#servicos", label: "Serviços" },
+  { href: "/engenharia", label: "Engenharia" },
+  { href: "/projetos", label: "Projetos" },
   { href: "/#planos", label: "Planos" },
   { href: "/sobre", label: "Sobre" },
   { href: "/blog", label: "Blog" },
