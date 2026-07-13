@@ -41,11 +41,11 @@ export type HomeBlocks = {
 export const DEFAULT_HOME: HomeBlocks = {
   hero: {
     badge: "Software sob medida · Baixada Fluminense",
-    titleLead: "Seu negócio merece sistema feito para ele —",
-    titleHighlight: "não template comprado de fora.",
+    titleLead: "Software sob medida, feito por quem constrói",
+    titleHighlight: "o difícil.",
     subtitle:
-      "Desenvolvemos software sob medida para escritórios de advocacia, contabilidade e clínicas da Baixada Fluminense. Levantamento de requisitos conduzido por engenheiro, entrega com qualidade de produção.",
-    ctaLabel: "Diagnóstico gratuito — 30 minutos",
+      "Da vitrine que traz o cliente ao sistema distribuído que sustenta a operação. Uma engenharia só, em todos os níveis.",
+    ctaLabel: "Agendar diagnóstico (sem custo)",
   },
   services: {
     eyebrow: "O que fazemos",
@@ -59,13 +59,14 @@ export const DEFAULT_HOME: HomeBlocks = {
       "Um processo simples para transformar necessidade de negócio em software com escopo claro.",
   },
   portfolio: {
-    eyebrow: "O que oferecemos",
-    title: "Portfólio",
-    subtitle: "Planos sob medida para tirar seu negócio do papel — escolha por onde começar.",
+    eyebrow: "Vitrine Sapienza",
+    title: "A porta de entrada",
+    subtitle:
+      "O Degrau 01 da escada: o produto que mais vende e por onde a maioria começa. Da vitrine, a Sapienza sobe com a sua operação.",
     items: [
       {
-        name: "Essencial — Presença digital com credibilidade",
-        audience: "Para quem precisa existir online com cara profissional.",
+        name: "Essencial — o site que te apresenta e responde",
+        audience: "Para começar: seu negócio encontrado no Google e respondido no WhatsApp.",
         features: [
           "Site institucional sob medida (home, sobre, contato)",
           "Responsivo no celular",
@@ -78,8 +79,8 @@ export const DEFAULT_HOME: HomeBlocks = {
         ctaLabel: "Consultar valores",
       },
       {
-        name: "Profissional — Presença + máquina de conteúdo",
-        audience: "Para quem quer aparecer no Google e ter marketing de conteúdo rodando sozinho.",
+        name: "Profissional — site + conteúdo que trabalha sozinho",
+        audience: "Para aparecer no Google com marketing de conteúdo rodando no automático.",
         features: [
           "Tudo do Essencial",
           "Blog completo",
@@ -91,7 +92,7 @@ export const DEFAULT_HOME: HomeBlocks = {
         ctaLabel: "Consultar valores",
       },
       {
-        name: "Premium — Presença + conteúdo + relacionamento",
+        name: "Premium — site + conteúdo + atendimento",
         audience: "Para quem vive de captação e atendimento — advogados, contadores, clínicas.",
         features: [
           "Tudo do Profissional",

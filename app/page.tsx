@@ -1,10 +1,13 @@
 import type { Metadata } from "next"
 import { Hero } from "@/components/hero"
-import { Services } from "@/components/services"
+import { CapabilityLadder } from "@/components/capability-ladder"
+import { EngineeringProof } from "@/components/engineering-proof"
 import { HowItWorks } from "@/components/how-it-works"
-import { Differentials } from "@/components/differentials"
+import { Services } from "@/components/services"
 import { Plans } from "@/components/plans"
 import { Trust } from "@/components/trust"
+import { Differentials } from "@/components/differentials"
+import { CtaFinal } from "@/components/cta-final"
 import { Footer } from "@/components/footer"
 import { WhatsAppButton } from "@/components/whatsapp-button"
 import { getHomeBlocks } from "@/lib/content/pages"
@@ -17,13 +20,25 @@ export default async function HomePage() {
   const home = await getHomeBlocks()
   return (
     <main className="min-h-screen">
+      {/* Tese acima da dobra */}
       <Hero block={home.hero} />
-      <section id="servicos">
-        <Services header={home.services} />
+      {/* Escada de capacidade — a seção-assinatura */}
+      <section id="escada">
+        <CapabilityLadder />
       </section>
+      {/* Prova de engenharia — antes dos planos, é o que convence */}
+      <section id="provas">
+        <EngineeringProof />
+      </section>
+      {/* Como trabalhamos */}
       <section id="como-funciona">
         <HowItWorks header={home.howItWorks} />
       </section>
+      {/* Capacidades em detalhe */}
+      <section id="servicos">
+        <Services header={home.services} />
+      </section>
+      {/* Vitrine (planos) — rebaixada para depois da prova */}
       <section id="planos">
         <Plans block={home.portfolio} />
       </section>
@@ -33,6 +48,7 @@ export default async function HomePage() {
       <section id="diferenciais">
         <Differentials block={home.differentials} />
       </section>
+      <CtaFinal />
       <Footer />
       <WhatsAppButton />
     </main>

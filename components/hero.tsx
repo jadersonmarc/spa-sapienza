@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button"
-import { MessageCircle } from "lucide-react"
+import { MessageCircle, ArrowDown } from "lucide-react"
 import { Eyebrow } from "@/components/eyebrow"
 import { DEFAULT_HOME, type HeroBlock } from "@/lib/content/pages"
+import { whatsappUrl } from "@/lib/contact"
 
 export function Hero({ block = DEFAULT_HOME.hero }: { block?: HeroBlock }) {
   return (
@@ -23,20 +24,33 @@ export function Hero({ block = DEFAULT_HOME.hero }: { block?: HeroBlock }) {
           {block.subtitle}
         </p>
 
-        <Button 
-          size="lg" 
-          className="glow-primary bg-primary hover:bg-primary/90 text-primary-foreground w-full px-6 py-5 text-base font-medium sm:w-auto sm:px-8 sm:py-6 sm:text-lg"
-          asChild
-        >
-          <a
-            href="https://wa.me/5521984185606?text=Olá! Quero agendar um diagnóstico gratuito de 30 minutos."
-            target="_blank"
-            rel="noopener noreferrer"
+        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Button
+            size="lg"
+            className="glow-primary bg-primary hover:bg-primary/90 text-primary-foreground w-full px-6 py-5 text-base font-medium sm:w-auto sm:px-8 sm:py-6 sm:text-lg"
+            asChild
           >
-            <MessageCircle className="mr-2 h-5 w-5" />
-            {block.ctaLabel}
-          </a>
-        </Button>
+            <a
+              href={whatsappUrl("Olá! Quero agendar um diagnóstico (sem custo).")}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircle className="mr-2 h-5 w-5" />
+              {block.ctaLabel}
+            </a>
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="w-full px-6 py-5 text-base font-medium sm:w-auto sm:px-8 sm:py-6 sm:text-lg"
+            asChild
+          >
+            <a href="#provas">
+              <ArrowDown className="mr-2 h-5 w-5" />
+              Ver o que construímos
+            </a>
+          </Button>
+        </div>
       </div>
     </section>
   )
