@@ -16,6 +16,7 @@ export interface Project {
   degrau: Degrau
   destaque: boolean
   ordem: number
+  publicado: boolean
   arquitetura: string | null
   decisoes: string | null
   resultado: string | null
@@ -35,6 +36,7 @@ function toProject(row: Row): Project {
     degrau: row.degrau as Degrau,
     destaque: row.destaque,
     ordem: row.ordem,
+    publicado: row.publicado,
     arquitetura: row.arquitetura,
     decisoes: row.decisoes,
     resultado: row.resultado,
