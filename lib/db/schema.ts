@@ -31,6 +31,8 @@ export const platform = pgEnum("platform", ["instagram", "linkedin"])
 export const socialStatus = pgEnum("social_status", ["draft", "approved", "sent"])
 export const userRole = pgEnum("user_role", ["admin", "editor"])
 export const membershipRole = pgEnum("membership_role", ["owner", "member"])
+// Escada de capacidade: degrau que o projeto prova (ver lib/content/degraus.ts).
+export const degrau = pgEnum("degrau", ["presenca", "operacao", "plataforma", "fronteira"])
 
 // ── users (identidade do admin; auth via Auth.js) ────────────────────────────
 export const users = pgTable("users", {
@@ -174,6 +176,38 @@ export const socialDrafts = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("social_drafts_item_idx").on(t.contentItemId)],
+)
+
+// ── projects (prova de engenharia — estudos de caso da escada) ───────────────
+export const projects = pgTable(
+  "projects",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull(),
+    nome: text("nome").notNull(),
+    // Resumo: 1 frase de problema resolvido, em linguagem de negócio.
+    resumo: text("resumo").notNull().default(""),
+    problema: text("problema").notNull().default(""),
+    // Stack técnica (mono no site): ex.: ["Go","Rust","gRPC","Ed25519"].
+    stack: jsonb("stack").notNull().default([]),
+    degrau: degrau("degrau").notNull(),
+    destaque: boolean("destaque").notNull().default(false),
+    ordem: integer("ordem").notNull().default(0),
+    publicado: boolean("publicado").notNull().default(false),
+    // Estudo de caso (opcionais) — corpo da página /projetos/[slug].
+    arquitetura: text("arquitetura"),
+    decisoes: text("decisoes"),
+    resultado: text("resultado"),
+    coverImageUrl: text("cover_image_url"),
+    authorId: uuid("author_id").references(() => users.id),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("projects_slug_idx").on(t.slug),
+    index("projects_publicado_idx").on(t.publicado),
+    index("projects_degrau_idx").on(t.degrau),
+  ],
 )
 
 // ── audit_log (transições editoriais) ────────────────────────────────────────

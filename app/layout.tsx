@@ -43,6 +43,60 @@ export const metadata: Metadata = {
   },
 }
 
+// Organization + catálogo de serviços (os 4 degraus da escada). Amplia a
+// categoria — software sob medida, ERP, CRM, apps, SaaS, distribuídos — sem
+// abrir mão da geografia (Duque de Caxias / Baixada Fluminense).
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Sapienza Labs',
+  url: 'https://sapienzalabs.com.br',
+  logo: 'https://sapienzalabs.com.br/logo-sapienza.png',
+  description:
+    'Estúdio de engenharia de software sob medida: da vitrine digital a ERP, CRM, aplicativos, plataformas SaaS e sistemas distribuídos.',
+  areaServed: 'Baixada Fluminense, Rio de Janeiro, Brasil',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Duque de Caxias',
+    addressRegion: 'RJ',
+    addressCountry: 'BR',
+  },
+  makesOffer: [
+    {
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: 'Presença — vitrine digital e atendimento',
+        description: 'Site sob medida, atendente de WhatsApp e SEO local.',
+      },
+    },
+    {
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: 'Operação — ERP, CRM e automação',
+        description: 'ERP sob medida, CRM, automação de fluxos e integrações.',
+      },
+    },
+    {
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: 'Plataforma — apps e SaaS',
+        description: 'Aplicativos mobile, portais/área do cliente e produtos SaaS.',
+      },
+    },
+    {
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: 'Fronteira — sistemas críticos',
+        description: 'Sistemas distribuídos, embarcados, criptografia aplicada e Web3.',
+      },
+    },
+  ],
+}
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -63,6 +117,10 @@ export default function RootLayout({
       className={`${display.variable} ${sans.variable} ${mono.variable}`}
     >
       <body className="bg-background font-sans text-foreground antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Header />
           {children}
