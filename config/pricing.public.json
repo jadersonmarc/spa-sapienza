@@ -1,0 +1,50 @@
+{
+  "currency": "BRL",
+  "produtos": {
+    "margot": {
+      "nome": "Margot Atendente",
+      "metric": "resposta",
+      "tiers": [
+        {
+          "id": "start",
+          "mensal": 400,
+          "incluso": 500
+        },
+        {
+          "id": "pro",
+          "mensal": 700,
+          "incluso": 1500
+        },
+        {
+          "id": "scale",
+          "mensal": 1200,
+          "incluso": 5000
+        }
+      ]
+    },
+    "motor": {
+      "nome": "Motor de Conteúdo",
+      "metric": "peca",
+      "tiers": [
+        {
+          "id": "start",
+          "mensal": 400,
+          "incluso": 12,
+          "canais": 1
+        },
+        {
+          "id": "pro",
+          "mensal": 700,
+          "incluso": 30,
+          "canais": 2
+        },
+        {
+          "id": "scale",
+          "mensal": 1200,
+          "incluso": 60,
+          "canais": 3
+        }
+      ]
+    }
+  }
+}
