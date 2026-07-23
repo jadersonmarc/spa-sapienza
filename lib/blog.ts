@@ -27,7 +27,7 @@ export interface Post {
 const DEFAULT_AUTHOR = {
   name: "Marc Jaderson",
   role: "Fundador, Sapienza Labs",
-  avatarUrl: "/marc.webp",
+  avatarUrl: "/owner.jpeg",
 }
 
 // Mapeia o enum de pilar do banco para o vocabulário do site.

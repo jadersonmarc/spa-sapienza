@@ -2,18 +2,18 @@ import type { Metadata } from "next"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Eyebrow } from "@/components/eyebrow"
-import { ArrowRight, Leaf, HeartPulse, Building2 } from "lucide-react"
+import { ArrowRight, Bot, Sparkles, Globe } from "lucide-react"
 import Image from "next/image"
 import { whatsappUrl } from "@/lib/contact"
 
 export const metadata: Metadata = {
   title: "Sobre Nós | Sapienza Labs",
   description:
-    "Conheça a Sapienza Labs, estúdio de software de Duque de Caxias que une engenharia de alta performance a impacto social, ciência e inovação.",
+    "Conheça a Sapienza Labs, startup de inteligência artificial que constrói produtos de software para operar online — IA aplicada à operação de quem contrata, sem que a distância importe.",
   openGraph: {
     title: "Sobre Nós | Sapienza Labs",
     description:
-      "Conheça a Sapienza Labs, estúdio de software de Duque de Caxias que une engenharia de alta performance a impacto social, ciência e inovação.",
+      "Conheça a Sapienza Labs, startup de inteligência artificial que constrói produtos de software para operar online — IA aplicada à operação de quem contrata, sem que a distância importe.",
     url: "https://sapienzalabs.com.br/sobre",
     siteName: "Sapienza Labs",
     locale: "pt_BR",
@@ -30,38 +30,34 @@ const jsonLd = {
   "@type": "AboutPage",
   name: "Sobre Nós | Sapienza Labs",
   description:
-    "Conheça a Sapienza Labs, estúdio de software de Duque de Caxias que une engenharia de alta performance a impacto social, ciência e inovação.",
+    "Conheça a Sapienza Labs, startup de inteligência artificial que constrói produtos de software para operar online — IA aplicada à operação de quem contrata.",
   url: "https://sapienzalabs.com.br/sobre",
   mainEntity: {
     "@type": "Organization",
     name: "Sapienza Labs",
     url: "https://sapienzalabs.com.br",
     logo: "https://sapienzalabs.com.br/logo-sapienza.png",
-    foundingLocation: {
-      "@type": "Place",
-      name: "Duque de Caxias, Rio de Janeiro, Brasil",
-    },
   },
 }
 
-const impactAreas = [
+const capabilities = [
   {
-    icon: Leaf,
-    title: "Agro & Soberania Alimentar",
+    icon: Bot,
+    title: "Atendimento com IA",
     description:
-      "Rastreabilidade, soberania de dados e transparência para produtores rurais. Tecnologia que dá voz e visibilidade a quem alimenta o país.",
+      "Agentes que respondem, qualificam e encaminham no WhatsApp e em outros canais — 24/7, no tom da sua marca.",
   },
   {
-    icon: HeartPulse,
-    title: "Saúde Pública & SUS",
+    icon: Sparkles,
+    title: "Conteúdo com IA",
     description:
-      "Sistemas que ajudam a gerir, auditar e melhorar serviços de saúde pública. Infraestrutura para quem cuida de gente.",
+      "Geração e publicação de conteúdo sob medida, do artigo ao post social, mantendo a marca consistente em escala.",
   },
   {
-    icon: Building2,
-    title: "Transparência Cívica & Institucional",
+    icon: Globe,
+    title: "Alcance sem fronteira",
     description:
-      "Software para auditoria, prestação de contas e governança digital para instituições públicas e ONGs.",
+      "Produtos que operam 100% online. Onde há internet, a Sapienza atende — de qualquer lugar, para qualquer lugar.",
   },
 ]
 
@@ -81,7 +77,7 @@ export default function SobrePage() {
               Quem somos
             </h1>
             <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Somos um estúdio de software nascido na Baixada Fluminense. Acreditamos que tecnologia de alta qualidade não deve ser exclusividade de grandes corporações ou do eixo Sudeste. Construímos daqui, para cá — e para o mundo.
+              Somos uma startup de inteligência artificial. Construímos produtos de software que operam online e colocam IA para trabalhar dentro da operação de quem contrata — sem que a distância importe. Nosso território é a internet: atendemos de qualquer lugar, para qualquer lugar.
             </p>
           </div>
         </section>
@@ -91,7 +87,7 @@ export default function SobrePage() {
           <div className="mx-auto max-w-3xl">
             <h2 className="text-xl font-semibold text-foreground font-display sm:text-2xl">Para quem trabalhamos</h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Trabalhamos com empresas que chegaram ao limite da planilha, do sistema pronto ou do processo manual. Nosso papel é transformar operação real em software sob medida, com escopo claro e engenharia responsável desde o primeiro diagnóstico.
+              Trabalhamos com empresas que chegaram ao limite da planilha, do sistema pronto ou do processo manual — e querem usar inteligência artificial para dar o próximo passo. Nosso papel é transformar operação real em software sob medida, com escopo claro e engenharia responsável desde o primeiro diagnóstico.
             </p>
           </div>
         </section>
@@ -102,7 +98,7 @@ export default function SobrePage() {
             <div className="glass flex flex-col items-center gap-6 rounded-2xl p-6 text-center sm:gap-8 sm:p-8 md:flex-row md:items-start md:text-left">
               <div className="relative h-28 w-28 flex-shrink-0 overflow-hidden rounded-full border-2 border-primary/20 sm:h-32 sm:w-32">
                 <Image
-                  src="/marc.webp"
+                  src="/owner.jpeg"
                   alt="Marc, fundador da Sapienza Labs"
                   fill
                   sizes="128px"
@@ -112,7 +108,7 @@ export default function SobrePage() {
               <div>
                 <h2 className="text-xl font-semibold text-foreground font-display sm:text-2xl">O fundador</h2>
                 <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  Sou Marc, o engenheiro por trás da Sapienza Labs. Vim do Ruby e do Smalltalk, me apaixonei por Go e Rust, e decidi que a melhor forma de crescer era construir coisas que importam. Moro em Duque de Caxias e acredito que a Baixada Fluminense merece uma referência tecnológica própria.
+                  Sou Marc, o engenheiro por trás da Sapienza Labs. Vim do Ruby e do Smalltalk, me apaixonei por Go e Rust, e decidi que a melhor forma de crescer era construir coisas que importam. Hoje concentro esse aprendizado em produtos de IA que rodam online — feitos para resolver problemas reais de negócio, em qualquer lugar.
                 </p>
               </div>
             </div>
@@ -125,34 +121,34 @@ export default function SobrePage() {
             <h2 className="text-xl font-semibold text-foreground font-display sm:text-2xl">Como trabalhamos</h2>
             <div className="mt-4 space-y-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
               <p>
-                Não trabalhamos isolados. A Sapienza Labs participa ativamente de programas de empreendedorismo e inovação, como o Dev Empreendedor do SEBRAE, e busca parcerias com ICTs (Instituições de Ciência e Tecnologia) e centros de pesquisa.
+                Não trabalhamos isolados. A Sapienza Labs participa de programas de empreendedorismo e inovação, como o Dev Empreendedor do SEBRAE, e mantém o rigor de engenharia no centro de tudo o que entrega.
               </p>
               <p>
-                Acreditamos que a fronteira entre um estúdio de software e um laboratório de pesquisa deve ser tênue. A cada projeto, buscamos não apenas entregar código, mas gerar conhecimento que possa ser compartilhado e reutilizado — seja em forma de artigos, dados abertos ou ferramentas de código aberto.
+                A cada projeto, buscamos não apenas entregar código, mas deixar uma base sólida: sistemas que o cliente entende, opera e evolui. Menos caixa-preta, mais autonomia — porque tecnologia só vira vantagem quando você confia nela.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Impact Areas Section */}
+        {/* What We Build Section */}
         <section className="mt-16 px-4 sm:mt-20 sm:px-6">
           <div className="mx-auto max-w-3xl">
-            <h2 className="text-xl font-semibold text-foreground font-display sm:text-2xl">Impacto social como visão</h2>
+            <h2 className="text-xl font-semibold text-foreground font-display sm:text-2xl">O que construímos</h2>
             <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Existimos na interseção entre engenharia e impacto social. Desenvolvemos software robusto, mas também perseguimos algo maior: usar tecnologia como ferramenta para o progresso científico e para resolver problemas públicos reais — no agronegócio, na saúde pública e na infraestrutura cívica.
+              Colocamos inteligência artificial para trabalhar onde ela gera valor de verdade: dentro da operação. Nossos produtos nascem para rodar online, escalar sem fronteira e resolver problemas concretos de negócio.
             </p>
             <div className="mt-6 grid gap-4 sm:mt-8 sm:gap-6 md:grid-cols-3">
-              {impactAreas.map((area) => (
+              {capabilities.map((cap) => (
                 <div
-                  key={area.title}
+                  key={cap.title}
                   className="glass rounded-2xl p-6 transition-colors hover:border-primary/20"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <area.icon className="h-6 w-6" />
+                    <cap.icon className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-4 text-lg font-medium text-foreground">{area.title}</h3>
+                  <h3 className="mt-4 text-lg font-medium text-foreground">{cap.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    {area.description}
+                    {cap.description}
                   </p>
                 </div>
               ))}

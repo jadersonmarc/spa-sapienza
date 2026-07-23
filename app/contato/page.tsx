@@ -2,17 +2,17 @@ import type { Metadata } from "next"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { Eyebrow } from "@/components/eyebrow"
-import { MessageCircle, Mail, MapPin, ArrowUpRight } from "lucide-react"
+import { MessageCircle, Mail, Globe, ArrowUpRight } from "lucide-react"
 import { whatsappUrl } from "@/lib/contact"
 
 export const metadata: Metadata = {
   title: "Contato | Sapienza Labs",
   description:
-    "Fale com a Sapienza Labs, estúdio de software de Duque de Caxias. Agende um diagnóstico gratuito de 30 minutos pelo WhatsApp ou por e-mail.",
+    "Fale com a Sapienza Labs, startup de inteligência artificial que atua online. Agende um diagnóstico gratuito de 30 minutos pelo WhatsApp ou por e-mail.",
   openGraph: {
     title: "Contato | Sapienza Labs",
     description:
-      "Fale com a Sapienza Labs, estúdio de software de Duque de Caxias. Agende um diagnóstico gratuito de 30 minutos pelo WhatsApp ou por e-mail.",
+      "Fale com a Sapienza Labs, startup de inteligência artificial que atua online. Agende um diagnóstico gratuito de 30 minutos pelo WhatsApp ou por e-mail.",
     url: "https://sapienzalabs.com.br/contato",
     siteName: "Sapienza Labs",
     locale: "pt_BR",
@@ -34,7 +34,7 @@ const jsonLd = {
   "@type": "ContactPage",
   name: "Contato | Sapienza Labs",
   description:
-    "Fale com a Sapienza Labs, estúdio de software de Duque de Caxias.",
+    "Fale com a Sapienza Labs, startup de inteligência artificial que atua online.",
   url: "https://sapienzalabs.com.br/contato",
   mainEntity: {
     "@type": "Organization",
@@ -42,13 +42,7 @@ const jsonLd = {
     url: "https://sapienzalabs.com.br",
     logo: "https://sapienzalabs.com.br/logo-sapienza.png",
     email,
-    areaServed: "Baixada Fluminense, Rio de Janeiro, Brasil",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Duque de Caxias",
-      addressRegion: "RJ",
-      addressCountry: "BR",
-    },
+    areaServed: "Brasil",
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "sales",
@@ -121,13 +115,13 @@ export default function ContatoPage() {
 
               <div className="glass flex flex-col rounded-2xl p-6">
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <MapPin className="h-5 w-5" />
+                  <Globe className="h-5 w-5" />
                 </div>
-                <h3 className="text-base font-semibold text-foreground">Onde estamos</h3>
+                <h3 className="text-base font-semibold text-foreground">Como atendemos</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Duque de Caxias — Baixada Fluminense, RJ.
+                  100% online, para todo o Brasil.
                   <br />
-                  Atendimento remoto para todo o Brasil.
+                  Onde há internet, a gente atende.
                 </p>
               </div>
             </div>
