@@ -75,3 +75,15 @@ export function brl(value: number): string {
 export function pisoDe(produto: Produto): number {
   return Math.min(...produto.tiers.map((t) => t.mensal))
 }
+
+/** Localiza produto+tier pelos ids (checkout). undefined se qualquer um for inválido. */
+export function findTier(
+  produtoId: string,
+  tierId: string,
+): { id: ProdutoId; produto: Produto; tier: Tier } | undefined {
+  if (!(PRODUTO_IDS as readonly string[]).includes(produtoId)) return undefined
+  const id = produtoId as ProdutoId
+  const produto = pricing.produtos[id]
+  const tier = produto.tiers.find((t) => t.id === tierId)
+  return tier ? { id, produto, tier } : undefined
+}

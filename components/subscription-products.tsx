@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Check, MessageCircle } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tag } from "@/components/tag"
@@ -99,17 +100,21 @@ function TierCard({
         </ul>
       </CardContent>
 
-      <CardFooter>
+      <CardFooter className="flex-col gap-2">
         <Button className="w-full" variant={destaque ? "default" : "outline"} asChild>
-          <a
-            href={whatsappUrl(ctaText(produto.nome, tier))}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MessageCircle className="mr-2 h-4 w-4" />
-            Falar sobre o {tierLabel(tier.id)}
-          </a>
+          <Link href={`/assinar?produto=${id}&tier=${tier.id}`}>
+            Assinar o {tierLabel(tier.id)}
+          </Link>
         </Button>
+        <a
+          href={whatsappUrl(ctaText(produto.nome, tier))}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 font-mono text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+        >
+          <MessageCircle className="h-3.5 w-3.5" />
+          Falar com vendas
+        </a>
       </CardFooter>
     </Card>
   )
