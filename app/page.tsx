@@ -5,6 +5,7 @@ import { EngineeringProof } from "@/components/engineering-proof"
 import { HowItWorks } from "@/components/how-it-works"
 import { Services } from "@/components/services"
 import { Plans } from "@/components/plans"
+import { SubscriptionProducts } from "@/components/subscription-products"
 import { Trust } from "@/components/trust"
 import { Differentials } from "@/components/differentials"
 import { CtaFinal } from "@/components/cta-final"
@@ -42,6 +43,8 @@ export default async function HomePage() {
       <section id="planos">
         <Plans block={home.portfolio} />
       </section>
+      {/* Produtos por assinatura — valor exposto, negócio conversado */}
+      <SubscriptionProducts />
       <section id="confianca">
         <Trust header={home.trust} />
       </section>
