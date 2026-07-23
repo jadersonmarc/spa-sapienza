@@ -65,7 +65,7 @@ describe("SubscriptionProducts — modo hibrido (default)", () => {
     expect(ctas.length).toBe(6)
     // produto + tier codificados no texto da mensagem.
     expect(html).toContain("Margot%20Atendente%20Pro")
-    expect(html).toContain("Motor%20de%20Conte%C3%BAdo%20Scale")
+    expect(html).toContain("Motor%20de%20Conte%C3%BAdo%20Premium")
   })
 })
 

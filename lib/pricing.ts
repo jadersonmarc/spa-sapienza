@@ -58,7 +58,7 @@ export function metricLabel(metric: string, plural = true): string {
 
 /** Nome comercial do tier. */
 export function tierLabel(id: string): string {
-  const map: Record<string, string> = { start: "Start", pro: "Pro", scale: "Scale" }
+  const map: Record<string, string> = { start: "Start", pro: "Pro", scale: "Premium" }
   return map[id] ?? id
 }
 
