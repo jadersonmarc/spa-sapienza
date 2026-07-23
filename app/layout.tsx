@@ -43,9 +43,9 @@ export const metadata: Metadata = {
   },
 }
 
-// Organization + catálogo de serviços (os 4 degraus da escada). Amplia a
-// categoria — software sob medida, ERP, CRM, apps, SaaS, distribuídos — sem
-// abrir mão da geografia (Duque de Caxias / Baixada Fluminense).
+// Organization + catálogo de serviços (os 4 degraus da escada). Startup de IA
+// que atua online — software sob medida, IA aplicada, ERP, CRM, apps, SaaS,
+// distribuídos —, sem âncora geográfica: o alcance é a internet.
 const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -53,21 +53,15 @@ const organizationJsonLd = {
   url: 'https://sapienzalabs.com.br',
   logo: 'https://sapienzalabs.com.br/logo-sapienza.png',
   description:
-    'Estúdio de engenharia de software sob medida: da vitrine digital a ERP, CRM, aplicativos, plataformas SaaS e sistemas distribuídos.',
-  areaServed: 'Baixada Fluminense, Rio de Janeiro, Brasil',
-  address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Duque de Caxias',
-    addressRegion: 'RJ',
-    addressCountry: 'BR',
-  },
+    'Startup de inteligência artificial que constrói produtos de software para operar online: IA aplicada, atendimento e conteúdo automatizados, ERP, CRM, aplicativos, plataformas SaaS e sistemas distribuídos.',
+  areaServed: 'Brasil',
   makesOffer: [
     {
       '@type': 'Offer',
       itemOffered: {
         '@type': 'Service',
         name: 'Presença — vitrine digital e atendimento',
-        description: 'Site sob medida, atendente de WhatsApp e SEO local.',
+        description: 'Site sob medida, atendente de WhatsApp com IA e SEO.',
       },
     },
     {

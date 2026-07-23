@@ -58,7 +58,7 @@ export function Trust({ header = DEFAULT_HOME.trust }: { header?: SectionHeader 
           <div className="glass flex flex-col gap-5 rounded-xl p-6 sm:flex-row sm:items-center lg:flex-col lg:items-start">
             <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border border-primary/25">
               <Image
-                src="/marc.webp"
+                src="/owner.jpeg"
                 alt="Marc Jaderson, fundador da Sapienza Labs"
                 fill
                 sizes="80px"
