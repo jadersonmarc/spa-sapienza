@@ -92,7 +92,7 @@ export async function applyRecommendationAction(
   if (!revision) return { error: "Revisão não encontrada." }
 
   const system =
-    "Você é editor(a) sênior da Sapienza Labs (pt-BR, PMEs da Baixada Fluminense). Reescreva o " +
+    "Você é editor(a) sênior da Sapienza Labs (pt-BR), startup de inteligência artificial. Reescreva o " +
     "conteúdo implementando APENAS a recomendação indicada, preservando o resto, o tom e a " +
     "acentuação correta. Retorne o conteúdo completo revisado."
   const user =
