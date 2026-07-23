@@ -78,7 +78,10 @@ export default async function AssinarPage({
                   <span>hoje você paga só a 1ª mensalidade</span>
                 </li>
               </ul>
-              <p className="mt-4 font-mono text-xs text-muted-foreground">
+              <p className="mt-4 text-xs text-muted-foreground">
+                Fidelidade de 12 meses. Cancelamento antes do prazo tem multa proporcional ao tempo restante.
+              </p>
+              <p className="mt-2 font-mono text-xs text-muted-foreground">
                 Não é o plano certo?{" "}
                 <Link href="/#produtos" className="underline underline-offset-2">trocar</Link>
               </p>
