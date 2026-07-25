@@ -102,7 +102,9 @@ function TierCard({
 
       <CardFooter className="flex-col gap-2">
         <Button className="w-full" variant={destaque ? "default" : "outline"} asChild>
-          <Link href={`/assinar?produto=${id}&tier=${tier.id}`}>
+          <Link
+            href={`${process.env.NEXT_PUBLIC_CONSOLE_URL ?? "https://console.sapienzalabs.com.br"}/assinar?produto=${id}&tier=${tier.id}`}
+          >
             Assinar o {tierLabel(tier.id)}
           </Link>
         </Button>
