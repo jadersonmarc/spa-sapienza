@@ -18,6 +18,14 @@ export type Produto = {
   tiers: Tier[]
 }
 
+// Combo POR TIER: assinar Margot + Motor no mesmo tier, numa recorrência única.
+// `mensal` = preço do combo; `economia` = desconto vs. soma dos avulsos.
+export type Combo = {
+  tier: string
+  mensal: number
+  economia: number
+}
+
 // Bloco comercial só existe quando o JSON foi gerado com --full (modo TRANSPARENCIA=total).
 export type Comercial = {
   setup: { padrao: number; porta_assinatura: number; degrau_13: boolean }
@@ -28,6 +36,7 @@ export type Comercial = {
 export type PublicPricing = {
   currency: string
   produtos: { margot: Produto; motor: Produto }
+  combos: Combo[]
   comercial?: Comercial
 }
 
@@ -44,6 +53,25 @@ export function getProducts(): { id: ProdutoId; produto: Produto }[] {
 /** Bloco comercial (só presente com JSON --full). */
 export function getComercial(): Comercial | undefined {
   return pricing.comercial
+}
+
+/** Combos por tier (margot + motor juntos), na ordem do JSON. */
+export function getCombos(): Combo[] {
+  return pricing.combos ?? []
+}
+
+/** "De" do combo = soma das mensalidades avulsas de margot + motor no tier. */
+export function comboDe(tier: string): number {
+  const margot = pricing.produtos.margot.tiers.find((t) => t.id === tier)?.mensal ?? 0
+  const motor = pricing.produtos.motor.tiers.find((t) => t.id === tier)?.mensal ?? 0
+  return margot + motor
+}
+
+/** Inclusos do combo no tier: respostas (margot) + peças (motor). */
+export function comboInclusos(tier: string): { respostas: number; pecas: number } {
+  const respostas = pricing.produtos.margot.tiers.find((t) => t.id === tier)?.incluso ?? 0
+  const pecas = pricing.produtos.motor.tiers.find((t) => t.id === tier)?.incluso ?? 0
+  return { respostas, pecas }
 }
 
 /** Rótulo da unidade a partir do campo `metric` — nunca assumir. */
