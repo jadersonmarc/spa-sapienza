@@ -17,9 +17,18 @@ function readTransparencia(): Transparencia {
 
 export const TRANSPARENCIA: Transparencia = readTransparencia()
 
-// Teaser do combo (assine os dois) — SEM preço, só chamada para conversa.
-export const MOSTRAR_COMBO_TEASER: boolean =
-  process.env.NEXT_PUBLIC_MOSTRAR_COMBO_TEASER === "true"
+// Seção do Combo (assine Margot + Motor juntos, COM preço e assinatura self-service).
+// Ligada por padrão; desligável por env em preview/teste.
+export const MOSTRAR_COMBO: boolean =
+  process.env.NEXT_PUBLIC_MOSTRAR_COMBO !== "false"
+
+// Copy da seção de combos.
+export const COMBO_COPY = {
+  eyebrow: "Sistema Sapienza",
+  titulo: "Combo: os dois trabalhando juntos, por menos",
+  promessa:
+    "Um atendimento que responde e um conteúdo que atrai — assine Margot Atendente e Margot Editora juntos e economize todo mês.",
+} as const
 
 // Copy editorial por produto (promessa que ancora valor, sem revelar o negócio).
 export const PRODUTO_COPY: Record<

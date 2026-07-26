@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button"
 import { whatsappUrl } from "@/lib/contact"
 import {
   brl,
+  type Combo,
+  comboDe,
+  comboInclusos,
   getComercial,
+  getCombos,
   getProducts,
   metricLabel,
   pisoDe,
@@ -17,12 +21,15 @@ import {
   tierLabel,
 } from "@/lib/pricing"
 import {
-  MOSTRAR_COMBO_TEASER,
+  COMBO_COPY,
+  MOSTRAR_COMBO,
   PRODUTO_COPY,
   TIER_DESTAQUE,
   TIER_ENQUADRAMENTO,
   TRANSPARENCIA,
 } from "@/lib/products-config"
+
+const CONSOLE_URL = process.env.NEXT_PUBLIC_CONSOLE_URL ?? "https://console.sapienzalabs.com.br"
 
 // Seção de PRODUTOS POR ASSINATURA (Margot / Motor). Estratégia hibrido: valor
 // exposto (tiers/inclusos vindos da projeção pública do pricing.yaml), negócio
@@ -102,9 +109,7 @@ function TierCard({
 
       <CardFooter className="flex-col gap-2">
         <Button className="w-full" variant={destaque ? "default" : "outline"} asChild>
-          <Link
-            href={`${process.env.NEXT_PUBLIC_CONSOLE_URL ?? "https://console.sapienzalabs.com.br"}/assinar?produto=${id}&tier=${tier.id}`}
-          >
+          <Link href={`${CONSOLE_URL}/assinar?produto=${id}&tier=${tier.id}`}>
             Assinar o {tierLabel(tier.id)}
           </Link>
         </Button>
@@ -178,30 +183,88 @@ function ComoVocePaga() {
   )
 }
 
-function ComboTeaser() {
+// Card de combo (margot + motor no mesmo tier): de/por/economia + assinatura no console.
+function ComboCard({ combo }: { combo: Combo }) {
+  const destaque = combo.tier === TIER_DESTAQUE
+  const de = comboDe(combo.tier)
+  const { respostas, pecas } = comboInclusos(combo.tier)
+
   return (
-    <div className="glass rounded-lg border-l-2 border-l-primary border-border/50 px-6 py-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <Tag tone="primary" className="mb-2">
-          Sistema Sapienza
-        </Tag>
-        <p className="text-foreground text-base text-balance">
-          Assine os dois e ganhe um atendimento que responde e um conteúdo que atrai — trabalhando
-          juntos.
+    <Card
+      className={`glass flex flex-col transition-colors duration-300 ${
+        destaque
+          ? "border-primary/40 ring-1 ring-primary/20 hover:border-primary/60"
+          : "border-border/50 hover:border-primary/30"
+      }`}
+    >
+      <CardHeader>
+        {destaque && (
+          <Tag tone="primary" className="mb-1">
+            Mais escolhido
+          </Tag>
+        )}
+        <CardTitle className="text-xl font-semibold text-card-foreground font-display">
+          Combo {tierLabel(combo.tier)}
+        </CardTitle>
+        {mostraPreco ? (
+          <p className="font-mono text-sm text-muted-foreground">
+            <span className="mr-2 line-through">{brl(de)}</span>
+            <span className="text-2xl font-semibold text-foreground">{brl(combo.mensal)}</span>
+            <span className="ml-1">/mês</span>
+          </p>
+        ) : (
+          <p className="text-sm text-muted-foreground">Investimento mensal — a combinar</p>
+        )}
+        {mostraPreco && (
+          <Tag tone="primary" className="mt-1 w-fit">
+            economize {brl(combo.economia)}/mês
+          </Tag>
+        )}
+      </CardHeader>
+
+      <CardContent className="flex-1">
+        <ul className="flex flex-col gap-2 text-sm text-foreground/90">
+          <li className="flex items-start gap-2">
+            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <span>{respostas.toLocaleString("pt-BR")} {metricLabel("resposta")} por mês</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <span>{pecas.toLocaleString("pt-BR")} {metricLabel("peca")} por mês</span>
+          </li>
+        </ul>
+      </CardContent>
+
+      <CardFooter>
+        <Button className="w-full" variant={destaque ? "default" : "outline"} asChild>
+          <Link href={`${CONSOLE_URL}/assinar?produto=combo&tier=${combo.tier}`}>
+            Assinar o Combo {tierLabel(combo.tier)}
+          </Link>
+        </Button>
+      </CardFooter>
+    </Card>
+  )
+}
+
+function ComboSection() {
+  const combos = getCombos()
+  if (combos.length === 0) return null
+  return (
+    <div className="border-t border-border/50 pt-10 sm:pt-14">
+      <div className="mb-6 sm:mb-8">
+        <Eyebrow className="mb-3">{COMBO_COPY.eyebrow}</Eyebrow>
+        <h3 className="font-display text-xl font-semibold text-foreground text-balance max-w-2xl sm:text-2xl">
+          {COMBO_COPY.titulo}
+        </h3>
+        <p className="mt-2 text-foreground/90 text-base text-balance max-w-2xl">
+          {COMBO_COPY.promessa}
         </p>
       </div>
-      <Button variant="outline" className="shrink-0 w-full sm:w-auto" asChild>
-        <a
-          href={whatsappUrl(
-            "Olá! Tenho interesse em assinar a Margot e o Motor juntos (Sistema Sapienza) e gostaria de entender como funciona.",
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <MessageCircle className="mr-2 h-4 w-4" />
-          Quero os dois
-        </a>
-      </Button>
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
+        {combos.map((combo) => (
+          <ComboCard key={combo.tier} combo={combo} />
+        ))}
+      </div>
     </div>
   )
 }
@@ -225,11 +288,11 @@ export function SubscriptionProducts() {
           {getProducts().map(({ id, produto }) => (
             <ProdutoGrid key={id} id={id} produto={produto} />
           ))}
+          {MOSTRAR_COMBO && <ComboSection />}
         </div>
 
         <div className="mt-10 sm:mt-14 flex flex-col gap-6">
           {TRANSPARENCIA === "total" ? <ComoVocePaga /> : <DiferenciacaoBand />}
-          {MOSTRAR_COMBO_TEASER && <ComboTeaser />}
         </div>
       </div>
     </section>
