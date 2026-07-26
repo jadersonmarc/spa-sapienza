@@ -46,5 +46,22 @@
         }
       ]
     }
-  }
+  },
+  "combos": [
+    {
+      "tier": "start",
+      "mensal": 700,
+      "economia": 100
+    },
+    {
+      "tier": "pro",
+      "mensal": 1200,
+      "economia": 200
+    },
+    {
+      "tier": "scale",
+      "mensal": 2000,
+      "economia": 400
+    }
+  ]
 }
