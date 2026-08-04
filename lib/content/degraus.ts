@@ -59,3 +59,9 @@ export const DEGRAUS: Degrau[] = [
       "Quando o problema exige garantia de integridade, resiliência ou desempenho que fogem do trivial.",
   },
 ]
+
+/** Rótulo curto "NN · Nome" por degrau — assinatura mono usada nos cards de projeto.
+ *  Derivado de DEGRAUS (fonte única) para não repetir a lista em cada consumidor. */
+export const DEGRAU_LABEL: Record<DegrauKey, string> = Object.fromEntries(
+  DEGRAUS.map((d) => [d.key, `${d.numero} · ${d.nome}`]),
+) as Record<DegrauKey, string>

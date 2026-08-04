@@ -3,13 +3,7 @@ import { ArrowUpRight } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Eyebrow } from "@/components/eyebrow"
 import { getPublishedProjects } from "@/lib/content/projects"
-
-const DEGRAU_LABEL: Record<string, string> = {
-  presenca: "01 · Presença",
-  operacao: "02 · Operação",
-  plataforma: "03 · Plataforma",
-  fronteira: "04 · Fronteira",
-}
+import { DEGRAU_LABEL } from "@/lib/content/degraus"
 
 // Prova de engenharia: os projetos reais como artefato. Sem isto, o
 // reposicionamento não convence — adjetivo não prova, artefato prova.

@@ -47,7 +47,7 @@ function inclusosLine(produto: Produto, tier: Tier): string {
   return `${tier.incluso.toLocaleString("pt-BR")} ${unidade} por mês`
 }
 
-function TierCard({
+export function TierCard({
   id,
   produto,
   tier,
@@ -127,7 +127,7 @@ function TierCard({
   )
 }
 
-function ProdutoGrid({ id, produto }: { id: ProdutoId; produto: Produto }) {
+export function ProdutoGrid({ id, produto }: { id: ProdutoId; produto: Produto }) {
   const copy = PRODUTO_COPY[id]
   return (
     <div>
@@ -150,7 +150,7 @@ function ProdutoGrid({ id, produto }: { id: ProdutoId; produto: Produto }) {
 }
 
 // Faixa de diferenciação — SEM números. Enquadra a estrutura de pagamento sem revelá-la.
-function DiferenciacaoBand() {
+export function DiferenciacaoBand() {
   return (
     <div className="glass rounded-lg border border-border/50 px-6 py-5 text-center">
       <p className="text-foreground/90 text-base text-balance max-w-3xl mx-auto sm:text-lg">
@@ -246,7 +246,7 @@ function ComboCard({ combo }: { combo: Combo }) {
   )
 }
 
-function ComboSection() {
+export function ComboSection() {
   const combos = getCombos()
   if (combos.length === 0) return null
   return (

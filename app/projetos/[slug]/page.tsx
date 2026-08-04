@@ -6,13 +6,7 @@ import { Footer } from "@/components/footer"
 import { Eyebrow } from "@/components/eyebrow"
 import { CtaFinal } from "@/components/cta-final"
 import { getProjectBySlug, getPublishedProjects } from "@/lib/content/projects"
-
-const DEGRAU_LABEL: Record<string, string> = {
-  presenca: "01 · Presença",
-  operacao: "02 · Operação",
-  plataforma: "03 · Plataforma",
-  fronteira: "04 · Fronteira",
-}
+import { DEGRAU_LABEL } from "@/lib/content/degraus"
 
 export async function generateStaticParams() {
   const projects = await getPublishedProjects()

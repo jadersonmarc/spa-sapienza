@@ -5,6 +5,7 @@ import { Eyebrow } from "@/components/eyebrow"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CtaFinal } from "@/components/cta-final"
 import { getPublishedProjects } from "@/lib/content/projects"
+import { DEGRAU_LABEL } from "@/lib/content/degraus"
 
 const TITLE = "Projetos | Sapienza Labs"
 const DESCRIPTION =
@@ -23,13 +24,6 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   alternates: { canonical: "https://sapienzalabs.com.br/projetos" },
-}
-
-const DEGRAU_LABEL: Record<string, string> = {
-  presenca: "01 · Presença",
-  operacao: "02 · Operação",
-  plataforma: "03 · Plataforma",
-  fronteira: "04 · Fronteira",
 }
 
 export default async function ProjetosPage() {
