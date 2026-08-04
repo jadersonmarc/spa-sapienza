@@ -15,7 +15,7 @@ export function Footer() {
               className="mx-auto mb-3 h-auto w-36 md:mx-0 sm:w-40"
             />
             <p className="text-muted-foreground text-sm max-w-xs mx-auto md:mx-0">
-              Product Studio de Inteligência Tecnológica
+              Estúdio de software com IA. Sistemas sob medida e os produtos Margot.
             </p>
           </div>
 

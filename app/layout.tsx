@@ -12,8 +12,8 @@ const display = Bricolage_Grotesque({ subsets: ['latin'], weight: ['600', '700']
 const sans = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600', '700'], display: 'swap', variable: '--font-sans' })
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500', '600'], display: 'swap', variable: '--font-mono' })
 
-const SITE_TITLE = 'Sapienza Labs | Product Studio de Inteligência Tecnológica'
-const SITE_DESCRIPTION = 'Especialistas em desenvolvimento de software, automações inteligentes e soluções RegTech sob medida. Transformamos complexidade técnica em ativos digitais de alto valor.'
+const SITE_TITLE = 'Sapienza Labs | Estúdio de software com IA'
+const SITE_DESCRIPTION = 'Estúdio de software com IA: sistemas sob medida — da vitrine ao sistema crítico — e os produtos Margot (atendimento no WhatsApp e conteúdo automatizado). Atuamos online, para todo o Brasil.'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://sapienzalabs.com.br'),

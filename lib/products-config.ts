@@ -24,7 +24,7 @@ export const MOSTRAR_COMBO: boolean =
 
 // Copy da seção de combos.
 export const COMBO_COPY = {
-  eyebrow: "Sistema Sapienza",
+  eyebrow: "Combo Margot",
   titulo: "Combo: os dois trabalhando juntos, por menos",
   promessa:
     "Um atendimento que responde e um conteúdo que atrai — assine Margot Atendente e Margot Editora juntos e economize todo mês.",

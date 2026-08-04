@@ -40,11 +40,11 @@ export type HomeBlocks = {
 // no admin — garante que o site nunca quebra.
 export const DEFAULT_HOME: HomeBlocks = {
   hero: {
-    badge: "Software sob medida · Baixada Fluminense",
-    titleLead: "Software sob medida, feito por quem constrói",
+    badge: "Estúdio de software com IA",
+    titleLead: "Software sob medida com IA, feito por quem constrói",
     titleHighlight: "o difícil.",
     subtitle:
-      "Da vitrine que traz o cliente ao sistema distribuído que sustenta a operação. Uma engenharia só, em todos os níveis.",
+      "Da vitrine que traz o cliente ao sistema distribuído que sustenta a operação. E os produtos Margot, que atendem e produzem conteúdo por você.",
     ctaLabel: "Agendar diagnóstico (sem custo)",
   },
   services: {
