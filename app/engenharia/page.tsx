@@ -1,14 +1,21 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { ArrowUpRight, MessageCircle } from "lucide-react"
 import { Footer } from "@/components/footer"
 import { Eyebrow } from "@/components/eyebrow"
+import { Button } from "@/components/ui/button"
 import { CtaFinal } from "@/components/cta-final"
+import { HowItWorks } from "@/components/how-it-works"
+import { Services } from "@/components/services"
+import { Plans } from "@/components/plans"
 import { DEGRAUS } from "@/lib/content/degraus"
 import { getProjectsByDegrau } from "@/lib/content/projects"
+import { getHomeBlocks } from "@/lib/content/pages"
+import { whatsappUrl } from "@/lib/contact"
 
-const TITLE = "Engenharia | Sapienza Labs"
+const TITLE = "Sistemas sob medida | Sapienza Labs"
 const DESCRIPTION =
-  "A escada de capacidade da Sapienza Labs: da vitrine (Presença) ao sistema distribuído (Fronteira). Desenvolvimento de software sob medida — ERP, CRM, aplicativos, plataformas SaaS, sistemas distribuídos e embarcados."
+  "Estúdio de software com IA: sistemas sob medida, da vitrine (Presença) ao sistema distribuído (Fronteira) — ERP, CRM, apps, plataformas SaaS, sistemas distribuídos e embarcados."
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -37,8 +44,8 @@ const jsonLd = {
   })),
 }
 
-export default async function EngenhariaPage() {
-  const byDegrau = await getProjectsByDegrau()
+export default async function SobMedidaPage() {
+  const [byDegrau, home] = await Promise.all([getProjectsByDegrau(), getHomeBlocks()])
 
   return (
     <>
@@ -47,25 +54,37 @@ export default async function EngenhariaPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main className="min-h-screen pt-32 pb-20">
-        {/* Hero */}
+        {/* Hero-pitch */}
         <section className="px-4 sm:px-6">
           <div className="mx-auto max-w-3xl">
-            <Eyebrow className="mb-5">Engenharia</Eyebrow>
+            <Eyebrow className="mb-5">Sob medida</Eyebrow>
             <h1 className="text-balance font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
-              Uma engenharia só, em quatro degraus.
+              Software sob medida com IA, do primeiro contato ao sistema crítico.
             </h1>
-            <p className="mt-6 text-base leading-relaxed text-muted-foreground sm:text-lg">
-              A Sapienza opera do primeiro contato digital ao sistema crítico. A
-              vitrine é a porta de entrada — abaixo, cada degrau com as capacidades,
-              quando faz sentido, e os projetos que provam o nível.
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Quando o sistema pronto não cabe na sua operação, a gente constrói o exato — com escopo
+              fechado, prazo definido e a mesma engenharia em todos os níveis. Abaixo, a escada de
+              capacidade: cada degrau resolve um problema maior, com os projetos que provam o nível.
             </p>
+            <div className="mt-8">
+              <Button size="lg" asChild>
+                <a
+                  href={whatsappUrl("Olá! Quero agendar um diagnóstico (sem custo).")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle className="mr-2 h-5 w-5" />
+                  Agendar diagnóstico (sem custo)
+                </a>
+              </Button>
+            </div>
           </div>
         </section>
 
-        {/* Um bloco por degrau */}
+        {/* Um bloco por degrau (com até 2 provas cada) */}
         {DEGRAUS.map((d) => {
           const isFronteira = d.key === "fronteira"
-          const projetos = byDegrau[d.key]
+          const projetos = byDegrau[d.key].slice(0, 2)
           return (
             <section key={d.key} id={d.anchor} className="mt-16 scroll-mt-28 px-4 sm:mt-20 sm:px-6">
               <div className="mx-auto max-w-3xl">
@@ -132,9 +151,36 @@ export default async function EngenhariaPage() {
           )
         })}
 
+        {/* Ponte para a Presença já pronta (produtos Margot) + todos os cases */}
+        <section className="mt-12 px-4 sm:mt-16 sm:px-6">
+          <div className="mx-auto flex max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-muted-foreground">
+              Precisa da Presença (Degrau 01) funcionando agora? Os produtos{" "}
+              <Link href="/margot" className="text-primary underline-offset-4 hover:underline">
+                Margot
+              </Link>{" "}
+              atendem e produzem conteúdo por assinatura.
+            </p>
+            <Link
+              href="/projetos"
+              className="group inline-flex shrink-0 items-center gap-2 font-medium text-primary underline-offset-4 hover:underline"
+            >
+              Ver todos os cases
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+        </section>
+
+        {/* Como trabalhamos */}
         <div className="mt-8">
-          <CtaFinal />
+          <HowItWorks header={home.howItWorks} />
         </div>
+        {/* Capacidades em detalhe */}
+        <Services header={home.services} />
+        {/* Vitrine / planos de serviço (Degrau 01 — porta de entrada) */}
+        <Plans block={home.portfolio} />
+
+        <CtaFinal />
       </main>
       <Footer />
     </>
