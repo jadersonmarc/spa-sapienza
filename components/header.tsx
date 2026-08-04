@@ -11,9 +11,8 @@ import { whatsappUrl } from "@/lib/contact"
 
 const navLinks = [
   { href: "/", label: "Início" },
-  { href: "/engenharia", label: "Engenharia" },
-  { href: "/projetos", label: "Projetos" },
-  { href: "/#planos", label: "Planos" },
+  { href: "/engenharia", label: "Sob medida" },
+  { href: "/margot", label: "Produtos" },
   { href: "/sobre", label: "Sobre" },
   { href: "/blog", label: "Blog" },
   { href: "/contato", label: "Contato" },

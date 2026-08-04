@@ -1,5 +1,14 @@
 import Image from "next/image"
+import Link from "next/link"
 import { Mail, MapPin, Linkedin, Instagram } from "lucide-react"
+
+const footerLinks = [
+  { href: "/engenharia", label: "Sob medida" },
+  { href: "/margot", label: "Produtos Margot" },
+  { href: "/sobre", label: "Sobre" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contato", label: "Contato" },
+]
 
 export function Footer() {
   return (
@@ -19,9 +28,21 @@ export function Footer() {
             </p>
           </div>
 
+          <nav className="flex flex-wrap justify-center gap-x-5 gap-y-2 md:justify-start" aria-label="Rodapé">
+            {footerLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
           <div className="flex flex-col gap-3 text-sm items-center md:items-start">
-            <a 
-              href="mailto:contato@sapienzalabs.com.br" 
+            <a
+              href="mailto:contato@sapienzalabs.com.br"
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
               <Mail className="h-4 w-4 flex-shrink-0" />
