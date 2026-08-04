@@ -2,10 +2,19 @@
 
 ## O que é este projeto
 
-Site institucional da **Sapienza Labs** — estúdio de software sob medida para
-PMEs da Baixada Fluminense (escritórios de advocacia, contabilidade e clínicas).
-O site apresenta a empresa, seus serviços e produtos, e funciona como canal de
-comunicação direta com clientes.
+Site institucional da **Sapienza Labs** — **estúdio de software com IA** que atua
+online (todo o Brasil), com duas ofertas: **sistemas sob medida** (da vitrine ao
+sistema crítico) e os **produtos Margot** por assinatura (Margot Atendente =
+WhatsApp com IA; Margot Editora = conteúdo automatizado). O site apresenta a
+empresa, as duas ofertas e funciona como canal de conversão (WhatsApp + assinatura).
+
+**Arquitetura de navegação** (bifurcada, para não competir na mesma página):
+`Início · Sob medida (/engenharia) · Produtos (/margot) · Sobre · Blog · Contato`.
+A home é o hub (hero de tese única → teaser Sob medida → vitrine Margot → prova
+compartilhada → CTA duplo); `/engenharia` é a página-mãe de sob medida (escada +
+processo + serviços + planos de serviço + cases); `/margot` é o hub dos produtos
+com `/margot/atendente` e `/margot/editora` (detalhe/SEO). `/projetos/[slug]` são
+os cases (fora do menu de topo, alcançados de dentro de Sob medida).
 
 - **Canal de conversão**: WhatsApp — `https://wa.me/5521984185606`. Não há
   formulário de contato; todos os CTAs apontam para o WhatsApp.
@@ -61,8 +70,10 @@ pnpm db:import-mdx # importa os .mdx para o Postgres (idempotente)
 
 ## Estrutura
 
-- `app/` — rotas: `/`, `/sobre`, `/blog`, `/blog/[slug]`. Tema real em
-  `app/globals.css`.
+- `app/` — rotas: `/`, `/engenharia` (Sob medida), `/margot` + `/margot/atendente`
+  + `/margot/editora`, `/projetos` + `/projetos/[slug]`, `/sobre`, `/blog` +
+  `/blog/[slug]`, `/campanhas` + `/campanhas/[slug]`, `/contato`, `/admin`. Tema real
+  em `app/globals.css`.
 - `components/` — seções da home (`hero.tsx`, `services.tsx`, `plans.tsx` (planos de
   serviço da seção "Portfólio"), `differentials.tsx`, `header.tsx`, `footer.tsx`,
   `whatsapp-button.tsx`) e `components/ui/` (shadcn).

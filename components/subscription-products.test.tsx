@@ -79,11 +79,11 @@ describe("SubscriptionProducts — flag alterna os modos", () => {
 
   it("a seção de combo aparece por padrão e some com a flag desligada", async () => {
     const semCombo = visibleText(await renderWith("hibrido", false))
-    expect(semCombo).not.toContain("Sistema Sapienza")
+    expect(semCombo).not.toContain("Combo Margot")
     expect(semCombo).not.toContain("Combo Start")
 
     const comCombo = visibleText(await renderWith("hibrido", true))
-    expect(comCombo).toContain("Sistema Sapienza")
+    expect(comCombo).toContain("Combo Margot")
     expect(comCombo).toContain("Combo Start")
     expect(comCombo).toContain("Combo Pro")
   })
