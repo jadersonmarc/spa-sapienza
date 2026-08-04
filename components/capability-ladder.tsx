@@ -76,6 +76,16 @@ export function CapabilityLadder() {
             )
           })}
         </ol>
+
+        <div className="mt-8 text-center sm:mt-10">
+          <Link
+            href="/engenharia"
+            className="group inline-flex items-center gap-2 font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Ver tudo sobre sistemas sob medida
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </Link>
+        </div>
       </div>
     </section>
   )

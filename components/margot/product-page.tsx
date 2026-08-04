@@ -185,7 +185,7 @@ export function MargotProductPage({ id }: { id: ProdutoId }) {
           </div>
         </section>
 
-        <CtaFinal />
+        <CtaFinal secondary={null} />
       </main>
       <Footer />
     </>

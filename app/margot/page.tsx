@@ -104,7 +104,7 @@ export default function MargotHubPage() {
           </div>
         </section>
 
-        <CtaFinal />
+        <CtaFinal secondary={null} />
       </main>
       <Footer />
     </>

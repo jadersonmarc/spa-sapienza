@@ -1,10 +1,8 @@
 import type { Metadata } from "next"
 import { Hero } from "@/components/hero"
 import { CapabilityLadder } from "@/components/capability-ladder"
+import { MargotShowcase } from "@/components/margot-showcase"
 import { EngineeringProof } from "@/components/engineering-proof"
-import { HowItWorks } from "@/components/how-it-works"
-import { Services } from "@/components/services"
-import { SubscriptionProducts } from "@/components/subscription-products"
 import { Trust } from "@/components/trust"
 import { Differentials } from "@/components/differentials"
 import { CtaFinal } from "@/components/cta-final"
@@ -20,26 +18,20 @@ export default async function HomePage() {
   const home = await getHomeBlocks()
   return (
     <main className="min-h-screen">
-      {/* Tese acima da dobra */}
+      {/* Tese única acima da dobra */}
       <Hero block={home.hero} />
-      {/* Escada de capacidade — a seção-assinatura */}
-      <section id="escada">
+      {/* Sob medida — teaser da escada; aprofunda em /engenharia */}
+      <section id="sob-medida">
         <CapabilityLadder />
       </section>
-      {/* Prova de engenharia — antes dos planos, é o que convence */}
+      {/* Produtos Margot — vitrine; aprofunda em /margot */}
+      <section id="produtos">
+        <MargotShowcase />
+      </section>
+      {/* Prova compartilhada — serve às duas ofertas */}
       <section id="provas">
         <EngineeringProof />
       </section>
-      {/* Como trabalhamos */}
-      <section id="como-funciona">
-        <HowItWorks header={home.howItWorks} />
-      </section>
-      {/* Capacidades em detalhe */}
-      <section id="servicos">
-        <Services header={home.services} />
-      </section>
-      {/* Produtos por assinatura — valor exposto, negócio conversado */}
-      <SubscriptionProducts />
       <section id="confianca">
         <Trust header={home.trust} />
       </section>
