@@ -78,10 +78,14 @@ export function TierCard({
           {tierLabel(tier.id)}
         </CardTitle>
         {mostraPreco ? (
-          <p className="font-mono text-sm text-muted-foreground">
-            <span className="text-2xl font-semibold text-foreground">{brl(tier.mensal)}</span>
-            <span className="ml-1">/mês</span>
-          </p>
+          <div className="font-mono text-sm text-muted-foreground">
+            <p>
+              <span className="text-2xl font-semibold text-foreground">{brl(tier.mensal)}</span>
+              <span className="ml-1">/mês</span>
+              <span className="ml-1 text-xs">no anual</span>
+            </p>
+            <p className="mt-0.5 text-xs">ou {brl(tier.mensal_sf)}/mês no mensal</p>
+          </div>
         ) : (
           <p className="text-sm text-muted-foreground">Investimento mensal — a combinar</p>
         )}
@@ -149,14 +153,29 @@ export function ProdutoGrid({ id, produto }: { id: ProdutoId; produto: Produto }
   )
 }
 
-// Faixa de diferenciação — SEM números. Enquadra a estrutura de pagamento sem revelá-la.
+// Faixa que explica os DOIS modelos de assinatura (você escolhe no checkout).
 export function DiferenciacaoBand() {
   return (
-    <div className="glass rounded-lg border border-border/50 px-6 py-5 text-center">
-      <p className="text-foreground/90 text-base text-balance max-w-3xl mx-auto sm:text-lg">
-        Sem fidelidade abusiva. Estrutura de pagamento que cabe no seu caixa —{" "}
-        <span className="text-foreground font-medium">inclusive começando sem entrada</span>.
+    <div className="glass rounded-lg border border-border/50 px-6 py-5">
+      <p className="mb-3 text-center font-mono text-xs uppercase tracking-wider text-muted-foreground">
+        Dois jeitos de assinar — você escolhe no checkout
       </p>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <p className="font-display text-base font-semibold text-foreground">Anual</p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            Contrato de 12 meses, <span className="text-foreground">mais barato</span> e{" "}
+            <span className="text-foreground">sem taxa de implantação</span>. Pago mensalmente no cartão.
+          </p>
+        </div>
+        <div>
+          <p className="font-display text-base font-semibold text-foreground">Mensal</p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            <span className="text-foreground">Sem fidelidade</span> — cancela quando quiser. A implantação
+            equivale a uma mensalidade, cobrada só na adesão.
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
@@ -207,11 +226,15 @@ function ComboCard({ combo }: { combo: Combo }) {
           Combo {tierLabel(combo.tier)}
         </CardTitle>
         {mostraPreco ? (
-          <p className="font-mono text-sm text-muted-foreground">
-            <span className="mr-2 line-through">{brl(de)}</span>
-            <span className="text-2xl font-semibold text-foreground">{brl(combo.mensal)}</span>
-            <span className="ml-1">/mês</span>
-          </p>
+          <div className="font-mono text-sm text-muted-foreground">
+            <p>
+              <span className="mr-2 line-through">{brl(de)}</span>
+              <span className="text-2xl font-semibold text-foreground">{brl(combo.mensal)}</span>
+              <span className="ml-1">/mês</span>
+              <span className="ml-1 text-xs">no anual</span>
+            </p>
+            <p className="mt-0.5 text-xs">ou {brl(combo.mensal_sf)}/mês no mensal</p>
+          </div>
         ) : (
           <p className="text-sm text-muted-foreground">Investimento mensal — a combinar</p>
         )}

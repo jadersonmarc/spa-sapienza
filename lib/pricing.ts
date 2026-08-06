@@ -7,7 +7,8 @@ import pricingData from "@/config/pricing.public.json"
 
 export type Tier = {
   id: string
-  mensal: number
+  mensal: number // preço do modelo ANUAL (contrato 12m pago mensal)
+  mensal_sf: number // preço do modelo MENSAL (sem fidelidade)
   incluso: number
   canais?: number
 }
@@ -22,7 +23,8 @@ export type Produto = {
 // `mensal` = preço do combo; `economia` = desconto vs. soma dos avulsos.
 export type Combo = {
   tier: string
-  mensal: number
+  mensal: number // combo anual
+  mensal_sf: number // combo mensal (sem fidelidade)
   economia: number
 }
 

@@ -8,16 +8,19 @@
         {
           "id": "start",
           "mensal": 400,
+          "mensal_sf": 500,
           "incluso": 500
         },
         {
           "id": "pro",
           "mensal": 700,
+          "mensal_sf": 900,
           "incluso": 1500
         },
         {
           "id": "scale",
           "mensal": 1200,
+          "mensal_sf": 1500,
           "incluso": 5000
         }
       ]
@@ -29,18 +32,21 @@
         {
           "id": "start",
           "mensal": 400,
+          "mensal_sf": 500,
           "incluso": 12,
           "canais": 1
         },
         {
           "id": "pro",
           "mensal": 700,
+          "mensal_sf": 900,
           "incluso": 30,
           "canais": 2
         },
         {
           "id": "scale",
           "mensal": 1200,
+          "mensal_sf": 1500,
           "incluso": 60,
           "canais": 3
         }
@@ -51,16 +57,19 @@
     {
       "tier": "start",
       "mensal": 700,
+      "mensal_sf": 900,
       "economia": 100
     },
     {
       "tier": "pro",
       "mensal": 1200,
+      "mensal_sf": 1500,
       "economia": 200
     },
     {
       "tier": "scale",
       "mensal": 2000,
+      "mensal_sf": 2500,
       "economia": 400
     }
   ]
